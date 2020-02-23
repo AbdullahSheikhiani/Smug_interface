@@ -123,7 +123,7 @@ class MainActivity : AppCompatActivity() {
                  //val bufferedReader = BufferedReader(inputStreamReader)
                  //val stringBuilder: StringBuilder = StringBuilder()
 
-                 //var text: String? = null
+                 //var text: String? = null 
                  //while ({ text = bufferedReader.readLine(); text }() != null) {
                  //    stringBuilder.append(text)
                  // }
