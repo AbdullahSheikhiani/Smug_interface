@@ -40,9 +40,14 @@ class AddGesture : AppCompatActivity() {
         t.join()
 */
         bckBtn.setOnClickListener {
+            finishAffinity()
+
+            /*
             val intent = Intent(    this, Interface::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             applicationContext.startActivity(intent)
+
+             */
         }
     }
 }
