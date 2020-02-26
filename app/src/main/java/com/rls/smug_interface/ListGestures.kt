@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_list_gestures.*
 import java.lang.Thread.sleep
+import java.net.InetAddress
 import java.net.Socket
 import kotlin.concurrent.thread
 
@@ -13,11 +14,15 @@ class ListGestures : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_gestures)
-        sleep(100)
+        //sleep(100)
+        //val ip = InetAddress.getByName("pspsps")
+        val ip = "192.168.0.186"
+        println('x')
+        println(ip)
         val a = ArrayList<String>()
         val t = thread {
             println("THREAD")
-            val connection = Socket("192.168.4.1", 5050)
+            val connection = Socket(ip, 5050)
             val reader = connection.getInputStream()
             //val writer = connection.getOutputStream()
             val b = reader.bufferedReader()
@@ -30,6 +35,7 @@ class ListGestures : AppCompatActivity() {
                 //print("x=")
                 //println(x)
             }
+            connection.close()
         }
         t.join()
         var r = ""
@@ -45,8 +51,7 @@ class ListGestures : AppCompatActivity() {
             val intent = Intent(this, Interface::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
-
-
+            finish()
         }
     }
 }

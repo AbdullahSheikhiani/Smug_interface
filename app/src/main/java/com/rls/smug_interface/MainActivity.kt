@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity, Interface::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             applicationContext.startActivity(intent)
-            //setContentView(R.layout.activity_interface)
+            finish()
 
             /*
             thread {

@@ -14,10 +14,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".AddGesture"></activity>
+        <activity android:name=".RemoveGesture"></activity>
+        <activity android:name=".AddGesture" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".ListGestures"/>
+        <activity android:name=".ListGestures" />
         <activity android:name=".Interface">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
