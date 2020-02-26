@@ -36,6 +36,7 @@ class ListGestures : AppCompatActivity() {
                 //println(x)
             }
             connection.close()
+            println("list reading finished")
         }
         t.join()
         var r = ""

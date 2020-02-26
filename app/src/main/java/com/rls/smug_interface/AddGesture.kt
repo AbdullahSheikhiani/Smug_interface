@@ -16,12 +16,12 @@ class AddGesture : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_gesture)
-
+        val ip = "192.168.0.186"
         var clickflag = false
         btnAdd.setOnClickListener {
             clickflag = true
             val t = thread {
-                val connection = Socket("192.168.4.1", 5050)
+                val connection = Socket(ip, 5050)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write(gestureNameTxt.text.toString().toByteArray())
