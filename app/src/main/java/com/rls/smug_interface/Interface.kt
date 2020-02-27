@@ -75,5 +75,32 @@ class Interface : AppCompatActivity() {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             applicationContext.startActivity(intent)
         }
+        tstGesBtn.setOnClickListener{
+            val t = thread {
+                //val ip = InetAddress.getByName("pspsps")
+                val ip = "192.168.0.186"
+                val connection = Socket(ip, 5051)
+                //val reader = connection.getInputStream()
+                val writer = connection.getOutputStream()
+                writer.write("4".toByteArray())
+                connection.close()
+            }
+
+        }
+        addUsrBtn.setOnClickListener{
+            val t = thread {
+                //val ip = InetAddress.getByName("pspsps")
+                val ip = "192.168.0.186"
+                val connection = Socket(ip, 5051)
+                //val reader = connection.getInputStream()
+                val writer = connection.getOutputStream()
+                writer.write("6".toByteArray())
+                connection.close()
+            }
+            t.join()
+            val intent = Intent(this, addUser::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            applicationContext.startActivity(intent)
+        }
     }
 }

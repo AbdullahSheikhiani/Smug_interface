@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RemoveGesture"></activity>
+        <activity android:name=".addUser"></activity>
+        <activity android:name=".RemoveGesture" />
         <activity android:name=".AddGesture" />
         <activity android:name=".MainActivity" />
         <activity android:name=".ListGestures" />
