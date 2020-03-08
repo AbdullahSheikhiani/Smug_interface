@@ -32,9 +32,9 @@ class MainActivity : AppCompatActivity() {
 
         spinner0.adapter = adapter
 
-        val file = "ip"
-        val oldIP = "192.168.4.1"
-        var newIP: String = oldIP
+        //val file = "ip"
+        //val oldIP = "192.168.4.1"
+        //var newIP: String = oldIP
         val networkList = ArrayList<String>()
         /*  thread {
               val connection = Socket("192.168.4.1", 5050)
@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         reloadBtn.setOnClickListener {
             var networks = ArrayList<String>()
             var t = thread {
-                val connection = Socket(oldIP, 5050)
+                val connection = Socket(ip, 5050)
                 val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write("conf".toByteArray())

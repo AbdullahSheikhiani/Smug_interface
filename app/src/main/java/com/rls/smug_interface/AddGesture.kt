@@ -16,7 +16,6 @@ class AddGesture : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_gesture)
-        val ip = "192.168.0.186"
         var clickflag = false
         btnAdd.setOnClickListener {
             clickflag = true

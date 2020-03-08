@@ -14,7 +14,7 @@ class RemoveGesture : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_remove_gesture)
-        val ip = "192.168.0.186"
+        //val ip = "192.168.0.186"
         val a = ArrayList<String>()
         rldBtn.setOnClickListener {
             val t = thread {

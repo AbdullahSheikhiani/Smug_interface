@@ -12,7 +12,7 @@ class changeUser : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_change_user)
-        val ip = "192.168.0.186"
+       // val ip = "192.168.0.186"
         println('x')
         println(ip)
 

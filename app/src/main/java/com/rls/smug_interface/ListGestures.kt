@@ -1,13 +1,18 @@
 package com.rls.smug_interface
 
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.net.DhcpInfo
+import android.net.wifi.WifiManager
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_list_gestures.*
-import java.lang.Thread.sleep
+import java.net.Inet4Address
+import java.net.Inet6Address
 import java.net.InetAddress
 import java.net.Socket
 import kotlin.concurrent.thread
+
 
 class ListGestures : AppCompatActivity() {
 
@@ -16,11 +21,30 @@ class ListGestures : AppCompatActivity() {
         setContentView(R.layout.activity_list_gestures)
         //sleep(100)
         //val ip = InetAddress.getByName("pspsps")
-        val ip = "192.168.0.186"
-        println('x')
-        println(ip)
+        //val x:DnsResolver();
+        //println('x')
+        //println(ip)
         val a = ArrayList<String>()
         val t = thread {
+            val wifi = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            val info: DhcpInfo = wifi.dhcpInfo
+            print("info= ")
+            println(info.dns1)
+            println(info.dns2.toString())
+            val ipas = InetAddress.getByName("pspspspi")
+            print("ipa= ")
+            println(ipas)
+            /*
+            for (ipa in ipas) {
+                print(when (ipa) {
+                    is Inet4Address -> "  ipv4 : "
+                    is Inet6Address -> "  ipv6 : "
+                    else            -> "  ipv? : "
+                })
+                print("host address=")
+                println(ipa)
+            }
+            */
             println("THREAD")
             val connection = Socket(ip, 5050)
             val reader = connection.getInputStream()
@@ -36,9 +60,9 @@ class ListGestures : AppCompatActivity() {
                 //println(x)
             }
             connection.close()
-            println("list reading finished")
         }
         t.join()
+        println("\nlist reading finished")
         var r = ""
         for (i in a) {
             print("i =")

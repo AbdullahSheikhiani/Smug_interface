@@ -9,6 +9,8 @@ import java.net.InetAddress
 import java.net.Socket
 import kotlin.concurrent.thread
 
+val ip = "192.168.4.1"
+
 class Interface : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,9 +30,9 @@ class Interface : AppCompatActivity() {
             val t = thread {
                 //println("ip by DNS")
                 //val ip = InetAddress.getByName("pspsps")
-                val ip = "192.168.0.186"
-                print("ip =")
-                println(ip)
+                //val ip = "192.168.0.186"
+                //print("ip =")
+                //println(ip)
                 // val ip = "192.168.4.1"
                 val connection = Socket(ip, 5051)
                 //val reader = connection.getInputStream()
@@ -47,7 +49,7 @@ class Interface : AppCompatActivity() {
         addGstBtn.setOnClickListener {
             val t = thread {
                 //val ip = InetAddress.getByName("pspsps")
-                val ip = "192.168.0.186"
+                //val ip = "192.168.0.186"
                 val connection = Socket(ip, 5051)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
@@ -63,7 +65,7 @@ class Interface : AppCompatActivity() {
         rmGstBtn.setOnClickListener {
             val t = thread {
                 //val ip = InetAddress.getByName("pspsps")
-                val ip = "192.168.0.186"
+                // val ip = "192.168.0.186"
                 val connection = Socket(ip, 5051)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
@@ -78,7 +80,7 @@ class Interface : AppCompatActivity() {
         tstGesBtn.setOnClickListener {
             val t = thread {
                 //val ip = InetAddress.getByName("pspsps")
-                val ip = "192.168.0.186"
+                // val ip = "192.168.0.186"
                 val connection = Socket(ip, 5051)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
@@ -90,7 +92,7 @@ class Interface : AppCompatActivity() {
         addUsrBtn.setOnClickListener {
             val t = thread {
                 //val ip = InetAddress.getByName("pspsps")
-                val ip = "192.168.0.186"
+                //val ip = "192.168.0.186"
                 val connection = Socket(ip, 5051)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
@@ -105,7 +107,7 @@ class Interface : AppCompatActivity() {
         chgUsrBtn.setOnClickListener {
             val t = thread {
                 //val ip = InetAddress.getByName("pspsps")
-                val ip = "192.168.0.186"
+                //val ip = "192.168.0.186"
                 val connection = Socket(ip, 5051)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
