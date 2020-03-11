@@ -3,6 +3,7 @@ package com.rls.smug_interface
 import android.content.Intent
 import android.os.Bundle
 import android.os.StrictMode
+import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_add_gesture.*
 import kotlinx.android.synthetic.main.activity_list_gestures.bckBtn
@@ -12,6 +13,10 @@ import kotlin.concurrent.thread
 
 
 class AddGesture : AppCompatActivity() {
+    fun loadIP(): String? {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        return sharedPreferences.getString("ip", "192.168.4.1")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +25,7 @@ class AddGesture : AppCompatActivity() {
         btnAdd.setOnClickListener {
             clickflag = true
             val t = thread {
-                val connection = Socket(ip, 5050)
+                val connection = Socket(loadIP(), 5050)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write(gestureNameTxt.text.toString().toByteArray())

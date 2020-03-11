@@ -1,14 +1,30 @@
 package com.rls.smug_interface
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.SharedPreferences.Editor
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import java.net.Socket
 import kotlin.concurrent.thread
 
+
 class MainActivity : AppCompatActivity() {
+    private fun saveIP(value: String) {
+        //PreferenceManager.getDefaultSharedPreferences(applicationContext).edit().putString("ip", value).commit()
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        val editor = sharedPreferences.edit()
+        editor.putString("ip", value)
+        editor.commit()
+    }
+
+    private fun loadIP(): String? {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        return sharedPreferences.getString("ip", "192.168.4.1")
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
@@ -62,19 +78,22 @@ class MainActivity : AppCompatActivity() {
         reloadBtn.setOnClickListener {
             var networks = ArrayList<String>()
             var t = thread {
-                val connection = Socket(ip, 5050)
+                val connection = Socket("192.168.4.1", 5005)
                 val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write("conf".toByteArray())
 
                 var s = reader.bufferedReader()
                 var x = s.readLine()
+                print("x= ")
+                println(x)
                 while (x != "stp") {
                     networks.add(x)
                     x = s.readLine()
+                    println(x)
                 }
                 //println("out")
-                writer.write("ACK".toByteArray())
+                //writer.write("ACK".toByteArray())
                 connection.close()
             }
             t.join()
@@ -89,6 +108,7 @@ class MainActivity : AppCompatActivity() {
             )
             adapter.notifyDataSetChanged()
             spinner0.adapter = adapter
+            print(networks)
             //adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
 
             //spinner0.adapter = adapter
@@ -96,10 +116,33 @@ class MainActivity : AppCompatActivity() {
 
         }
         confBtn.setOnClickListener {
-            val intent = Intent(this@MainActivity, Interface::class.java)
+            val t = thread {
+                val connection = Socket("192.168.4.1", 5005)
+                val reader = connection.getInputStream()
+                val writer = connection.getOutputStream()
+                writer.write(spinner0.selectedItem.toString().toByteArray())
+                var s = reader.bufferedReader()
+                println("ack: ")
+                println(s.readLine())
+                //writer.flush()
+                //writer.write("\n".toByteArray())
+                println(spinner0.selectedItem)
+                writer.write(inputPassword.text.toString().toByteArray())
+                println(inputPassword.text)
+                //writer.write("\n".toByteArray())
+                saveIP(s.readLine())
+
+
+            }
+            t.join()
+            intent = Intent(this, Interface::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            applicationContext.startActivity(intent)
+            startActivity(intent)
             finish()
+            //val intent = Intent(this@MainActivity, Interface::class.java)
+            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            //applicationContext.startActivity(intent)
+            //finish()
 
             /*
             thread {

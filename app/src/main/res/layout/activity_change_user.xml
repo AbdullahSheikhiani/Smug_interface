@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".changeUser">
+    tools:context=".ChangeUser">
 
     <Spinner
         android:id="@+id/userSpinner"
-        android:layout_width="146dp"
-        android:layout_height="49dp"
+        android:layout_width="245dp"
+        android:layout_height="101dp"
         android:layout_marginEnd="36dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
