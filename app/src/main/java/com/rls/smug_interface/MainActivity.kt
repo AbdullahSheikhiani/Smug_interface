@@ -4,15 +4,20 @@ import android.content.Intent
 import android.content.SharedPreferences.Editor
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import java.net.Inet4Address
+import java.net.InetAddress
 import java.net.Socket
 import kotlin.concurrent.thread
 
 
 class MainActivity : AppCompatActivity() {
     private fun saveIP(value: String) {
+        println("saved ip value: ")
+        print(value)
         //PreferenceManager.getDefaultSharedPreferences(applicationContext).edit().putString("ip", value).commit()
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
         val editor = sharedPreferences.edit()
@@ -33,11 +38,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val networks = arrayOf(
             "getting networks list "
-        )//= arrayOf("light Green", "clear Blue", "Red", "Blue", "clear Green", "clear Red")
+        )
+        print("loadIP value: ")
+        println(loadIP())
 
-
-        //val address = "192.168.4.1"
-        val port = 5050
         val adapter = ArrayAdapter(
             this, // Context
             android.R.layout.simple_spinner_item, // Layout
@@ -74,10 +78,13 @@ class MainActivity : AppCompatActivity() {
               }*/
               connection.close()
           }*/
-
+        //println("before reload")
         reloadBtn.setOnClickListener {
+            //DNS
+            progressBar_initsetup.visibility = View.VISIBLE
             var networks = ArrayList<String>()
             var t = thread {
+
                 val connection = Socket("192.168.4.1", 5005)
                 val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
@@ -108,11 +115,13 @@ class MainActivity : AppCompatActivity() {
             )
             adapter.notifyDataSetChanged()
             spinner0.adapter = adapter
-            print(networks)
+            println(networks)
             //adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
 
             //spinner0.adapter = adapter
 
+            //progressBar_initsetup.visibility = View.GONE
+            progressBar_initsetup.visibility = View.GONE
 
         }
         confBtn.setOnClickListener {
@@ -122,7 +131,8 @@ class MainActivity : AppCompatActivity() {
                 val writer = connection.getOutputStream()
                 writer.write(spinner0.selectedItem.toString().toByteArray())
                 var s = reader.bufferedReader()
-                println("ack: ")
+                println()
+                print("ack: ")
                 println(s.readLine())
                 //writer.flush()
                 //writer.write("\n".toByteArray())
@@ -130,7 +140,10 @@ class MainActivity : AppCompatActivity() {
                 writer.write(inputPassword.text.toString().toByteArray())
                 println(inputPassword.text)
                 //writer.write("\n".toByteArray())
-                saveIP(s.readLine())
+                val ip = s.readLine()
+                print("ip value: ")
+                println(ip)
+                saveIP(ip)
 
 
             }

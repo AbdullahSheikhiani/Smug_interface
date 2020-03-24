@@ -13,19 +13,19 @@ import kotlin.concurrent.thread
 
 
 class AddGesture : AppCompatActivity() {
-    fun loadIP(): String? {
+    fun IP(): String? {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
         return sharedPreferences.getString("ip", "192.168.4.1")
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_gesture)
         var clickflag = false
         btnAdd.setOnClickListener {
             clickflag = true
+
             val t = thread {
-                val connection = Socket(loadIP(), 5050)
+                val connection = Socket(IP(), 5050)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write(gestureNameTxt.text.toString().toByteArray())

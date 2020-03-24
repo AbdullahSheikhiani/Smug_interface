@@ -1,16 +1,18 @@
 package com.rls.smug_interface
 
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
 import kotlinx.android.synthetic.main.activity_interface.*
+import java.net.InetAddress
 import java.net.Socket
 import kotlin.concurrent.thread
 
 
 class Interface : AppCompatActivity() {
-    fun loadIP(): String? {
+    fun IP(): String? {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
         return sharedPreferences.getString("ip", "192.168.4.1")
     }
@@ -28,11 +30,26 @@ class Interface : AppCompatActivity() {
                 //print("ip =")
                 //println(ip)
                 // val ip = "192.168.4.1"
-                val connection = Socket(loadIP(), 5051)
-                //val reader = connection.getInputStream()
-                val writer = connection.getOutputStream()
-                writer.write("8".toByteArray())
-                connection.close()
+
+                try {
+                    val connection = Socket(IP(), 5051)
+                    //val reader = connection.getInputStream()
+                    val writer = connection.getOutputStream()
+                    writer.write("8".toByteArray())
+                    connection.close()
+                } catch (e: Exception) {
+                    PreferenceManager.getDefaultSharedPreferences(applicationContext).edit().clear()
+                        .commit()
+                    println()
+                    print("e: ")
+                    println(e)
+                    val connection = Socket("192.168.4.1", 5051)
+                    //val reader = connection.getInputStream()
+                    val writer = connection.getOutputStream()
+                    writer.write("8".toByteArray())
+                    connection.close()
+                }
+
             }
             t.join()
             //exitProcess(-2)
@@ -51,7 +68,24 @@ class Interface : AppCompatActivity() {
                 //print("ip =")
                 //println(ip)
                 // val ip = "192.168.4.1"
-                val connection = Socket(loadIP(), 5051)
+                /*
+                 try {
+                     print("load ip value: ")
+                     println(IP())
+                     println("getting inet address")
+                     print("google ip: ")
+                     println(InetAddress.getByName("google.com"))
+                     val i = InetAddress.getByName("pspspspi")
+                     print("ip via inet4 =")
+                     println(i)
+                 } catch (es: Exception) {
+                     println(es)
+                     println("this is not working for some reason")
+                 }
+                 */
+
+
+                val connection = Socket(IP(), 5051)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write("1".toByteArray())
@@ -67,7 +101,7 @@ class Interface : AppCompatActivity() {
             val t = thread {
                 //val ip = InetAddress.getByName("pspsps")
                 //val ip = "192.168.0.186"
-                val connection = Socket(loadIP(), 5051)
+                val connection = Socket(IP(), 5051)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write("2".toByteArray())
@@ -83,7 +117,7 @@ class Interface : AppCompatActivity() {
             val t = thread {
                 //val ip = InetAddress.getByName("pspsps")
                 // val ip = "192.168.0.186"
-                val connection = Socket(loadIP(), 5051)
+                val connection = Socket(IP(), 5051)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write("3".toByteArray())
@@ -98,7 +132,7 @@ class Interface : AppCompatActivity() {
             val t = thread {
                 //val ip = InetAddress.getByName("pspsps")
                 // val ip = "192.168.0.186"
-                val connection = Socket(loadIP(), 5051)
+                val connection = Socket(IP(), 5051)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write("4".toByteArray())
@@ -106,26 +140,12 @@ class Interface : AppCompatActivity() {
             }
 
         }
-        addUsrBtn.setOnClickListener {
-            val t = thread {
-                //val ip = InetAddress.getByName("pspsps")
-                //val ip = "192.168.0.186"
-                val connection = Socket(loadIP(), 5051)
-                //val reader = connection.getInputStream()
-                val writer = connection.getOutputStream()
-                writer.write("6".toByteArray())
-                connection.close()
-            }
-            t.join()
-            val intent = Intent(this, AddUser::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            applicationContext.startActivity(intent)
-        }
+
         chgUsrBtn.setOnClickListener {
             val t = thread {
                 //val ip = InetAddress.getByName("pspsps")
                 //val ip = "192.168.0.186"
-                val connection = Socket(loadIP(), 5051)
+                val connection = Socket(IP(), 5051)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write("5".toByteArray())
@@ -136,6 +156,37 @@ class Interface : AppCompatActivity() {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             applicationContext.startActivity(intent)
 
+        }
+        addUsrBtn.setOnClickListener {
+            val t = thread {
+                //val ip = InetAddress.getByName("pspsps")
+                //val ip = "192.168.0.186"
+                val connection = Socket(IP(), 5051)
+                //val reader = connection.getInputStream()
+                val writer = connection.getOutputStream()
+                writer.write("6".toByteArray())
+                connection.close()
+            }
+            t.join()
+            val intent = Intent(this, AddUser::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            applicationContext.startActivity(intent)
+        }
+        rmUsrBtn.setOnClickListener {
+            val t = thread {
+                //val ip = InetAddress.getByName("pspsps")
+                //val ip = "192.168.0.186"
+                val connection = Socket(IP(), 5051)
+                //val reader = connection.getInputStream()
+                val writer = connection.getOutputStream()
+                writer.write("7".toByteArray())
+                connection.close()
+            }
+            t.join()
+            val intent = Intent(this, RemoveUser::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            applicationContext.startActivity(intent)
+            //finish()
         }
     }
 }

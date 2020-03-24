@@ -7,11 +7,11 @@ import android.os.Looper
 import android.preference.PreferenceManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_change_user.*
+import kotlinx.android.synthetic.main.activity_remove_user.*
 import java.net.Socket
 import kotlin.concurrent.thread
 
-class ChangeUser : AppCompatActivity() {
+class RemoveUser : AppCompatActivity() {
     fun IP(): String? {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
         return sharedPreferences.getString("ip", "192.168.4.1")
@@ -19,29 +19,25 @@ class ChangeUser : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_change_user)
-        // val ip = "192.168.0.186"
-        println("change user")
-        println(IP())
-
+        setContentView(R.layout.activity_remove_user)
         val a = ArrayList<String>()
-        btnReload.setOnClickListener {
+        rldBtn.setOnClickListener {
             val t = thread {
                 println("THREAD")
                 val connection = Socket(IP(), 5050)
                 val reader = connection.getInputStream()
                 //val writer = connection.getOutputStream()
                 val b = reader.bufferedReader()
-                //println("AFTER BUFF")
+                //list users
                 var x = b.readLine()
-                println(x)
+                print(x)
                 while (x != "stp") {
                     a.add(x)
                     x = b.readLine()
-                    println(x)
+                    //print("x=")
+                    //println(x)
                 }
                 connection.close()
-                println("list reading finished")
             }
             t.join()
             val adapter = ArrayAdapter(
@@ -50,35 +46,50 @@ class ChangeUser : AppCompatActivity() {
                 a // Array
             )
             adapter.notifyDataSetChanged()
-            userSpinner.adapter = adapter
+            spinnerrmUsr.adapter = adapter
         }
-        btnChgUser.setOnClickListener {
+        btnRemove.setOnClickListener {
             val t = thread {
-                println("THREAD")
                 val connection = Socket(IP(), 5050)
-                //val reader = connection.getInputStream()
+                val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
-                writer.write(userSpinner.selectedItem.toString().toByteArray())
-                //todo validation
+                writer.write(spinnerrmUsr.selectedItem.toString().toByteArray())
+                val r = reader.bufferedReader()
+                if (r.readLine() == "NAK") {
+                    Looper.prepare()
+                    Toast.makeText(
+                        applicationContext,
+                        "User ${spinnerrmUsr.selectedItem} not found",
+                        Toast.LENGTH_SHORT
+                        //applicationContext,
+                        //wifiManager.scanResults[0].toString(),
+                        //Toast.LENGTH_LONG
+
+                    ).show()
+                } else {
+                    Looper.prepare()
+                    Toast.makeText(
+                        applicationContext,
+                        "User ${spinnerrmUsr.selectedItem} removed",
+                        Toast.LENGTH_SHORT
+                        //applicationContext,
+                        //wifiManager.scanResults[0].toString(),
+                        //Toast.LENGTH_LONG
+
+                    ).show()
+
+                }
+
+                println(r.readLine())
             }
             t.join()
-            /*
-            Looper.prepare()
-            Toast.makeText(
-                applicationContext,
-                "changed to user to ${userSpinner.selectedItem}",
-                Toast.LENGTH_SHORT
-                //applicationContext,
-                //wifiManager.scanResults[0].toString(),
-                //Toast.LENGTH_LONG
 
-            ).show()
-             */
+        }
+        btnBack.setOnClickListener {
             val intent = Intent(this, Interface::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            applicationContext.startActivity(intent)
+            startActivity(intent)
             finish()
         }
-
     }
 }

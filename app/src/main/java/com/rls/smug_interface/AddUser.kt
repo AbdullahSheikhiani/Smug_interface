@@ -8,7 +8,7 @@ import java.net.Socket
 import kotlin.concurrent.thread
 
 class AddUser : AppCompatActivity() {
-    fun loadIP(): String? {
+    fun IP(): String? {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
         return sharedPreferences.getString("ip", "192.168.4.1")
     }
@@ -20,7 +20,7 @@ class AddUser : AppCompatActivity() {
         this.btnSendUser.setOnClickListener {
             clickflag = true
             val t = thread {
-                val connection = Socket(loadIP(), 5050)
+                val connection = Socket(IP(), 5050)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write(editText.text.toString().toByteArray())

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.DhcpInfo
 import android.net.wifi.WifiManager
 import android.os.Bundle
+import android.os.Looper
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_list_gestures.*
@@ -16,10 +17,11 @@ import kotlin.concurrent.thread
 
 
 class ListGestures : AppCompatActivity() {
-    fun loadIP(): String? {
+    fun IP(): String? {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
         return sharedPreferences.getString("ip", "192.168.4.1")
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_gestures)
@@ -30,14 +32,14 @@ class ListGestures : AppCompatActivity() {
         //println(ip)
         val a = ArrayList<String>()
         val t = thread {
-            val wifi = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-            val info: DhcpInfo = wifi.dhcpInfo
-            print("info= ")
-            println(info.dns1)
-            println(info.dns2.toString())
-            val ipas = InetAddress.getByName("pspspspi")
-            print("ipa= ")
-            println(ipas)
+            //val wifi = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            //val info: DhcpInfo = wifi.dhcpInfo
+            //print("info= ")
+            //println(info.dns1)
+            //println(info.dns2.toString())
+            //val ipas = InetAddress.getByName("pspspspi")
+            //print("ipa= ")
+            //println(ipas)
             /*
             for (ipa in ipas) {
                 print(when (ipa) {
@@ -49,8 +51,13 @@ class ListGestures : AppCompatActivity() {
                 println(ipa)
             }
             */
+            Looper.prepare()
             println("THREAD")
-            val connection = Socket(loadIP(), 5050)
+            print("IP= ")
+            //val ip = "192.168.0.134"
+            println(IP())
+            val connection = Socket(IP(), 5050)
+            print(connection)
             val reader = connection.getInputStream()
             //val writer = connection.getOutputStream()
             val b = reader.bufferedReader()

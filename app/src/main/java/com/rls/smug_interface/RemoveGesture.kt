@@ -11,11 +11,11 @@ import java.net.Socket
 import kotlin.concurrent.thread
 
 class RemoveGesture : AppCompatActivity() {
-    fun loadIP(): String? {
+
+    fun IP(): String? {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
         return sharedPreferences.getString("ip", "192.168.4.1")
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_remove_gesture)
@@ -24,7 +24,7 @@ class RemoveGesture : AppCompatActivity() {
         rldBtn.setOnClickListener {
             val t = thread {
                 println("THREAD")
-                val connection = Socket(loadIP(), 5050)
+                val connection = Socket(IP(), 5050)
                 val reader = connection.getInputStream()
                 //val writer = connection.getOutputStream()
                 val b = reader.bufferedReader()
@@ -50,7 +50,7 @@ class RemoveGesture : AppCompatActivity() {
         }
         btnRemove.setOnClickListener {
             val t = thread {
-                val connection = Socket(loadIP(), 5050)
+                val connection = Socket(IP(), 5050)
                 val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write(spinner.selectedItem.toString().toByteArray())
