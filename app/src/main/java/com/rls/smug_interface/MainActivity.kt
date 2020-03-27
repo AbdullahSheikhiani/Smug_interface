@@ -29,6 +29,28 @@ class MainActivity : AppCompatActivity() {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
         return sharedPreferences.getString("ip", "192.168.4.1")
     }
+    /*fun IP(): String? {
+     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+     return sharedPreferences.getString("ip", "192.168.4.1")
+ }*/
+
+    fun IPbyName(): String {
+        val host = "pspspspi"
+        lateinit var ipas: String
+        try {
+            //print("INSIDE SHOW IP ADDRESS")
+            val t = thread {
+                ipas = Inet4Address.getByName(host).hostAddress
+            }
+            t.join()
+            //println("The IP address(es) for '$host' is/are:\n")
+            //println(ipas)
+            return ipas
+        } catch (ex: Exception) {
+            println(ex.message)
+        }
+        return "192.168.4.1"
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,13 +58,13 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val networks = arrayOf(
+        var networks = arrayOf(
             "getting networks list "
         )
         print("loadIP value: ")
         println(loadIP())
 
-        val adapter = ArrayAdapter(
+        var adapter = ArrayAdapter(
             this, // Context
             android.R.layout.simple_spinner_item, // Layout
             networks // Array
@@ -55,7 +77,6 @@ class MainActivity : AppCompatActivity() {
         //val file = "ip"
         //val oldIP = "192.168.4.1"
         //var newIP: String = oldIP
-        val networkList = ArrayList<String>()
         /*  thread {
               val connection = Socket("192.168.4.1", 5050)
               val writer0: OutputStream = connection.getOutputStream()
@@ -79,51 +100,49 @@ class MainActivity : AppCompatActivity() {
               connection.close()
           }*/
         //println("before reload")
-        reloadBtn.setOnClickListener {
-            //DNS
-            progressBar_initsetup.visibility = View.VISIBLE
-            var networks = ArrayList<String>()
-            var t = thread {
+        //DNS
+        progressBar_initsetup.visibility = View.VISIBLE
+        val networkList = ArrayList<String>()
+        var t = thread {
 
-                val connection = Socket("192.168.4.1", 5005)
-                val reader = connection.getInputStream()
-                val writer = connection.getOutputStream()
-                writer.write("conf".toByteArray())
+            val connection = Socket("192.168.4.1", 5005)
+            val reader = connection.getInputStream()
+            val writer = connection.getOutputStream()
+            writer.write("conf".toByteArray())
 
-                var s = reader.bufferedReader()
-                var x = s.readLine()
-                print("x= ")
+            var s = reader.bufferedReader()
+            var x = s.readLine()
+            print("x= ")
+            println(x)
+            while (x != "stp") {
+                networkList.add(x)
+                x = s.readLine()
                 println(x)
-                while (x != "stp") {
-                    networks.add(x)
-                    x = s.readLine()
-                    println(x)
-                }
-                //println("out")
-                //writer.write("ACK".toByteArray())
-                connection.close()
             }
-            t.join()
-            /*for (i in networks) {
-                println(i)
-            }*/
-
-            val adapter = ArrayAdapter(
-                this, // Context
-                android.R.layout.simple_spinner_item, // Layout
-                networks // Array
-            )
-            adapter.notifyDataSetChanged()
-            spinner0.adapter = adapter
-            println(networks)
-            //adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
-
-            //spinner0.adapter = adapter
-
-            //progressBar_initsetup.visibility = View.GONE
-            progressBar_initsetup.visibility = View.GONE
-
+            //println("out")
+            //writer.write("ACK".toByteArray())
+            connection.close()
         }
+        t.join()
+        /*for (i in networks) {
+            println(i)
+        }*/
+
+        adapter = ArrayAdapter(
+            this, // Context
+            android.R.layout.simple_spinner_item, // Layout
+            networkList // Array
+        )
+        adapter.notifyDataSetChanged()
+        spinner0.adapter = adapter
+        println(networks)
+        //adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
+
+        //spinner0.adapter = adapter
+
+        //progressBar_initsetup.visibility = View.GONE
+        progressBar_initsetup.visibility = View.GONE
+
         confBtn.setOnClickListener {
             val t = thread {
                 val connection = Socket("192.168.4.1", 5005)

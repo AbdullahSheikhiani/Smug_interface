@@ -8,46 +8,65 @@ import android.preference.PreferenceManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_remove_user.*
+import java.net.Inet4Address
 import java.net.Socket
 import kotlin.concurrent.thread
 
 class RemoveUser : AppCompatActivity() {
-    fun IP(): String? {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-        return sharedPreferences.getString("ip", "192.168.4.1")
+    /*fun IP(): String? {
+      val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+      return sharedPreferences.getString("ip", "192.168.4.1")
+  }*/
+
+    fun IP(): String {
+        val host = "pspspspi"
+        lateinit var ipas: String
+        try {
+            //print("INSIDE SHOW IP ADDRESS")
+            val t = thread {
+                ipas = Inet4Address.getByName(host).hostAddress
+            }
+            t.join()
+            //println("The IP address(es) for '$host' is/are:\n")
+            //println(ipas)
+            return ipas
+        } catch (ex: Exception) {
+            println(ex.message)
+        }
+        return "192.168.4.1"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_remove_user)
         val a = ArrayList<String>()
-        rldBtn.setOnClickListener {
-            val t = thread {
-                println("THREAD")
-                val connection = Socket(IP(), 5050)
-                val reader = connection.getInputStream()
-                //val writer = connection.getOutputStream()
-                val b = reader.bufferedReader()
-                //list users
-                var x = b.readLine()
-                print(x)
-                while (x != "stp") {
-                    a.add(x)
-                    x = b.readLine()
-                    //print("x=")
-                    //println(x)
-                }
-                connection.close()
+
+        val t = thread {
+            println("THREAD")
+            val connection = Socket(IP(), 5050)
+            val reader = connection.getInputStream()
+            //val writer = connection.getOutputStream()
+            val b = reader.bufferedReader()
+            //list users
+            var x = b.readLine()
+            print(x)
+            while (x != "stp") {
+                a.add(x)
+                x = b.readLine()
+                //print("x=")
+                //println(x)
             }
-            t.join()
-            val adapter = ArrayAdapter(
-                this, // Context
-                android.R.layout.simple_spinner_item, // Layout
-                a // Array
-            )
-            adapter.notifyDataSetChanged()
-            spinnerrmUsr.adapter = adapter
+            connection.close()
         }
+        t.join()
+        val adapter = ArrayAdapter(
+            this, // Context
+            android.R.layout.simple_spinner_item, // Layout
+            a // Array
+        )
+        adapter.notifyDataSetChanged()
+        spinnerrmUsr.adapter = adapter
+
         btnRemove.setOnClickListener {
             val t = thread {
                 val connection = Socket(IP(), 5050)

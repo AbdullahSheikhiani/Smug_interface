@@ -6,20 +6,47 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
 import kotlinx.android.synthetic.main.activity_interface.*
+import java.net.Inet4Address
+import java.net.Inet6Address
 import java.net.InetAddress
 import java.net.Socket
 import kotlin.concurrent.thread
 
 
 class Interface : AppCompatActivity() {
-    fun IP(): String? {
+
+    /*fun IP(): String? {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
         return sharedPreferences.getString("ip", "192.168.4.1")
+    }*/
+
+    fun IP(): String {
+        val host = "pspspspi"
+        lateinit var ipas: String
+        try {
+            //print("INSIDE SHOW IP ADDRESS")
+            val t = thread {
+                ipas = Inet4Address.getByName(host).hostAddress
+            }
+            t.join()
+            //println("The IP address(es) for '$host' is/are:\n")
+            //println(ipas)
+            return ipas
+        } catch (ex: Exception) {
+            println(ex.message)
+        }
+        return "192.168.4.1"
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_interface)
+
+        print("pspspspi =")
+        println(IP())
+
+
 
         exitBtn.setOnClickListener {
             //TODO
@@ -38,8 +65,11 @@ class Interface : AppCompatActivity() {
                     writer.write("8".toByteArray())
                     connection.close()
                 } catch (e: Exception) {
-                    PreferenceManager.getDefaultSharedPreferences(applicationContext).edit().clear()
+                    /*
+                    PreferenceManager.getDefaultSharedPreferences(applicationContext).edit()
+                        .clear()
                         .commit()
+                        */
                     println()
                     print("e: ")
                     println(e)
@@ -187,6 +217,18 @@ class Interface : AppCompatActivity() {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             applicationContext.startActivity(intent)
             //finish()
+        }
+        addDeviceBtn.setOnClickListener {
+            val t = thread {
+                val connection = Socket(IP(), 5051)
+                val writer = connection.getOutputStream()
+                writer.write("9".toByteArray())
+                connection.close()
+            }
+            t.join()
+            //val intent = Intent(this, AddDevice::class.java)
+            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            //applicationContext.startActivity(intent)
         }
     }
 }

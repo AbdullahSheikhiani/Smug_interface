@@ -8,6 +8,9 @@ import android.os.Bundle
 import android.os.Looper
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProviders.of
 import kotlinx.android.synthetic.main.activity_list_gestures.*
 import java.net.Inet4Address
 import java.net.Inet6Address
@@ -17,14 +20,35 @@ import kotlin.concurrent.thread
 
 
 class ListGestures : AppCompatActivity() {
-    fun IP(): String? {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-        return sharedPreferences.getString("ip", "192.168.4.1")
+    /*fun IP(): String? {
+      val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+      return sharedPreferences.getString("ip", "192.168.4.1")
+  }*/
+
+    fun IP(): String {
+        val host = "pspspspi"
+        lateinit var ipas: String
+        try {
+            //print("INSIDE SHOW IP ADDRESS")
+            val t = thread {
+                ipas = Inet4Address.getByName(host).hostAddress
+            }
+            t.join()
+            //println("The IP address(es) for '$host' is/are:\n")
+            //println(ipas)
+            return ipas
+        } catch (ex: Exception) {
+            println(ex.message)
+        }
+        return "192.168.4.1"
     }
 
+    //lateinit var viewModel: NetworkHandlerViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_gestures)
+
+        //viewModel = ViewModelProvider(this).get(NetworkHandlerViewModel::class.java)
         //sleep(100)
         //val ip = InetAddress.getByName("pspsps")
         //val x:DnsResolver();
@@ -51,7 +75,7 @@ class ListGestures : AppCompatActivity() {
                 println(ipa)
             }
             */
-            Looper.prepare()
+            //Looper.prepare()
             println("THREAD")
             print("IP= ")
             //val ip = "192.168.0.134"
