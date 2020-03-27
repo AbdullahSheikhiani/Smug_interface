@@ -9,8 +9,6 @@ import android.os.Looper
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.ViewModelProviders.of
 import kotlinx.android.synthetic.main.activity_list_gestures.*
 import java.net.Inet4Address
 import java.net.Inet6Address
@@ -113,5 +111,23 @@ class ListGestures : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val th = thread {
+            val connection = Socket(IP(), 5050)
+            //val reader = connection.getInputStream()
+            val writer = connection.getOutputStream()
+            writer.write("0".toByteArray())
+            connection.close()
+
+        }
+        th.join()
+        println("sent 0 to return to Interface")
+        val intent = Intent(this, Interface::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        applicationContext.startActivity(intent)
+        finish()
     }
 }

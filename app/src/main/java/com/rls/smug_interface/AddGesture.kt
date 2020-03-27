@@ -32,6 +32,7 @@ class AddGesture : AppCompatActivity() {
             //println(ipas)
             return ipas
         } catch (ex: Exception) {
+            println("DNS REQUEST ERROR")
             println(ex.message)
         }
         return "192.168.4.1"
@@ -40,9 +41,9 @@ class AddGesture : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_gesture)
-        var clickflag = false
+        //var clickflag = false
         btnAdd.setOnClickListener {
-            clickflag = true
+          //  clickflag = true
 
             val t = thread {
                 val connection = Socket(IP(), 5050)
@@ -87,11 +88,38 @@ class AddGesture : AppCompatActivity() {
         t.join()
 */
         bckBtn.setOnClickListener {
+            val th = thread {
+                val connection = Socket(IP(), 5050)
+                //val reader = connection.getInputStream()
+                val writer = connection.getOutputStream()
+                writer.write("0".toByteArray())
+                connection.close()
+
+            }
+            th.join()
             val intent = Intent(this, Interface::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             applicationContext.startActivity(intent)
             finish()
 
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val th = thread {
+            val connection = Socket(IP(), 5050)
+            //val reader = connection.getInputStream()
+            val writer = connection.getOutputStream()
+            writer.write("0".toByteArray())
+            connection.close()
+
+        }
+        th.join()
+        println("sent 0 to return to Interface")
+        val intent = Intent(this, Interface::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        applicationContext.startActivity(intent)
+        finish()
     }
 }

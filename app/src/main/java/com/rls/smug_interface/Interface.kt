@@ -47,7 +47,6 @@ class Interface : AppCompatActivity() {
         println(IP())
 
 
-
         exitBtn.setOnClickListener {
             //TODO
             val t = thread {
@@ -168,6 +167,7 @@ class Interface : AppCompatActivity() {
                 writer.write("4".toByteArray())
                 connection.close()
             }
+            t.join()
 
         }
 

@@ -68,7 +68,7 @@ class RemoveUser : AppCompatActivity() {
         spinnerrmUsr.adapter = adapter
 
         btnRemove.setOnClickListener {
-            val t = thread {
+            val th = thread {
                 val connection = Socket(IP(), 5050)
                 val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
@@ -101,7 +101,7 @@ class RemoveUser : AppCompatActivity() {
 
                 println(r.readLine())
             }
-            t.join()
+            th.join()
 
         }
         btnBack.setOnClickListener {
@@ -110,5 +110,22 @@ class RemoveUser : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+    }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val th = thread {
+            val connection = Socket(IP(), 5050)
+            //val reader = connection.getInputStream()
+            val writer = connection.getOutputStream()
+            writer.write("0".toByteArray())
+            connection.close()
+
+        }
+        th.join()
+        println("sent 0 to return to Interface")
+        val intent = Intent(this, Interface::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        applicationContext.startActivity(intent)
+        finish()
     }
 }
