@@ -1,7 +1,9 @@
 package com.rls.smug_interface
 
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import kotlinx.android.synthetic.main.activity_add_action.*
 import java.net.Inet4Address
 import java.net.Socket
@@ -49,7 +51,22 @@ class AddAction : AppCompatActivity() {
                 x = b.readLine()
             }
             println("got list of devices")
+            connection.close()
         }
         th.join()
+        for(i in devices){
+            println(i)
+        }
+        val adapter = ArrayAdapter(
+            this, // Context
+            android.R.layout.simple_expandable_list_item_1, // Layout
+            gstList // Array
+        )
+        gstListView.adapter = adapter
+        gstListView.setOnItemClickListener { parent, view, position, id ->
+            println(gstList[position])
+        }
+
+
     }
 }

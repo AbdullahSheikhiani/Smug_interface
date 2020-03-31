@@ -232,7 +232,7 @@ class Interface : AppCompatActivity() {
             applicationContext.startActivity(intent)
         }
         addActionBtn.setOnClickListener {
-            /*
+
             val t = thread {
                 val connection = Socket(IP(), 5051)
                 val writer = connection.getOutputStream()
@@ -241,7 +241,6 @@ class Interface : AppCompatActivity() {
             }
             t.join()
 
-             */
             val intent = Intent(this, AddAction::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             applicationContext.startActivity(intent)
