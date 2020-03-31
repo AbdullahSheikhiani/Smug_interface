@@ -21,6 +21,8 @@ class Interface : AppCompatActivity() {
     }*/
 
     fun IP(): String {
+        return "192.168.1.126"
+
         val host = "pspspspi"
         lateinit var ipas: String
         try {
@@ -34,8 +36,8 @@ class Interface : AppCompatActivity() {
             return ipas
         } catch (ex: Exception) {
             println(ex.message)
+            return "192.168.1.126"
         }
-        return "192.168.4.1"
     }
 
 

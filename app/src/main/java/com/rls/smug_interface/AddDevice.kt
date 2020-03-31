@@ -1,16 +1,20 @@
 package com.rls.smug_interface
 
+import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_add_device.*
 import java.net.Inet4Address
 import java.net.Socket
 import kotlin.concurrent.thread
 
+
 class AddDevice : AppCompatActivity() {
     fun IP(): String {
+        return "192.168.1.126"
+
         val host = "pspspspi"
         lateinit var ipas: String
         try {
@@ -34,11 +38,11 @@ class AddDevice : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_device)
 
-        val a = ArrayList<String>()
+        val gstList = ArrayList<String>()
         val adapter = ArrayAdapter(
             this, // Context
             android.R.layout.simple_expandable_list_item_1, // Layout
-            a // Array
+            gstList // Array
         )
         deviceList.adapter = adapter
         val t = thread {
@@ -49,7 +53,7 @@ class AddDevice : AppCompatActivity() {
             val b = reader.bufferedReader()
             var x = b.readLine()
             while (x != "stp") {
-                a.add(x)
+                gstList.add(x)
                 x = b.readLine()
             }
             connection.close()
@@ -58,9 +62,19 @@ class AddDevice : AppCompatActivity() {
         t.join()
         adapter.notifyDataSetChanged()
         println("\ngot list of devices")
-        for (i in a) {
+        for (i in gstList) {
             print("d: ")
             println(i)
+        }
+        var called = true;
+        if (called) {
+            deviceList.setOnItemClickListener { parent, view, position, id ->
+                println(gstList[position])
+                val returnIntent = Intent()
+                returnIntent.putExtra("result", gstList[position])
+                setResult(Activity.RESULT_OK, returnIntent)
+                finish()
+            }
         }
     }
 

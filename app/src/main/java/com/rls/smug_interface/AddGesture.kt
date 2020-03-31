@@ -16,6 +16,8 @@ class AddGesture : AppCompatActivity() {
      }*/
 
     fun IP(): String {
+        return "192.168.1.126"
+
         val host = "pspspspi"
         lateinit var ipas: String
         try {
@@ -31,7 +33,7 @@ class AddGesture : AppCompatActivity() {
             println("DNS REQUEST ERROR")
             println(ex.message)
         }
-        return "192.168.4.1"
+        return "192.168.1.126"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
