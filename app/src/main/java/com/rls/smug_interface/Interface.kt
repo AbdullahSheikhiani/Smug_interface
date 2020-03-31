@@ -223,12 +223,28 @@ class Interface : AppCompatActivity() {
                 val connection = Socket(IP(), 5051)
                 val writer = connection.getOutputStream()
                 writer.write("9".toByteArray())
+                println("sent 9")
                 connection.close()
             }
             t.join()
-            //val intent = Intent(this, AddDevice::class.java)
-            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            //applicationContext.startActivity(intent)
+            val intent = Intent(this, AddDevice::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            applicationContext.startActivity(intent)
+        }
+        addActionBtn.setOnClickListener {
+            /*
+            val t = thread {
+                val connection = Socket(IP(), 5051)
+                val writer = connection.getOutputStream()
+                writer.write("10".toByteArray())
+                connection.close()
+            }
+            t.join()
+
+             */
+            val intent = Intent(this, AddAction::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            applicationContext.startActivity(intent)
         }
     }
 }

@@ -7,8 +7,10 @@ import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.os.Looper
 import android.preference.PreferenceManager
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import kotlinx.android.synthetic.main.activity_interface.*
 import kotlinx.android.synthetic.main.activity_list_gestures.*
 import java.net.Inet4Address
 import java.net.Inet6Address
@@ -41,11 +43,12 @@ class ListGestures : AppCompatActivity() {
         return "192.168.4.1"
     }
 
+    private var success = false
+
     //lateinit var viewModel: NetworkHandlerViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_gestures)
-
         //viewModel = ViewModelProvider(this).get(NetworkHandlerViewModel::class.java)
         //sleep(100)
         //val ip = InetAddress.getByName("pspsps")
@@ -93,41 +96,35 @@ class ListGestures : AppCompatActivity() {
                 //println(x)
             }
             connection.close()
+            success = true
         }
         t.join()
         println("\nlist reading finished")
-        var r = ""
-        for (i in a) {
-            print("i =")
-            println(i)
-            r = r + i + "\n"
-        }
-        print("r=")
-        println(r)
-        txt.text = r
-        bckBtn.setOnClickListener {
-            val intent = Intent(this, Interface::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-            finish()
-        }
+        val adapter = ArrayAdapter(
+            this, // Context
+            android.R.layout.simple_expandable_list_item_1, // Layout
+            a // Array
+        )
+        listGstView.adapter = adapter
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
-        val th = thread {
-            val connection = Socket(IP(), 5050)
-            //val reader = connection.getInputStream()
-            val writer = connection.getOutputStream()
-            writer.write("0".toByteArray())
-            connection.close()
-
+        if (!success) {
+            val th = thread {
+                val connection = Socket(IP(), 5050)
+                //val reader = connection.getInputStream()
+                val writer = connection.getOutputStream()
+                writer.write("0".toByteArray())
+                connection.close()
+            }
+            th.join()
+            println("sent 0 to return to Interface")
         }
-        th.join()
-        println("sent 0 to return to Interface")
         val intent = Intent(this, Interface::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         applicationContext.startActivity(intent)
         finish()
     }
+
 }

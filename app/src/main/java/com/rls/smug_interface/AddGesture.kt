@@ -2,12 +2,8 @@ package com.rls.smug_interface
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.StrictMode
-import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_add_gesture.*
-import kotlinx.android.synthetic.main.activity_list_gestures.bckBtn
-import kotlinx.coroutines.runBlocking
 import java.net.Inet4Address
 import java.net.Socket
 import kotlin.concurrent.thread
