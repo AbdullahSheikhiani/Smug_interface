@@ -12,12 +12,10 @@ import kotlin.concurrent.thread
 
 
 class AddDevice : AppCompatActivity() {
-    fun IP(): String {
-        return "192.168.1.126"
-
+    fun ip(): String {
         val host = "pspspspi"
         lateinit var ipas: String
-        try {
+        return try {
             //print("INSIDE SHOW IP ADDRESS")
             val t = thread {
                 ipas = Inet4Address.getByName(host).hostAddress
@@ -25,11 +23,11 @@ class AddDevice : AppCompatActivity() {
             t.join()
             //println("The IP address(es) for '$host' is/are:\n")
             //println(ipas)
-            return ipas
+            ipas
         } catch (ex: Exception) {
-            println(ex.message)
+            //println(ex.message)
+            "192.168.4.1"
         }
-        return "192.168.4.1"
     }
 
     private var success = false
@@ -47,7 +45,7 @@ class AddDevice : AppCompatActivity() {
         deviceList.adapter = adapter
         val t = thread {
             println("thread")
-            val connection = Socket(IP(), 5050)
+            val connection = Socket(ip(), 5050)
             println(connection)
             val reader = connection.getInputStream()
             val b = reader.bufferedReader()
@@ -66,7 +64,7 @@ class AddDevice : AppCompatActivity() {
             print("d: ")
             println(i)
         }
-        var called = true;
+        var called = true
         if (called) {
             deviceList.setOnItemClickListener { parent, view, position, id ->
                 println(gstList[position])
@@ -82,7 +80,7 @@ class AddDevice : AppCompatActivity() {
         super.onBackPressed()
         if (!success) {
             val th = thread {
-                val connection = Socket(IP(), 5050)
+                val connection = Socket(ip(), 5050)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write("0".toByteArray())

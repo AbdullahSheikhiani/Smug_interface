@@ -19,11 +19,11 @@ class RemoveUser : AppCompatActivity() {
   }*/
 
     fun IP(): String {
-        return "192.168.1.126"
+        //return "192.168.1.126"
 
         val host = "pspspspi"
         lateinit var ipas: String
-        try {
+        return try {
             //print("INSIDE SHOW IP ADDRESS")
             val t = thread {
                 ipas = Inet4Address.getByName(host).hostAddress
@@ -31,11 +31,11 @@ class RemoveUser : AppCompatActivity() {
             t.join()
             //println("The IP address(es) for '$host' is/are:\n")
             //println(ipas)
-            return ipas
+            ipas
         } catch (ex: Exception) {
             println(ex.message)
+            "192.168.1.126"
         }
-        return "192.168.1.126"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,6 +113,7 @@ class RemoveUser : AppCompatActivity() {
             finish()
         }
     }
+
     override fun onBackPressed() {
         super.onBackPressed()
         val th = thread {

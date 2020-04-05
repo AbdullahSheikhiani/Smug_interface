@@ -3,7 +3,6 @@ package com.rls.smug_interface
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_associate_gesture.*
 import java.net.Inet4Address
@@ -12,12 +11,12 @@ import kotlin.concurrent.thread
 
 
 class AssociateGesture : AppCompatActivity() {
-    fun IP(): String {
-        return "192.168.1.126"
+    fun ip(): String {
+//        return "192.168.1.126"
 
         val host = "pspspspi"
         lateinit var ipas: String
-        try {
+        return try {
             //print("INSIDE SHOW IP ADDRESS")
             val t = thread {
                 ipas = Inet4Address.getByName(host).hostAddress
@@ -25,10 +24,10 @@ class AssociateGesture : AppCompatActivity() {
             t.join()
             //println("The IP address(es) for '$host' is/are:\n")
             //println(ipas)
-            return ipas
+            ipas
         } catch (ex: Exception) {
-            println(ex.message)
-            return "192.168.1.126"
+            //println(ex.message)
+            "192.168.1.126"
         }
     }
 
@@ -40,7 +39,7 @@ class AssociateGesture : AppCompatActivity() {
         gestureName.text = gstName
         //call add device to get device
         val intent = Intent(baseContext, AddDevice::class.java)
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, 1)
 
     }
 
@@ -52,7 +51,7 @@ class AssociateGesture : AppCompatActivity() {
             listOfComTxt.text = device.toString()
             println(device)
             val th = thread {
-                val connection = Socket(IP(), 5050)
+                val connection = Socket(ip(), 5050)
                 val writer = connection.getOutputStream()
                 writer.write(gstName.toByteArray())
                 writer.write("\n".toByteArray())
@@ -65,6 +64,7 @@ class AssociateGesture : AppCompatActivity() {
                 writer.flush()
                 connection.close()
             }
+            th.join()
         }
     }
 }

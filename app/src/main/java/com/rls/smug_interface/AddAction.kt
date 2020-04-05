@@ -11,12 +11,12 @@ import kotlin.concurrent.thread
 
 
 class AddAction : AppCompatActivity() {
-    fun IP(): String {
-        return "192.168.1.126"
+    fun ip(): String {
+        //return "192.168.1.126"
 
         val host = "pspspspi"
         lateinit var ipas: String
-        try {
+        return try {
             //print("INSIDE SHOW IP ADDRESS")
             val t = thread {
                 ipas = Inet4Address.getByName(host).hostAddress
@@ -24,11 +24,11 @@ class AddAction : AppCompatActivity() {
             t.join()
             //println("The IP address(es) for '$host' is/are:\n")
             //println(ipas)
-            return ipas
+            ipas
         } catch (ex: Exception) {
-            println(ex.message)
+            //println(ex.message)
+            "192.168.1.126"
         }
-        return "192.168.1.126"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +37,7 @@ class AddAction : AppCompatActivity() {
         val gstList = ArrayList<String>()
         val devices = ArrayList<String>()
         val th = thread {
-            val connection = Socket(IP(), 5050)
+            val connection = Socket(ip(), 5050)
             print(connection)
             val reader = connection.getInputStream()
             val b = reader.bufferedReader()
@@ -49,14 +49,6 @@ class AddAction : AppCompatActivity() {
                 println(x)
             }
             println("got list of gestures")
-            //x = b.readLine()
-            /* while (x != "stp") {
-                 devices.add(x)
-                 x = b.readLine()
-             }
-             println("got list of devices")
-
-             */
             connection.close()
         }
         th.join()

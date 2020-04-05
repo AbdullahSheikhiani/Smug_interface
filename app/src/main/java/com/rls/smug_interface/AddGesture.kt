@@ -15,12 +15,12 @@ class AddGesture : AppCompatActivity() {
          return sharedPreferences.getString("ip", "192.168.4.1")
      }*/
 
-    fun IP(): String {
-        return "192.168.1.126"
+    fun ip(): String {
+        //return "192.168.1.126"
 
         val host = "pspspspi"
         lateinit var ipas: String
-        try {
+        return try {
             //print("INSIDE SHOW IP ADDRESS")
             val t = thread {
                 ipas = Inet4Address.getByName(host).hostAddress
@@ -28,12 +28,12 @@ class AddGesture : AppCompatActivity() {
             t.join()
             //println("The IP address(es) for '$host' is/are:\n")
             //println(ipas)
-            return ipas
+            ipas
         } catch (ex: Exception) {
-            println("DNS REQUEST ERROR")
-            println(ex.message)
+           // println("DNS REQUEST ERROR")
+            //println(ex.message)
+            "192.168.1.126"
         }
-        return "192.168.1.126"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +44,7 @@ class AddGesture : AppCompatActivity() {
           //  clickflag = true
 
             val t = thread {
-                val connection = Socket(IP(), 5050)
+                val connection = Socket(ip(), 5050)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write(gestureNameTxt.text.toString().toByteArray())
@@ -87,7 +87,7 @@ class AddGesture : AppCompatActivity() {
 */
         bckBtn.setOnClickListener {
             val th = thread {
-                val connection = Socket(IP(), 5050)
+                val connection = Socket(ip(), 5050)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write("0".toByteArray())
@@ -106,7 +106,7 @@ class AddGesture : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         val th = thread {
-            val connection = Socket(IP(), 5050)
+            val connection = Socket(ip(), 5050)
             //val reader = connection.getInputStream()
             val writer = connection.getOutputStream()
             writer.write("0".toByteArray())

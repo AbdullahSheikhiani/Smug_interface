@@ -12,9 +12,9 @@
         android:layout_height="wrap_content"
         android:text="list gestures"
         app:layout_constraintBottom_toTopOf="@+id/rmGstBtn"
-        app:layout_constraintEnd_toStartOf="@+id/addGstBtn"
+        app:layout_constraintEnd_toEndOf="@+id/rmGstBtn"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/rmGstBtn"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -23,9 +23,9 @@
         android:layout_height="wrap_content"
         android:text="add gesture"
         app:layout_constraintBottom_toTopOf="@+id/tstGesBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/lstGstBtn"
+        app:layout_constraintEnd_toEndOf="@+id/tstGesBtn"
+        app:layout_constraintHorizontal_bias="0.066"
+        app:layout_constraintStart_toStartOf="@+id/tstGesBtn"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -34,9 +34,9 @@
         android:layout_height="wrap_content"
         android:text="remove gesture"
         app:layout_constraintBottom_toTopOf="@+id/chgUsrBtn"
-        app:layout_constraintEnd_toStartOf="@+id/tstGesBtn"
+        app:layout_constraintEnd_toEndOf="@+id/chgUsrBtn"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/chgUsrBtn"
         app:layout_constraintTop_toBottomOf="@+id/lstGstBtn" />
 
     <Button
@@ -45,9 +45,9 @@
         android:layout_height="wrap_content"
         android:text="Test Gestures"
         app:layout_constraintBottom_toTopOf="@+id/addUsrBtn"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/addUsrBtn"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/rmGstBtn"
+        app:layout_constraintStart_toStartOf="@+id/addUsrBtn"
         app:layout_constraintTop_toBottomOf="@+id/addGstBtn" />
 
     <Button
@@ -56,9 +56,9 @@
         android:layout_height="wrap_content"
         android:text="change user"
         app:layout_constraintBottom_toTopOf="@+id/rmUsrBtn"
-        app:layout_constraintEnd_toStartOf="@+id/addUsrBtn"
+        app:layout_constraintEnd_toEndOf="@+id/rmUsrBtn"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/rmUsrBtn"
         app:layout_constraintTop_toBottomOf="@+id/rmGstBtn" />
 
     <Button
@@ -67,57 +67,53 @@
         android:layout_height="wrap_content"
         android:text="add user"
         app:layout_constraintBottom_toTopOf="@+id/addDeviceBtn"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/addDeviceBtn"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/chgUsrBtn"
+        app:layout_constraintStart_toStartOf="@+id/addDeviceBtn"
         app:layout_constraintTop_toBottomOf="@+id/tstGesBtn" />
 
     <Button
         android:id="@+id/exitBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="92dp"
         android:text="initial setup page"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/addActionBtn"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.786"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addDeviceBtn" />
 
     <Button
         android:id="@+id/addActionBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="92dp"
+        android:layout_marginStart="4dp"
         android:text="add Action"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/exitBtn"
-        app:layout_constraintHorizontal_bias="0.472"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rmUsrBtn"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/rmUsrBtn" />
 
     <Button
         android:id="@+id/addDeviceBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="56dp"
-        android:layout_marginBottom="80dp"
         android:text="add device"
         app:layout_constraintBottom_toTopOf="@+id/exitBtn"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/exitBtn"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/rmUsrBtn" />
+        app:layout_constraintStart_toStartOf="@+id/exitBtn"
+        app:layout_constraintTop_toBottomOf="@+id/addUsrBtn" />
 
     <Button
         android:id="@+id/rmUsrBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Remove user"
-        app:layout_constraintBottom_toTopOf="@+id/exitBtn"
-        app:layout_constraintEnd_toStartOf="@+id/addDeviceBtn"
+        app:layout_constraintBottom_toTopOf="@+id/addActionBtn"
+        app:layout_constraintEnd_toEndOf="@+id/addActionBtn"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/addActionBtn"
         app:layout_constraintTop_toBottomOf="@+id/chgUsrBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

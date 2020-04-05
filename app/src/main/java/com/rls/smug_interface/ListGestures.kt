@@ -1,20 +1,11 @@
 package com.rls.smug_interface
 
-import android.content.Context
 import android.content.Intent
-import android.net.DhcpInfo
-import android.net.wifi.WifiManager
 import android.os.Bundle
-import android.os.Looper
-import android.preference.PreferenceManager
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.activity_interface.*
 import kotlinx.android.synthetic.main.activity_list_gestures.*
 import java.net.Inet4Address
-import java.net.Inet6Address
-import java.net.InetAddress
 import java.net.Socket
 import kotlin.concurrent.thread
 
@@ -25,12 +16,12 @@ class ListGestures : AppCompatActivity() {
       return sharedPreferences.getString("ip", "192.168.4.1")
   }*/
 
-    fun IP(): String {
-        return "192.168.1.126"
+    fun ip(): String {
+        //return "192.168.1.126"
 
         val host = "pspspspi"
         lateinit var ipas: String
-        try {
+        return try {
             //print("INSIDE SHOW IP ADDRESS")
             val t = thread {
                 ipas = Inet4Address.getByName(host).hostAddress
@@ -38,11 +29,11 @@ class ListGestures : AppCompatActivity() {
             t.join()
             //println("The IP address(es) for '$host' is/are:\n")
             //println(ipas)
-            return ipas
+            ipas
         } catch (ex: Exception) {
             println(ex.message)
+            "192.168.1.126"
         }
-        return "192.168.1.126"
     }
 
     private var success = false
@@ -82,8 +73,8 @@ class ListGestures : AppCompatActivity() {
             println("THREAD")
             print("IP= ")
             //val ip = "192.168.0.134"
-            println(IP())
-            val connection = Socket(IP(), 5050)
+            println(ip())
+            val connection = Socket(ip(), 5050)
             print(connection)
             val reader = connection.getInputStream()
             //val writer = connection.getOutputStream()
@@ -114,7 +105,7 @@ class ListGestures : AppCompatActivity() {
         super.onBackPressed()
         if (!success) {
             val th = thread {
-                val connection = Socket(IP(), 5050)
+                val connection = Socket(ip(), 5050)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write("0".toByteArray())
