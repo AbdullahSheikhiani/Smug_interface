@@ -30,6 +30,7 @@ class AddDevice : AppCompatActivity() {
         }
     }
 
+    private val returnIntent = Intent()
     private var success = false
     override fun onCreate(savedInstanceState: Bundle?) {
         //TODO add refresh button
@@ -68,20 +69,78 @@ class AddDevice : AppCompatActivity() {
         val a = "state"
         val v = "On"
         //need button instead of this
-
-        var called = true
-        if (called) {
-            deviceList.setOnItemClickListener { parent, view, position, id ->
+        var flag = true
+        deviceList.setOnItemClickListener { parent, view, position, id ->
+            if (flag) {
                 print("device = ")
                 println(listOfDevices[position])
-                val returnIntent = Intent()
                 returnIntent.putExtra("device", listOfDevices[position])
-                returnIntent.putExtra("attribute", a)
-                returnIntent.putExtra("value", v)
-                setResult(Activity.RESULT_OK, returnIntent)
-                finish()
+                if (listOfDevices[position].contains("Smart plug")) {
+                    listOfDevices.clear()
+                    listOfDevices.add("Turn on")
+                    listOfDevices.add("Turn off")
+                    adapter.notifyDataSetChanged()
+                } else {
+                    listOfDevices.clear()
+                    listOfDevices.add("Turn on/Off")
+                    listOfDevices.add("Change color")
+                    listOfDevices.add("Change brightness")
+                    adapter.notifyDataSetChanged()
+                }
+                flag = false
+            } else {
+                //handle what attribute is clicked
+                when {
+                    listOfDevices[position] == "Change color" -> {
+                        //todo
+                        println("CHANGE COLOR")
+                        val colorIntent = Intent(baseContext, ColorHandler::class.java)
+                        startActivityForResult(colorIntent, 2)
+                    }
+                    listOfDevices[position] == "Change brightness" -> {
+                        //todo
+                        returnIntent.putExtra("attribute", "brightness")
+                        returnIntent.putExtra("value", v)
+                        setResult(Activity.RESULT_OK, returnIntent)
+                        finish()
+                    }
+                    listOfDevices[position] == "Turn on/Off" -> {
+                        //todo
+                        returnIntent.putExtra("attribute", "state")
+                        returnIntent.putExtra("value", v)
+                        setResult(Activity.RESULT_OK, returnIntent)
+                        finish()
+                    }
+                    listOfDevices[position] == "Turn on" -> {
+                        returnIntent.putExtra("attribute", "state")
+                        returnIntent.putExtra("value", "on")
+                        setResult(Activity.RESULT_OK, returnIntent)
+                        finish()
+                    }
+                    listOfDevices[position] == "Turn off" -> {
+                        returnIntent.putExtra("attribute", "state")
+                        returnIntent.putExtra("value", "off")
+                        setResult(Activity.RESULT_OK, returnIntent)
+                        finish()
+                    }
+                }
             }
+
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 2) {
+            val color = data?.getStringExtra("color")
+            print("color =")
+            println(color)
+            returnIntent.putExtra("attribute", "color")
+            returnIntent.putExtra("value", color)
+            setResult(Activity.RESULT_OK, returnIntent)
+            finish()
+        }
+
     }
 
     override fun onBackPressed() {
