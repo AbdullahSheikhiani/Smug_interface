@@ -42,8 +42,8 @@ class AssociateGesture : AppCompatActivity() {
         startActivityForResult(intent, 1)
         addComBtn.setOnClickListener {
             val t = thread {
-                //todo make this elegant
-                //this part just emulates the processwithout using it
+                //todo make this elegant & fix part in pi
+                //this part just emulates the process without using it
                 var connection = Socket(ip(), 5051)
                 val writer = connection.getOutputStream()
                 writer.write("10".toByteArray())

@@ -64,19 +64,20 @@ class AddDevice : AppCompatActivity() {
             print("d: ")
             println(i)
         }
+        //get attribute and value
+        val a = "state"
+        val v = "On"
         //need button instead of this
+
         var called = true
         if (called) {
             deviceList.setOnItemClickListener { parent, view, position, id ->
                 print("device = ")
-                val v = "On"
-                val a = "state"
                 println(listOfDevices[position])
                 val returnIntent = Intent()
                 returnIntent.putExtra("device", listOfDevices[position])
                 returnIntent.putExtra("attribute", a)
                 returnIntent.putExtra("value", v)
-                println("extra all done, boss")
                 setResult(Activity.RESULT_OK, returnIntent)
                 finish()
             }
