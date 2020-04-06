@@ -40,31 +40,64 @@ class AssociateGesture : AppCompatActivity() {
         //call add device to get device
         val intent = Intent(baseContext, AddDevice::class.java)
         startActivityForResult(intent, 1)
+        addComBtn.setOnClickListener {
+            val t = thread {
+                //todo make this elegant
+                //this part just emulates the processwithout using it
+                var connection = Socket(ip(), 5051)
+                val writer = connection.getOutputStream()
+                writer.write("10".toByteArray())
+                connection.close()
+                connection = Socket(ip(), 5050)
+                print(connection)
+                val reader = connection.getInputStream()
+                val b = reader.bufferedReader()
+                var x = b.readLine()
+                println(x)
+                while (x != "stp") {
+                    x = b.readLine()
+                }
+                println("got list of gestures")
+                connection.close()
+            }
+            t.join()
+            //call add action or add device? but save string of listofComTxt somehow
+            val intentR = Intent(baseContext, AddDevice::class.java)
+            //intentR.putExtra("EXTRA_SESSION_ID", gstName)
+            startActivityForResult(intentR, 1)
+        }
 
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        //TODO add things to an array and send on button pressed
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
-            val device = data?.getStringExtra("result")
+            val device = data?.getStringExtra("device")
+            val action = data?.getStringExtra("attribute")
+            val value = data?.getStringExtra("value")
             print("device =")
-            listOfComTxt.text = device.toString()
+            //fixme: setText :^)
+            listOfComTxt.text =
+                "${listOfComTxt.text}\n${device.toString()},${action.toString()},${value.toString()}"
             println(device)
             val th = thread {
+                print("sent to device")
+                print(listOfComTxt.text)
                 val connection = Socket(ip(), 5050)
                 val writer = connection.getOutputStream()
-                writer.write(gstName.toByteArray())
-                writer.write("\n".toByteArray())
+                writer.write((this.gstName + "\n").toByteArray())
                 //TODO move to save and apply btn
                 //TODO create add action loop
-                writer.write("GO\n".toByteArray())
-                writer.write("state\n".toByteArray())
-                writer.write("On\n".toByteArray())
-                writer.write("stp\n".toByteArray())
+                writer.write((device + "\n").toByteArray())
+                writer.write((action + "\n").toByteArray())
+                writer.write((value + "\n").toByteArray())
+                //writer.write("stp\n".toByteArray())
                 writer.flush()
                 connection.close()
             }
             th.join()
+
         }
     }
 }

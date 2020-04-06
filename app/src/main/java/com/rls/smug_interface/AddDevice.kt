@@ -36,11 +36,11 @@ class AddDevice : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_device)
 
-        val gstList = ArrayList<String>()
+        val listOfDevices = ArrayList<String>()
         val adapter = ArrayAdapter(
             this, // Context
             android.R.layout.simple_expandable_list_item_1, // Layout
-            gstList // Array
+            listOfDevices // Array
         )
         deviceList.adapter = adapter
         val t = thread {
@@ -51,7 +51,7 @@ class AddDevice : AppCompatActivity() {
             val b = reader.bufferedReader()
             var x = b.readLine()
             while (x != "stp") {
-                gstList.add(x)
+                listOfDevices.add(x)
                 x = b.readLine()
             }
             connection.close()
@@ -60,16 +60,23 @@ class AddDevice : AppCompatActivity() {
         t.join()
         adapter.notifyDataSetChanged()
         println("\ngot list of devices")
-        for (i in gstList) {
+        for (i in listOfDevices) {
             print("d: ")
             println(i)
         }
+        //need button instead of this
         var called = true
         if (called) {
             deviceList.setOnItemClickListener { parent, view, position, id ->
-                println(gstList[position])
+                print("device = ")
+                val v = "On"
+                val a = "state"
+                println(listOfDevices[position])
                 val returnIntent = Intent()
-                returnIntent.putExtra("result", gstList[position])
+                returnIntent.putExtra("device", listOfDevices[position])
+                returnIntent.putExtra("attribute", a)
+                returnIntent.putExtra("value", v)
+                println("extra all done, boss")
                 setResult(Activity.RESULT_OK, returnIntent)
                 finish()
             }
