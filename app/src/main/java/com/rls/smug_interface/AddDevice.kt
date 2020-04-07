@@ -36,8 +36,8 @@ class AddDevice : AppCompatActivity() {
         //TODO add refresh button
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_device)
+        var listOfDevices = ArrayList<String>()
 
-        val listOfDevices = ArrayList<String>()
         val adapter = ArrayAdapter(
             this, // Context
             android.R.layout.simple_expandable_list_item_1, // Layout
@@ -45,7 +45,8 @@ class AddDevice : AppCompatActivity() {
         )
         deviceList.adapter = adapter
         val t = thread {
-            println("thread")
+
+            println("thread add device")
             val connection = Socket(ip(), 5050)
             println(connection)
             val reader = connection.getInputStream()
@@ -57,14 +58,15 @@ class AddDevice : AppCompatActivity() {
             }
             connection.close()
             success = true
+            adapter.notifyDataSetChanged()
         }
         t.join()
-        adapter.notifyDataSetChanged()
         println("\ngot list of devices")
         for (i in listOfDevices) {
             print("d: ")
             println(i)
         }
+
         //get attribute and value
         val a = "state"
         val v = "On"
@@ -100,7 +102,7 @@ class AddDevice : AppCompatActivity() {
                     listOfDevices[position] == "Change brightness" -> {
                         //todo
                         returnIntent.putExtra("attribute", "brightness")
-                        returnIntent.putExtra("value", v)
+                        returnIntent.putExtra("value", "180")
                         setResult(Activity.RESULT_OK, returnIntent)
                         finish()
                     }
@@ -125,7 +127,6 @@ class AddDevice : AppCompatActivity() {
                     }
                 }
             }
-
         }
     }
 
@@ -152,7 +153,6 @@ class AddDevice : AppCompatActivity() {
                 val writer = connection.getOutputStream()
                 writer.write("0".toByteArray())
                 connection.close()
-
             }
             th.join()
             println("sent 0 to return to Interface")
@@ -162,6 +162,4 @@ class AddDevice : AppCompatActivity() {
         applicationContext.startActivity(intent)
         finish()
     }
-
-
 }
