@@ -51,7 +51,6 @@ class AssociateGesture : AppCompatActivity() {
                 //this part just emulates the process without using it
                 var connection = Socket(ip(), 5050)
                 var writer = connection.getOutputStream()
-                writer = connection.getOutputStream()
                 writer.write("AIG".toByteArray())
                 connection.close()
                 connection = Socket(ip(), 5051)
@@ -87,7 +86,6 @@ class AssociateGesture : AppCompatActivity() {
                     writer.write((devices[i] + "\n").toByteArray())
                     writer.write((attr[i] + "\n").toByteArray())
                     writer.write((vals[i] + "\n").toByteArray())
-                    //writer.write("stp\n".toByteArray())
                     writer.flush()
                 }
                 connection.close()
