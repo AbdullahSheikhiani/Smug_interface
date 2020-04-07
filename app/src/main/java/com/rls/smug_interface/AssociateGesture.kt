@@ -83,8 +83,6 @@ class AssociateGesture : AppCompatActivity() {
                 val connection = Socket(ip(), 5050)
                 val writer = connection.getOutputStream()
                 writer.write((this.gstName + "\n").toByteArray())
-                //TODO move to save and apply btn
-                //TODO create add action loop
                 for (i in devices.indices) {
                     writer.write((devices[i] + "\n").toByteArray())
                     writer.write((attr[i] + "\n").toByteArray())
