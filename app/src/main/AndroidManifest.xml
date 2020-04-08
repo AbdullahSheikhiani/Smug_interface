@@ -10,22 +10,22 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".AssociateGesture" />
-        <activity android:name=".ColorHandler" />
-        <activity android:name=".AddAction" />
-        <activity android:name=".AddDevice" />
-        <activity android:name=".RemoveUser" />
-        <activity android:name=".ChangeUser" />
-        <activity android:name=".AddUser" />
-        <activity android:name=".RemoveGesture" />
-        <activity android:name=".AddGesture" />
+        android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".Interface" />
+        <activity android:name=".DeviceAndAction.AssociateGesture" />
+        <activity android:name=".UIutilities.ColorHandler" />
+        <activity android:name=".DeviceAndAction.AddAction" />
+        <activity android:name=".DeviceAndAction.AddDevice" />
+        <activity android:name=".User.RemoveUser" />
+        <activity android:name=".User.ChangeUser" />
+        <activity android:name=".User.AddUser" />
+        <activity android:name=".Gesture.RemoveGesture" />
+        <activity android:name=".Gesture.AddGesture" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".ListGestures" />
-        <activity android:name=".Interface">
+        <activity android:name=".Gesture.ListGestures" />
+        <activity android:name=".Main2Activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

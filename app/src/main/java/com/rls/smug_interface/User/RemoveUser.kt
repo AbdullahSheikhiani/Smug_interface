@@ -1,12 +1,13 @@
-package com.rls.smug_interface
+package com.rls.smug_interface.User
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
-import android.preference.PreferenceManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import com.rls.smug_interface.Interface
+import com.rls.smug_interface.R
 import kotlinx.android.synthetic.main.activity_remove_user.*
 import java.net.Inet4Address
 import java.net.Socket

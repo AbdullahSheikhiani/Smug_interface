@@ -4,6 +4,14 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Window
+import com.rls.smug_interface.DeviceAndAction.AddAction
+import com.rls.smug_interface.DeviceAndAction.AddDevice
+import com.rls.smug_interface.Gesture.AddGesture
+import com.rls.smug_interface.Gesture.ListGestures
+import com.rls.smug_interface.Gesture.RemoveGesture
+import com.rls.smug_interface.User.AddUser
+import com.rls.smug_interface.User.ChangeUser
+import com.rls.smug_interface.User.RemoveUser
 import kotlinx.android.synthetic.main.activity_interface.*
 import java.net.Inet4Address
 import java.net.Socket

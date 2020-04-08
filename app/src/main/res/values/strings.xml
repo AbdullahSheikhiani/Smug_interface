@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">SMUG_Interface</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="tab_text_1">Users</string>
+    <string name="tab_text_2">gestures</string>
+    <string name="tab_text_3">devices</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cancel">cancel</string>
+    <string name="yes">yes</string>
+    <string name="On">On</string>
+    <string name="Off">Off</string>
+    <string name="on_or_off">do you want to turn it on or off?</string>
+
 </resources>

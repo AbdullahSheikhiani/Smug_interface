@@ -1,10 +1,14 @@
-package com.rls.smug_interface
+package com.rls.smug_interface.DeviceAndAction
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import com.rls.smug_interface.Interface
+import com.rls.smug_interface.R
+import com.rls.smug_interface.UIutilities.ColorHandler
+import com.rls.smug_interface.UIutilities.LevelDialog
 import kotlinx.android.synthetic.main.activity_add_device.*
 import java.net.Inet4Address
 import java.net.Socket
@@ -68,11 +72,11 @@ class AddDevice : AppCompatActivity() {
         }
 
         //get attribute and value
-        val a = "state"
+        //val a = "state"
         val v = "On"
         //need button instead of this
         var flag = true
-        deviceList.setOnItemClickListener { parent, view, position, id ->
+        deviceList.setOnItemClickListener { _, _, position, _ ->
             if (flag) {
                 print("device = ")
                 println(listOfDevices[position])
@@ -90,8 +94,8 @@ class AddDevice : AppCompatActivity() {
                     adapter.notifyDataSetChanged()
                 }
                 flag = false
-            } else {
-                //handle what attribute is clicked
+            } else
+            //handle what attribute is clicked
                 when {
                     listOfDevices[position] == "Change color" -> {
                         //todo
@@ -108,6 +112,8 @@ class AddDevice : AppCompatActivity() {
                     }
                     listOfDevices[position] == "Turn on/Off" -> {
                         //todo
+                        val d = LevelDialog()
+                        d.show(this.supportFragmentManager, "")
                         returnIntent.putExtra("attribute", "state")
                         returnIntent.putExtra("value", v)
                         setResult(Activity.RESULT_OK, returnIntent)
@@ -126,7 +132,6 @@ class AddDevice : AppCompatActivity() {
                         finish()
                     }
                 }
-            }
         }
     }
 

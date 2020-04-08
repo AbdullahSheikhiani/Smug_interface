@@ -1,9 +1,11 @@
-package com.rls.smug_interface
+package com.rls.smug_interface.Gesture
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import com.rls.smug_interface.Interface
+import com.rls.smug_interface.R
 import kotlinx.android.synthetic.main.activity_list_gestures.*
 import java.net.Inet4Address
 import java.net.Socket

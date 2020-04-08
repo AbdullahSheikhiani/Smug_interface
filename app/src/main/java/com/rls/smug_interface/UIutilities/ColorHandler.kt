@@ -1,9 +1,10 @@
-package com.rls.smug_interface
+package com.rls.smug_interface.UIutilities
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.rls.smug_interface.R
 import com.skydoves.colorpickerview.listeners.ColorListener
 import kotlinx.android.synthetic.main.activity_color_handler.*
 
@@ -15,16 +16,15 @@ class ColorHandler : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_color_handler)
-        colorPickerView.setColorListener(ColorListener { color, fromUser ->
+        colorPickerView.setColorListener(ColorListener { color, _ ->
             println(String.format("#%06X", 0xFFFFFF and colour))
             colour = color
         })
         returnColorBtn.setOnClickListener {
-            val hexColor =
-                returnIntent.putExtra(
-                    "color",
-                    String.format("#%06X", 0xFFFFFF and colour)
-                )
+            returnIntent.putExtra(
+                "color",
+                String.format("#%06X", 0xFFFFFF and colour)
+            )
             setResult(Activity.RESULT_OK, returnIntent)
             finish()
         }

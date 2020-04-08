@@ -1,23 +1,23 @@
-package com.rls.smug_interface
+package com.rls.smug_interface.User
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
-import kotlinx.android.synthetic.main.activity_remove_gesture.*
+import com.rls.smug_interface.Interface
+import com.rls.smug_interface.R
+import kotlinx.android.synthetic.main.activity_change_user.*
 import java.net.Inet4Address
 import java.net.Socket
 import kotlin.concurrent.thread
 
-class RemoveGesture : AppCompatActivity() {
-
+class ChangeUser : AppCompatActivity() {
     /*fun IP(): String? {
        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
        return sharedPreferences.getString("ip", "192.168.4.1")
    }*/
-
     fun ip(): String {
-        //return "192.168.1.126"
+//        return "192.168.1.126"
 
         val host = "pspspspi"
         lateinit var ipas: String
@@ -31,7 +31,7 @@ class RemoveGesture : AppCompatActivity() {
             //println(ipas)
             ipas
         } catch (ex: Exception) {
-            println(ex.message)
+            //println(ex.message)
             "192.168.1.126"
         }
     }
@@ -39,8 +39,11 @@ class RemoveGesture : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_remove_gesture)
-        //val ip = "192.168.0.186"
+        setContentView(R.layout.activity_change_user)
+        // val ip = "192.168.0.186"
+        println("change user")
+        println(ip())
+
         val a = ArrayList<String>()
         val t = thread {
             println("THREAD")
@@ -48,16 +51,16 @@ class RemoveGesture : AppCompatActivity() {
             val reader = connection.getInputStream()
             //val writer = connection.getOutputStream()
             val b = reader.bufferedReader()
-            //list Gestures
+            //println("AFTER BUFF")
             var x = b.readLine()
-            print(x)
+            println(x)
             while (x != "stp") {
                 a.add(x)
                 x = b.readLine()
-                //print("x=")
-                //println(x)
+                println(x)
             }
             connection.close()
+            println("list reading finished")
         }
         t.join()
         val adapter = ArrayAdapter(
@@ -66,44 +69,35 @@ class RemoveGesture : AppCompatActivity() {
             a // Array
         )
         adapter.notifyDataSetChanged()
-        spinner.adapter = adapter
-        btnRemove.setOnClickListener {
-            val th = thread {
-                val connection = Socket(ip(), 5050)
-                val reader = connection.getInputStream()
-                val writer = connection.getOutputStream()
-                writer.write(spinner.selectedItem.toString().toByteArray())
-                val r = reader.bufferedReader()
-                print("removed gesture read: ")
-                println(r.readLine())
+        userSpinner.adapter = adapter
 
+        btnChgUser.setOnClickListener {
+            val th = thread {
+                println("THREAD")
+                val connection = Socket(ip(), 5050)
+                //val reader = connection.getInputStream()
+                val writer = connection.getOutputStream()
+                writer.write(userSpinner.selectedItem.toString().toByteArray())
+                //todo validation
             }
             th.join()
+            /*
+            Looper.prepare()
+            Toast.makeText(
+                applicationContext,
+                "changed to user to ${userSpinner.selectedItem}",
+                Toast.LENGTH_SHORT
+                //applicationContext,
+                //wifiManager.scanResults[0].toString(),
+                //Toast.LENGTH_LONG
 
-        }
-        btnBack.setOnClickListener {
+            ).show()
+             */
             val intent = Intent(this, Interface::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
+            applicationContext.startActivity(intent)
             finish()
         }
-    }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        val th = thread {
-            val connection = Socket(ip(), 5050)
-            //val reader = connection.getInputStream()
-            val writer = connection.getOutputStream()
-            writer.write("0".toByteArray())
-            connection.close()
-
-        }
-        th.join()
-        println("sent 0 to return to Interface")
-        val intent = Intent(this, Interface::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        applicationContext.startActivity(intent)
-        finish()
     }
 }
