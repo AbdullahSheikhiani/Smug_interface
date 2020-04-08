@@ -1,14 +1,16 @@
-package com.rls.smug_interface.DeviceAndAction
+package com.rls.smug_interface.deviceAndAction
 
 import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.app.AlertDialog.Builder
 import androidx.appcompat.app.AppCompatActivity
 import com.rls.smug_interface.Interface
 import com.rls.smug_interface.R
-import com.rls.smug_interface.UIutilities.ColorHandler
-import com.rls.smug_interface.UIutilities.LevelDialog
+import com.rls.smug_interface.utilities.ColorHandler
 import kotlinx.android.synthetic.main.activity_add_device.*
 import java.net.Inet4Address
 import java.net.Socket
@@ -16,6 +18,7 @@ import kotlin.concurrent.thread
 
 
 class AddDevice : AppCompatActivity() {
+
     fun ip(): String {
         val host = "pspspspi"
         lateinit var ipas: String
@@ -112,8 +115,10 @@ class AddDevice : AppCompatActivity() {
                     }
                     listOfDevices[position] == "Turn on/Off" -> {
                         //todo
-                        val d = LevelDialog()
-                        d.show(this.supportFragmentManager, "")
+                        //val d = LevelDialog()
+                        //d.show(this.supportFragmentManager, "LevelDialog")
+                        //showDialog()
+                        //println(result)
                         returnIntent.putExtra("attribute", "state")
                         returnIntent.putExtra("value", v)
                         setResult(Activity.RESULT_OK, returnIntent)
@@ -167,4 +172,5 @@ class AddDevice : AppCompatActivity() {
         applicationContext.startActivity(intent)
         finish()
     }
+
 }

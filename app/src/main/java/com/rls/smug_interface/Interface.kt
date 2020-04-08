@@ -1,24 +1,25 @@
 package com.rls.smug_interface
 
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Window
-import com.rls.smug_interface.DeviceAndAction.AddAction
-import com.rls.smug_interface.DeviceAndAction.AddDevice
+import com.rls.smug_interface.deviceAndAction.AddDevice
 import com.rls.smug_interface.Gesture.AddGesture
 import com.rls.smug_interface.Gesture.ListGestures
 import com.rls.smug_interface.Gesture.RemoveGesture
-import com.rls.smug_interface.User.AddUser
-import com.rls.smug_interface.User.ChangeUser
-import com.rls.smug_interface.User.RemoveUser
+import com.rls.smug_interface.user.AddUser
+import com.rls.smug_interface.user.ChangeUser
+import com.rls.smug_interface.user.RemoveUser
+import com.rls.smug_interface.utilities.YesNoDialog
 import kotlinx.android.synthetic.main.activity_interface.*
 import java.net.Inet4Address
 import java.net.Socket
 import kotlin.concurrent.thread
 
 
-class Interface : AppCompatActivity() {
+class Interface : AppCompatActivity(), YesNoDialog.NoticeDialogListener {
 
     /*fun IP(): String? {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
@@ -241,6 +242,9 @@ class Interface : AppCompatActivity() {
         }
         addActionBtn.setOnClickListener {
 
+            showYesNo()
+
+            /*
             val t = thread {
                 val connection = Socket(ip(), 5051)
                 val writer = connection.getOutputStream()
@@ -252,6 +256,22 @@ class Interface : AppCompatActivity() {
             val intent = Intent(this, AddAction::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             applicationContext.startActivity(intent)
+
+             */
         }
     }
+
+    private fun showYesNo() {
+        val dialog = YesNoDialog()
+        dialog.show(supportFragmentManager, "yesno")
+    }
+
+    override fun onDialogPositiveClick(dialog: Dialog?) {
+        println("user pressed yes")
+    }
+
+    override fun onDialogNegativeClick(dialog: Dialog?) {
+        println("user pressed no")
+    }
+
 }

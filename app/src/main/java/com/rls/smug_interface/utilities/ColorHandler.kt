@@ -1,4 +1,4 @@
-package com.rls.smug_interface.UIutilities
+package com.rls.smug_interface.utilities
 
 import android.app.Activity
 import android.content.Intent

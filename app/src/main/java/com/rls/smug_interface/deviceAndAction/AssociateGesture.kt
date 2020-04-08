@@ -1,4 +1,4 @@
-package com.rls.smug_interface.DeviceAndAction
+package com.rls.smug_interface.deviceAndAction
 
 import android.app.Activity
 import android.content.Intent

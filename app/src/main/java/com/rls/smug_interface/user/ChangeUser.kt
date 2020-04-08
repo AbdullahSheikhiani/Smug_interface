@@ -1,4 +1,4 @@
-package com.rls.smug_interface.User
+package com.rls.smug_interface.user
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
