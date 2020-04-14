@@ -93,7 +93,7 @@ class Interface : AppCompatActivity(), YesNoDialog.NoticeDialogListener,
             }
             t.join()
             //exitProcess(-2)
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, InitialSetup::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             applicationContext.startActivity(intent)
 

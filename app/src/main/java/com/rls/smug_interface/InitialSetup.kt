@@ -1,68 +1,26 @@
 package com.rls.smug_interface
 
 import android.content.Intent
-import android.content.SharedPreferences.Editor
 import android.os.Bundle
-import android.preference.PreferenceManager
-import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
-import java.net.Inet4Address
-import java.net.InetAddress
+import kotlinx.android.synthetic.main.activity_initial_setup.*
 import java.net.Socket
 import kotlin.concurrent.thread
 
 
-class MainActivity : AppCompatActivity() {
-    private fun saveIP(value: String) {
-        println("saved ip value: ")
-        print(value)
-        //PreferenceManager.getDefaultSharedPreferences(applicationContext).edit().putString("ip", value).commit()
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-        val editor = sharedPreferences.edit()
-        editor.putString("ip", value)
-        editor.commit()
-    }
-
-    private fun loadIP(): String? {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-        return sharedPreferences.getString("ip", "192.168.4.1")
-    }
-    /*fun IP(): String? {
-     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-     return sharedPreferences.getString("ip", "192.168.4.1")
- }*/
-
-    fun IPbyName(): String {
-        val host = "pspspspi"
-        lateinit var ipas: String
-        try {
-            //print("INSIDE SHOW IP ADDRESS")
-            val t = thread {
-                ipas = Inet4Address.getByName(host).hostAddress
-            }
-            t.join()
-            //println("The IP address(es) for '$host' is/are:\n")
-            //println(ipas)
-            return ipas
-        } catch (ex: Exception) {
-            println(ex.message)
-        }
-        return "192.168.4.1"
-    }
+class InitialSetup : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_initial_setup)
         var networks = arrayOf(
             "getting networks list "
         )
         print("loadIP value: ")
-        println(loadIP())
 
         var adapter = ArrayAdapter(
             this, // Context
@@ -74,43 +32,16 @@ class MainActivity : AppCompatActivity() {
 
         spinner0.adapter = adapter
 
-        //val file = "ip"
-        //val oldIP = "192.168.4.1"
-        //var newIP: String = oldIP
-        /*  thread {
-              val connection = Socket("192.168.4.1", 5050)
-              val writer0: OutputStream = connection.getOutputStream()
-              writer0.write("conf".toByteArray())
-              val reader: InputStream = connection.getInputStream()
 
-              Log.d("READING", reader.read().toString())
-
-              /*
-              val server0 = ServerSocket(5050)
-              val client0 = server0.accept()
-              val scanner0 = Scanner(client0.inputStream)
-              if (scanner0.hasNext()) {
-                  var t = scanner0.nextLine()
-                  while (t.toString() != "stp") {
-                      networkList.add(t.toString())
-                      //println(scanner0.next())
-                      Log.d("sc", scanner0.next())
-                  }
-              }*/
-              connection.close()
-          }*/
-        //println("before reload")
-        //DNS
-        progressBar_initsetup.visibility = View.VISIBLE
         val networkList = ArrayList<String>()
-        var t = thread {
+        val t = thread {
 
             val connection = Socket("192.168.4.1", 5005)
             val reader = connection.getInputStream()
             val writer = connection.getOutputStream()
             writer.write("conf".toByteArray())
 
-            var s = reader.bufferedReader()
+            val s = reader.bufferedReader()
             var x = s.readLine()
             print("x= ")
             println(x)
@@ -136,15 +67,32 @@ class MainActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
         spinner0.adapter = adapter
         println(networks)
-        //adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
 
-        //spinner0.adapter = adapter
+        reloadBtn.setOnClickListener {
+            val th = thread {
+                //TODO add handling clicking reload on server side
+                val connection = Socket("192.168.4.1", 5005)
+                val reader = connection.getInputStream()
+                val writer = connection.getOutputStream()
+                writer.write("conf".toByteArray())
 
-        //progressBar_initsetup.visibility = View.GONE
-        progressBar_initsetup.visibility = View.GONE
+                val s = reader.bufferedReader()
+                var x = s.readLine()
+                print("x= ")
+                println(x)
+                while (x != "stp") {
+                    networkList.add(x)
+                    x = s.readLine()
+                    println(x)
+                }
+                connection.close()
+            }
+            th.join()
+            adapter.notifyDataSetChanged()
 
+        }
         confBtn.setOnClickListener {
-            val t = thread {
+            val th = thread {
                 val connection = Socket("192.168.4.1", 5005)
                 val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
@@ -162,12 +110,9 @@ class MainActivity : AppCompatActivity() {
                 val ip = s.readLine()
                 print("ip value: ")
                 println(ip)
-                saveIP(ip)
-
-
             }
-            t.join()
-            intent = Intent(this, Interface::class.java)
+            th.join()
+            intent = Intent(this, MainUI::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
             finish()

@@ -1,5 +1,6 @@
 package com.rls.smug_interface
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -7,8 +8,33 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import java.net.Inet4Address
+import kotlin.concurrent.thread
 
-class main_ui : AppCompatActivity() {
+class MainUI : AppCompatActivity() {
+    fun ip(): String {
+        //return "192.168.1.126"
+
+        val host = "pspspspi"
+        lateinit var ipas: String
+        return try {
+            //print("INSIDE SHOW IP ADDRESS")
+            val t = thread {
+                ipas = Inet4Address.getByName(host).hostAddress
+            }
+            t.join()
+            //println("The IP address(es) for '$host' is/are:\n")
+            //println(ipas)
+            ipas
+        } catch (ex: Exception) {
+            val intent = Intent(this, InitialSetup::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            applicationContext.startActivity(intent)
+            finish()
+            //todo fix ip
+            "192.168.1.126"
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

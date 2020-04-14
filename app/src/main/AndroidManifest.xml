@@ -24,11 +24,11 @@
         <activity android:name=".user.AddUser" />
         <activity android:name=".gesture.RemoveGesture" />
         <activity android:name=".gesture.AddGesture" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".InitialSetup" />
         <activity android:name=".gesture.ListGestures" />
         <activity android:name=".Main2Activity" />
         <activity
-            android:name=".main_ui"
+            android:name=".MainUI"
             android:label="@string/title_activity_main_ui">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
