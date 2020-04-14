@@ -18,5 +18,9 @@
     <string name="save_color">save Color</string>
     <string name="no">No!</string>
     <string name="save">Save</string>
+    <string name="title_activity_main_ui">main_ui</string>
+    <string name="users">users</string>
+    <string name="gestures">gestures</string>
+    <string name="devices">devices</string>
 
 </resources>

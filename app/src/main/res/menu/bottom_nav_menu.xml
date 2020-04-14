@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_user"
+        android:icon="@drawable/ic_user"
+        android:title="@string/users" />
+
+    <item
+        android:id="@+id/navigation_gesture"
+        android:icon="@drawable/ic_gesture"
+        android:title="@string/gestures" />
+
+    <item
+        android:id="@+id/navigation_device"
+        android:icon="@drawable/ic_device"
+        android:title="@string/devices" />
+
+</menu>
