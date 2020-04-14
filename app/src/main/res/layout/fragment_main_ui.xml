@@ -10,10 +10,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <androidx.gridlayout.widget.GridLayout
             android:id="@+id/topbarLayout"
-            android:layout_width="match_parent"
-            android:layout_height="78dp"
+            android:layout_width="408dp"
+            android:layout_height="50dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -21,7 +22,7 @@
             <ImageView
                 android:id="@+id/imageViewAdd"
                 android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_height="50dp"
                 android:src="@android:drawable/ic_menu_add"
                 app:layout_column="3"
                 app:layout_row="0" />
@@ -29,31 +30,31 @@
             <ImageView
                 android:id="@+id/imageViewDel"
                 android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_height="50dp"
                 android:src="@android:drawable/ic_delete"
                 app:layout_column="2"
                 app:layout_row="0" />
 
             <ImageView
                 android:id="@+id/imageViewList"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:src="@android:drawable/ic_menu_sort_by_size"
                 app:layout_column="1"
                 app:layout_row="0" />
 
         </androidx.gridlayout.widget.GridLayout>
 
-        <LinearLayout
-            android:id="@+id/contenetPane"
-            android:layout_width="407dp"
-            android:layout_height="647dp"
-            android:layout_marginTop="7dp"
-            android:orientation="vertical"
+        <View
+            android:id="@+id/contentPane"
+            android:layout_width="410dp"
+            android:layout_height="697dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="topbarLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/topbarLayout" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
