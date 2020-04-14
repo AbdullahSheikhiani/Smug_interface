@@ -20,6 +20,10 @@ class Main2Activity : AppCompatActivity() {
         viewPager.adapter = sectionsPagerAdapter
         val tabs: TabLayout = findViewById(R.id.tabs)
         tabs.setupWithViewPager(viewPager)
+        tabs.getTabAt(0)?.setIcon(R.drawable.ic_user);
+        tabs.getTabAt(1)?.setIcon(R.drawable.ic_gesture);
+        tabs.getTabAt(2)?.setIcon(R.drawable.ic_device);
+
 
     }
 }

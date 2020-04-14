@@ -1,4 +1,4 @@
-package com.rls.smug_interface.Gesture
+package com.rls.smug_interface.gesture
 
 import android.content.Intent
 import android.os.Bundle

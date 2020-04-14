@@ -1,15 +1,20 @@
 package com.rls.smug_interface.ui.main
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.*
+import android.graphics.Paint.Align
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.fragment.app.Fragment
 import com.rls.smug_interface.Interface
 import com.rls.smug_interface.R
 import kotlinx.android.synthetic.main.fragment_user.*
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -25,9 +30,9 @@ class UserFrag : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val a = ArrayList<String>()
-        a.add("option A")
-        a.add("option B")
-        a.add("option C")
+        a.add("Add user")
+        a.add("remove user")
+
         val vadapter = ArrayAdapter(
             activity, // Context
             android.R.layout.simple_expandable_list_item_1, // Layout
@@ -37,12 +42,12 @@ class UserFrag : Fragment() {
         lView.setOnItemClickListener { _, _, position, _ ->
             println(a[position])
 
-            if (a[position].contains("A")) {
+            if (a[position].contains("Add")) {
                 println("IF")
                 val intent = Intent(context, Interface::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context!!.startActivity(intent)
-            } else if (a[position].contains("b")) {
+            } else if (a[position].contains("remove")) {
             }
         }
     }
@@ -72,4 +77,5 @@ class UserFrag : Fragment() {
 
             }
     }
+    
 }

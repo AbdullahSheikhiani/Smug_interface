@@ -1,23 +1,23 @@
 package com.rls.smug_interface.deviceAndAction
 
 import android.app.Activity
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.app.AlertDialog.Builder
 import androidx.appcompat.app.AppCompatActivity
 import com.rls.smug_interface.Interface
 import com.rls.smug_interface.R
 import com.rls.smug_interface.utilities.ColorHandler
+import com.rls.smug_interface.utilities.OnOffDialog
+import com.rls.smug_interface.utilities.YesNoDialog
 import kotlinx.android.synthetic.main.activity_add_device.*
 import java.net.Inet4Address
 import java.net.Socket
 import kotlin.concurrent.thread
 
 
-class AddDevice : AppCompatActivity() {
+class AddDevice : AppCompatActivity(), YesNoDialog.NoticeDialogListener,
+    OnOffDialog.NoticeDialogListener {
 
     fun ip(): String {
         val host = "pspspspi"
@@ -101,26 +101,25 @@ class AddDevice : AppCompatActivity() {
             //handle what attribute is clicked
                 when {
                     listOfDevices[position] == "Change color" -> {
-                        //todo
+                        //todo show color dialog
                         println("CHANGE COLOR")
                         val colorIntent = Intent(baseContext, ColorHandler::class.java)
                         startActivityForResult(colorIntent, 2)
                     }
                     listOfDevices[position] == "Change brightness" -> {
-                        //todo
+                        //todo show slider dialog
                         returnIntent.putExtra("attribute", "brightness")
                         returnIntent.putExtra("value", "180")
                         setResult(Activity.RESULT_OK, returnIntent)
                         finish()
                     }
                     listOfDevices[position] == "Turn on/Off" -> {
-                        //todo
-                        //val d = LevelDialog()
-                        //d.show(this.supportFragmentManager, "LevelDialog")
-                        //showDialog()
-                        //println(result)
+                        showOnOff()
                         returnIntent.putExtra("attribute", "state")
-                        returnIntent.putExtra("value", v)
+                        if (onOff != "")
+                            returnIntent.putExtra("value", onOff)
+                        else
+                            returnIntent.putExtra("value", "off")
                         setResult(Activity.RESULT_OK, returnIntent)
                         finish()
                     }
@@ -171,6 +170,38 @@ class AddDevice : AppCompatActivity() {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         applicationContext.startActivity(intent)
         finish()
+    }
+
+    private var yesNoAnsser = ""
+    private fun showYesNo() {
+        val dialog = YesNoDialog()
+        dialog.show(supportFragmentManager, "yesno")
+    }
+
+    override fun onDialogPositiveClick(answer: String) {
+        println("user pressed ON")
+        print(answer)
+        yesNoAnsser = "yes"
+    }
+
+    override fun onDialogNegativeClick(answer: String) {
+        println("user pressed OFF")
+        print(answer)
+        yesNoAnsser = "no"
+    }
+
+    private var onOff = ""
+    private fun showOnOff() {
+        val dialog = OnOffDialog()
+        dialog.show(supportFragmentManager, "onoff")
+    }
+
+    override fun onOnClick(answer: String) {
+        onOff = "on"
+    }
+
+    override fun onOffClick(answer: String) {
+        onOff = "off"
     }
 
 }

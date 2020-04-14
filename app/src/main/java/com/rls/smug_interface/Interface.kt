@@ -1,25 +1,27 @@
 package com.rls.smug_interface
 
-import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Window
 import com.rls.smug_interface.deviceAndAction.AddDevice
-import com.rls.smug_interface.Gesture.AddGesture
-import com.rls.smug_interface.Gesture.ListGestures
-import com.rls.smug_interface.Gesture.RemoveGesture
+import com.rls.smug_interface.gesture.AddGesture
+import com.rls.smug_interface.gesture.ListGestures
+import com.rls.smug_interface.gesture.RemoveGesture
 import com.rls.smug_interface.user.AddUser
 import com.rls.smug_interface.user.ChangeUser
 import com.rls.smug_interface.user.RemoveUser
+import com.rls.smug_interface.utilities.SliderDialog
 import com.rls.smug_interface.utilities.YesNoDialog
 import kotlinx.android.synthetic.main.activity_interface.*
 import java.net.Inet4Address
 import java.net.Socket
 import kotlin.concurrent.thread
+import kotlin.String as String
 
 
-class Interface : AppCompatActivity(), YesNoDialog.NoticeDialogListener {
+class Interface : AppCompatActivity(), YesNoDialog.NoticeDialogListener,
+    SliderDialog.OnSaveListener {
 
     /*fun IP(): String? {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
@@ -241,9 +243,11 @@ class Interface : AppCompatActivity(), YesNoDialog.NoticeDialogListener {
             applicationContext.startActivity(intent)
         }
         addActionBtn.setOnClickListener {
-
-            showYesNo()
-
+            showSlider()
+            //showYesNo()
+            //val dialog = SliderDialog()
+            //dialog.show(supportFragmentManager, "yesno")
+            // showYesNo()
             /*
             val t = thread {
                 val connection = Socket(ip(), 5051)
@@ -252,11 +256,9 @@ class Interface : AppCompatActivity(), YesNoDialog.NoticeDialogListener {
                 connection.close()
             }
             t.join()
-
             val intent = Intent(this, AddAction::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             applicationContext.startActivity(intent)
-
              */
         }
     }
@@ -266,12 +268,29 @@ class Interface : AppCompatActivity(), YesNoDialog.NoticeDialogListener {
         dialog.show(supportFragmentManager, "yesno")
     }
 
-    override fun onDialogPositiveClick(dialog: Dialog?) {
-        println("user pressed yes")
+    override fun onDialogPositiveClick(answer: String) {
+        print("user pressed: ")
+        println(answer)
     }
 
-    override fun onDialogNegativeClick(dialog: Dialog?) {
-        println("user pressed no")
+    override fun onDialogNegativeClick(answer: String) {
+        print("user pressed: ")
+        println(answer)
+    }
+
+
+    private fun showSlider() {
+        val dialog = SliderDialog()
+        dialog.show(supportFragmentManager, "slider")
+    }
+
+    override fun onSave(value: String) {
+        print("ON SAVE:")
+        print(value)
+    }
+
+    override fun onCancel() {
+        print("on cancel")
     }
 
 }

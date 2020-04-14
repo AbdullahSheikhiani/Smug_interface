@@ -28,7 +28,7 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
                 return UserFrag.newInstance()
             }
             1 -> {
-                return SliderFrag.newInstance()
+                //return SliderFrag.newInstance()
                 return GestureFrag.newInstance()
             }
             2 -> {

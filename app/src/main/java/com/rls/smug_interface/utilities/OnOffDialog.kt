@@ -1,15 +1,19 @@
 package com.rls.smug_interface.utilities
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+
 import com.rls.smug_interface.R
 
-
-class YesNoDialog : DialogFragment() {
+class OnOffDialog : DialogFragment() {
     // Use this instance of the interface to deliver action events
     private lateinit var listener: NoticeDialogListener
 
@@ -17,8 +21,8 @@ class YesNoDialog : DialogFragment() {
      * implement this interface in order to receive event callbacks.
      * Each method passes the DialogFragment in case the host needs to query it. */
     interface NoticeDialogListener {
-        fun onDialogPositiveClick(answer: String)
-        fun onDialogNegativeClick(answer: String)
+        fun onOnClick(answer: String)
+        fun onOffClick(answer: String)
     }
 
     // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
@@ -41,20 +45,20 @@ class YesNoDialog : DialogFragment() {
         return activity?.let {
             // Build the dialog and set up the button click handlers
             val builder = AlertDialog.Builder(it)
-            //todo
-            builder.setMessage("get argument")
+
+            builder.setMessage(R.string.on_or_off)
 
             builder.apply {
-                setPositiveButton(R.string.yes,
+                setPositiveButton(R.string.On,
                     DialogInterface.OnClickListener { dialog, id ->
                         // User clicked OK button
-                        listener.onDialogPositiveClick("Yes")
+                        listener.onOnClick("ON")
                         ///println("ON")
 
                     })
-                setNegativeButton(R.string.no,
+                setNegativeButton(R.string.Off,
                     DialogInterface.OnClickListener { dialog, id ->
-                        listener.onDialogNegativeClick("No")
+                        listener.onOffClick("OFF")
 
                         ////println("OFF")
                     })
