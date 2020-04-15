@@ -64,7 +64,7 @@ class RemoveGesture : AppCompatActivity() {
         t.join()
         val adapter = ArrayAdapter(
             this, // Context
-            android.R.layout.simple_spinner_item, // Layout
+            android.R.layout.simple_expandable_list_item_1, // Layout
             a // Array
         )
         adapter.notifyDataSetChanged()

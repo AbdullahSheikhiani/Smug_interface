@@ -45,7 +45,7 @@ class RemoveUser : AppCompatActivity() {
         val a = ArrayList<String>()
 
         val t = thread {
-            println("THREAD")
+            println("remove user THREAD")
             val connection = Socket(IP(), 5050)
             val reader = connection.getInputStream()
             //val writer = connection.getOutputStream()

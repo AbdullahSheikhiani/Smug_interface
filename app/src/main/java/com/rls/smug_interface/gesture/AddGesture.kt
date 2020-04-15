@@ -12,11 +12,6 @@ import kotlin.concurrent.thread
 
 
 class AddGesture : AppCompatActivity() {
-    /*fun IP(): String? {
-         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-         return sharedPreferences.getString("ip", "192.168.4.1")
-     }*/
-
     fun ip(): String {
         //return "192.168.1.126"
 
@@ -32,7 +27,7 @@ class AddGesture : AppCompatActivity() {
             //println(ipas)
             ipas
         } catch (ex: Exception) {
-           // println("DNS REQUEST ERROR")
+            // println("DNS REQUEST ERROR")
             //println(ex.message)
             "192.168.1.126"
         }
@@ -43,7 +38,7 @@ class AddGesture : AppCompatActivity() {
         setContentView(R.layout.activity_add_gesture)
         //var clickflag = false
         btnAdd.setOnClickListener {
-          //  clickflag = true
+            //  clickflag = true
 
             val t = thread {
                 val connection = Socket(ip(), 5050)
@@ -55,38 +50,8 @@ class AddGesture : AppCompatActivity() {
             t.join()
         }
 
+
         /*
-        var x = ""
-
-        val t = thread {
-            val connection = Socket("192.168.4.1", 5050)
-            val reader = connection.getInputStream()
-            val b = reader.bufferedReader()
-            //var s = reader.bufferedReader()
-            x = b.readLine()
-            while (x != "2") {
-                x = b.readLine()
-            }
-            connection.close()
-        }
-        */
-
-
-/*
-        val t = thread {
-            val connection = Socket("192.168.4.1", 5050)
-            val reader = connection.getInputStream()
-            val b = reader.bufferedReader()
-            //var s = reader.bufferedReader()
-            var x = b.readLine()
-            textView3.text = "recordings left: " + x
-            while (x != "2") {
-                x = b.readLine()
-            }
-        }
-        t.start()
-        t.join()
-*/
         bckBtn.setOnClickListener {
             val th = thread {
                 val connection = Socket(ip(), 5050)
@@ -97,14 +62,17 @@ class AddGesture : AppCompatActivity() {
 
             }
             th.join()
+
+
             val intent = Intent(this, Interface::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             applicationContext.startActivity(intent)
             finish()
 
-        }
+        }*/
     }
 
+/*
     override fun onBackPressed() {
         super.onBackPressed()
         val th = thread {
@@ -122,4 +90,6 @@ class AddGesture : AppCompatActivity() {
         applicationContext.startActivity(intent)
         finish()
     }
+
+ */
 }

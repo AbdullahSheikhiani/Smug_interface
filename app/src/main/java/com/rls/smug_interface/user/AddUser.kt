@@ -48,7 +48,7 @@ class AddUser : AppCompatActivity() {
                 val connection = Socket(ip(), 5050)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
-                writer.write(editText.text.toString().toByteArray())
+                writer.write(addUserEditText.text.toString().toByteArray())
                 connection.close()
             }
             t.join()
