@@ -34,7 +34,7 @@ class DeviceFragment : Fragment() {
         listBtn.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
-                    listBtn.setColorFilter(fAdd)
+                    listBtn.colorFilter = fList
                 }
                 MotionEvent.ACTION_DOWN -> {
                     listBtn.setColorFilter(Color.rgb(0, 0, 0))
@@ -48,7 +48,7 @@ class DeviceFragment : Fragment() {
         removeBtn.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
-                    removeBtn.setColorFilter(fAdd)
+                    removeBtn.colorFilter = fRemove
                 }
                 MotionEvent.ACTION_DOWN -> {
                     removeBtn.setColorFilter(Color.rgb(0, 0, 0))
@@ -62,7 +62,7 @@ class DeviceFragment : Fragment() {
         addBtn.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
-                    addBtn.setColorFilter(fAdd)
+                    addBtn.colorFilter = fAdd
                 }
                 MotionEvent.ACTION_DOWN -> {
                     addBtn.setColorFilter(Color.rgb(0, 0, 0))

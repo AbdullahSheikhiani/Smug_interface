@@ -53,7 +53,8 @@ class UserFragment : Fragment() {
         listBtn.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
-                    listBtn.colorFilter = fList
+                    addBtn.colorFilter = fAdd
+                    removeBtn.colorFilter = fRemove
                 }
                 MotionEvent.ACTION_DOWN -> {
                     listBtn.setColorFilter(Color.rgb(0, 0, 0))
@@ -66,7 +67,7 @@ class UserFragment : Fragment() {
                         println("list user THREAD")
                         var connection = Socket(ip(), 5051)
                         val writer = connection.getOutputStream()
-                        writer.write("5".toByteArray())
+                        writer.write("11".toByteArray())
                         connection.close()
                         connection = Socket(ip(), 5050)
                         val reader = connection.getInputStream()
@@ -84,7 +85,7 @@ class UserFragment : Fragment() {
                     t.join()
                     val adapter = ArrayAdapter(
                         context, // Context
-                        android.R.layout.simple_spinner_item, // Layout
+                        android.R.layout.simple_expandable_list_item_1, // Layout
                         a // Array
                     )
                     list.adapter = adapter
@@ -92,10 +93,15 @@ class UserFragment : Fragment() {
                     layout.addView(view)
                     list.setOnItemClickListener { parent, view, position, id ->
                         val th = thread {
-                            println("list user THREAD")
-                            val connection = Socket(ip(), 5050)
-                            //val reader = connection.getInputStream()
-                            val writer = connection.getOutputStream()
+                            println("chg user THREAD")
+                            var connection = Socket(ip(), 5051)
+                            var writer = connection.getOutputStream()
+                            writer.write("5".toByteArray())
+                            connection.close()
+                            Thread.sleep(0.1.toLong())
+
+                            connection = Socket(ip(), 5050)
+                            writer = connection.getOutputStream()
                             writer.write(a[position].toByteArray())
                             connection.close()
 
@@ -114,6 +120,7 @@ class UserFragment : Fragment() {
         removeBtn.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
+                    addBtn.colorFilter = fAdd
                     removeBtn.colorFilter = fRemove
                 }
                 MotionEvent.ACTION_DOWN -> {
@@ -134,7 +141,7 @@ class UserFragment : Fragment() {
                         val writer = connection.getOutputStream()
                         writer.write("7".toByteArray())
                         connection.close()
-
+                        Thread.sleep(1)
                         connection = Socket(ip(), 5050)
                         val reader = connection.getInputStream()
                         //val writer = connection.getOutputStream()
@@ -184,7 +191,8 @@ class UserFragment : Fragment() {
         addBtn.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
-                    addBtn.colorFilter = fAdd
+                    listBtn.colorFilter = fAdd
+                    removeBtn.colorFilter = fRemove
                 }
                 MotionEvent.ACTION_DOWN -> {
                     addBtn.setColorFilter(Color.rgb(0, 0, 0))
@@ -193,26 +201,49 @@ class UserFragment : Fragment() {
                     val view = mInflater.inflate(R.layout.activity_add_user, null)
                     val user = view.findViewById<EditText>(R.id.addUserEditText)
                     val btn = view.findViewById<Button>(R.id.btnSendUser)
-                    val t = thread {
-                        //val ip = InetAddress.getByName("pspsps")
-                        //val ip = "192.168.0.186"
-                        val connection = Socket(ip(), 5051)
-                        //val reader = connection.getInputStream()
-                        val writer = connection.getOutputStream()
-                        writer.write("6".toByteArray())
-                        connection.close()
-                    }
-                    t.join()
+                    layout.removeAllViewsInLayout()
+                    layout.addView(view)
                     btn.setOnClickListener {
                         val t = thread {
-                            val connection = Socket(ip(), 5050)
+                            //val ip = InetAddress.getByName("pspsps")
+                            //val ip = "192.168.0.186"
+                            var connection = Socket(ip(), 5051)
                             //val reader = connection.getInputStream()
-                            val writer = connection.getOutputStream()
+                            var writer = connection.getOutputStream()
+                            writer.write("6".toByteArray())
+                            connection.close()
+                            Thread.sleep(0.1.toLong())
+                            connection = Socket(ip(), 5050)
+                            println(connection)
+                            //val reader = connection.getInputStream()
+                            writer = connection.getOutputStream()
                             writer.write(user.text.toString().toByteArray())
                             connection.close()
-                            //TODO fingerprint confirmation
                         }
                         t.join()
+                        //TODO fingerprint confirmation
+                        layout.removeAllViews()
+                        val txt = TextView(context)
+                        txt.text = "please register your fingerprint via the SMUG controller"
+                        layout.addView(txt)
+                        /*
+                        val th = thread {
+                            var flag = false
+                            while (!flag)
+                                try {
+                                    val connection = Socket(ip(), 5050)
+                                    val reader = connection.getInputStream()
+                                    val bufferReader = reader.bufferedReader()
+                                    var x = bufferReader.readLine()
+                                    print("x= ")
+                                    println(x)
+                                    txt.text = "user added"
+                                    flag = true
+                                } catch (ex: java.lang.Exception) {
+
+                                }
+                        }
+                        th.join()*/
                     }
 
                 }

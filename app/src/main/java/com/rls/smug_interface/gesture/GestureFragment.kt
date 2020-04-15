@@ -55,7 +55,8 @@ class GestureFragment : Fragment() {
         listBtn.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
-                    listBtn.setColorFilter(fAdd)
+                    addBtn.colorFilter = fAdd
+                    removeBtn.colorFilter = fRemove
                 }
                 MotionEvent.ACTION_DOWN -> {
                     listBtn.setColorFilter(Color.rgb(0, 0, 0))
@@ -102,7 +103,8 @@ class GestureFragment : Fragment() {
         removeBtn.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
-                    removeBtn.setColorFilter(fAdd)
+                    addBtn.colorFilter = fAdd
+                    listBtn.colorFilter = fRemove
                 }
                 MotionEvent.ACTION_DOWN -> {
                     removeBtn.setColorFilter(Color.rgb(0, 0, 0))
@@ -173,7 +175,8 @@ class GestureFragment : Fragment() {
         addBtn.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
-                    addBtn.setColorFilter(fAdd)
+                    removeBtn.colorFilter = fAdd
+                    listBtn.colorFilter = fRemove
                 }
                 MotionEvent.ACTION_DOWN -> {
                     val mInflater = requireActivity().layoutInflater
@@ -198,6 +201,7 @@ class GestureFragment : Fragment() {
                         }
                         t.join()
                     }
+                    layout.removeAllViewsInLayout()
                     layout.addView(view)
 
                 }
