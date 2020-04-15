@@ -1,29 +1,29 @@
 package com.rls.smug_interface.deviceAndAction
 
-import android.content.Intent
+import android.bluetooth.BluetoothClass
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.SeekBar
-import android.widget.Switch
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.rls.smug_interface.R
 import kotlinx.android.synthetic.main.fragment_main_ui_device.view.*
 
 
 class DeviceFragment : Fragment() {
 
-
+    lateinit var viewModel: DeviceViewModel
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewModel = ViewModelProvider(this).get(DeviceViewModel::class.java)
 
         val root = inflater.inflate(R.layout.fragment_main_ui_device, container, false)
 
@@ -45,11 +45,24 @@ class DeviceFragment : Fragment() {
                     addBtn.colorFilter = fAdd
                 }
                 MotionEvent.ACTION_DOWN -> {
+                    //todo logic to get devices
+                    //smart plug needs different handling
+                    //get address and
+                    viewModel.deviceList.observe(viewLifecycleOwner, Observer {
+                        println(it)
+                    })
+                    viewModel.getDeviceList()
+
                     listBtn.setColorFilter(Color.rgb(0, 0, 0))
                     val x1 = adjustView(R.drawable.bulb, "BULB", false, 100)
                     layout.addView(x1)
+                    val separator = Space(context)
+                    separator.minimumWidth = 0
+                    separator.minimumHeight = 15
+                    layout.addView(separator)
                     val x2 = adjustView(R.drawable.strip, "STrip", true, 30)
                     layout.addView(x2)
+                    //layout.addView(separator)
 
                     /*
                     val intent = Intent(context, ActionHandler::class.java)
@@ -111,6 +124,9 @@ class DeviceFragment : Fragment() {
         s.isChecked = status
         bright.max = 255
         bright.progress = brightness
+        v.setBackgroundColor(
+            Color.argb(127, 222, 222, 222)
+        )
         return v
     }
 }
