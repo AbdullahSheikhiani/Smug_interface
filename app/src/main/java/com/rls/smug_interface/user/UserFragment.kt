@@ -40,7 +40,7 @@ class UserFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_main_ui, container, false)
 
-        val layout = root.vLayout
+        val layout = root.deviceLayout
 
         val listBtn = root.imageViewList
         val removeBtn = root.imageViewDel

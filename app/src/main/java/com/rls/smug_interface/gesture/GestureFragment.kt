@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import com.rls.smug_interface.R
-import kotlinx.android.synthetic.main.activity_remove_gesture.*
 import kotlinx.android.synthetic.main.fragment_main_ui.view.*
 import java.net.Inet4Address
 import java.net.Socket
@@ -42,7 +41,7 @@ class GestureFragment : Fragment() {
 
         val root = inflater.inflate(R.layout.fragment_main_ui, container, false)
 
-        val layout = root.vLayout
+        val layout = root.deviceLayout
 
         val listBtn = root.imageViewList
         val removeBtn = root.imageViewDel
