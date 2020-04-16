@@ -49,10 +49,10 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
 
         listOFViews.add(v)
 
-        val img = v.findViewById<ImageView>(R.id.deviceIcon)
-        val txt = v.findViewById<TextView>(R.id.deviceName)
-        val s = v.findViewById<Switch>(R.id.onOffSwitch)
-        val bright = v.findViewById<SeekBar>(R.id.brightnessBar)
+        val img = v.deviceIcon
+        val txt = v.deviceName
+        val s = v.onOffSwitch
+        val bright = v.brightnessBar
         img.setImageResource(imgID)
         txt.text = text
         s.isChecked = status
