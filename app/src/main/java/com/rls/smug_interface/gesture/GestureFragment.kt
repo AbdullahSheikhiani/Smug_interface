@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.rls.smug_interface.R
+import kotlinx.android.synthetic.main.activity_add_gesture.view.*
+import kotlinx.android.synthetic.main.fragment_list.view.*
 import kotlinx.android.synthetic.main.fragment_main_ui.view.*
 import java.net.Inet4Address
 import java.net.Socket
@@ -65,8 +67,8 @@ class GestureFragment : Fragment() {
                     listBtn.setColorFilter(Color.rgb(0, 0, 0))
                     //move to listGestures
                     val mInflater = requireActivity().layoutInflater
-                    val view = mInflater.inflate(R.layout.fragment_list_gestures, null)
-                    val list = view.findViewById<ListView>(R.id.listGstView)
+                    val view = mInflater.inflate(R.layout.fragment_list, null)
+                    val list = view.listView
                     //val a = ArrayList<String>()
                     viewModel.getGestureList()
                     viewModel.gestureList.observe(viewLifecycleOwner, Observer {
@@ -96,8 +98,8 @@ class GestureFragment : Fragment() {
                 MotionEvent.ACTION_DOWN -> {
                     removeBtn.setColorFilter(Color.rgb(0, 0, 0))
                     val mInflater = requireActivity().layoutInflater
-                    val view = mInflater.inflate(R.layout.fragment_list_gestures, null)
-                    val list = view.findViewById<ListView>(R.id.listGstView)
+                    val view = mInflater.inflate(R.layout.fragment_list, null)
+                    val list = view.findViewById<ListView>(R.id.listView)
                     val a = ArrayList<String>()
                     //todo move to viewModels
                     val t = thread {
@@ -149,6 +151,7 @@ class GestureFragment : Fragment() {
                         th.join()
                         layout.removeAllViewsInLayout()
                         val txt = TextView(context)
+                        //todo ack
                         txt.text = "removed ${a[position]} successfully"
                         layout.addView(txt)
                     }
@@ -167,15 +170,14 @@ class GestureFragment : Fragment() {
                 MotionEvent.ACTION_DOWN -> {
                     val mInflater = requireActivity().layoutInflater
                     val view = mInflater.inflate(R.layout.activity_add_gesture, null)
-                    val gestureName = view.findViewById<EditText>(R.id.gestureNameTxt)
-                    val addGstbtn = view.findViewById<Button>(R.id.btnAdd)
-                    val timesLeft = view.findViewById<TextView>(R.id.timesLeftText)
+                    val gestureName = view.gestureNameTxt
+                    val addGstbtn = view.btnAdd
+                    val timesLeft = view.timesLeftText
                     addBtn.setColorFilter(Color.rgb(0, 0, 0))
                     addGstbtn.setOnClickListener {
                         println(gestureName.text.toString())
-
+                        //todo move to viewModel
                         val t = thread {
-
                             var connection = Socket(ip(), 5051)
                             //val reader = connection.getInputStream()
                             var writer = connection.getOutputStream()
@@ -190,9 +192,7 @@ class GestureFragment : Fragment() {
                         }
                         t.join()
                         viewModel.getRemainingTimes()
-
                     }
-
                     viewModel.remainingTimes.observe(viewLifecycleOwner, Observer {
                         timesLeft.text = "recordings left ${it}"
                         if (it != 0)

@@ -59,8 +59,8 @@ class UserFragment : Fragment() {
                 MotionEvent.ACTION_DOWN -> {
                     listBtn.setColorFilter(Color.rgb(0, 0, 0))
                     val mInflater = requireActivity().layoutInflater
-                    val view = mInflater.inflate(R.layout.fragment_list_gestures, null)
-                    val list = view.findViewById<ListView>(R.id.listGstView)
+                    val view = mInflater.inflate(R.layout.fragment_list, null)
+                    val list = view.findViewById<ListView>(R.id.listView)
                     val a = ArrayList<String>()
                     val t = thread {
                         println("list user THREAD")
@@ -125,8 +125,8 @@ class UserFragment : Fragment() {
                 MotionEvent.ACTION_DOWN -> {
                     removeBtn.setColorFilter(Color.rgb(0, 0, 0))
                     val mInflater = requireActivity().layoutInflater
-                    val view = mInflater.inflate(R.layout.fragment_list_gestures, null)
-                    val list = view.findViewById<ListView>(R.id.listGstView)
+                    val view = mInflater.inflate(R.layout.fragment_list, null)
+                    val list = view.findViewById<ListView>(R.id.listView)
 
                     val a = ArrayList<String>()
 

@@ -1,25 +1,32 @@
 package com.rls.smug_interface.deviceAndAction
 
 import android.graphics.Color
+import android.graphics.ColorFilter
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import java.lang.Long.parseLong
 import androidx.lifecycle.ViewModelProvider
 import com.rls.smug_interface.R
+import com.rls.smug_interface.utilities.ColorPickerDialog
+import com.rls.smug_interface.utilities.ListDialog
 import kotlinx.android.synthetic.main.activity_add_actions.*
-import androidx.lifecycle.Observer
+import kotlinx.android.synthetic.main.fragment_bar.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class AddActions : AppCompatActivity() {
+
+class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
+    ListDialog.ListDialogListener {
     lateinit var layout: LinearLayout
-    lateinit var viewModel: DeviceViewModel
+    private lateinit var viewModel: DeviceViewModel
+
+    private val listOFViews = ArrayList<View>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_actions)
-        //actionBar.title = "add شسمه"
         supportActionBar!!.title = "add شسمه"
         viewModel = ViewModelProvider(this).get(DeviceViewModel::class.java)
 
@@ -27,18 +34,11 @@ class AddActions : AppCompatActivity() {
         gestureNameTxt.text = gestureName
         layout = insideLinearLayout
         val addAction = imgAddAction
-        val saveBtn = saveAndApllyBtn
+        val saveBtn = saveAndApplyBtn
         val del = delActionBtn
-        viewModel.getDeviceList()
-        var deviceList = ArrayList<String>()
-        viewModel.deviceList.observe(this, Observer {
-            deviceList = it
-            //todo add listner
-            //pop a dialog?
-            createDeviceList(it)
-            createDeviceList(it)
-            createDeviceList(it)
-        })
+        addAction.setOnClickListener {
+            listDialog()
+        }
     }
 
 
@@ -46,6 +46,9 @@ class AddActions : AppCompatActivity() {
         //todo add listeners
         val myInflater = layoutInflater
         val v: View = myInflater.inflate(R.layout.fragment_bar, null)
+
+        listOFViews.add(v)
+
         val img = v.findViewById<ImageView>(R.id.deviceIcon)
         val txt = v.findViewById<TextView>(R.id.deviceName)
         val s = v.findViewById<Switch>(R.id.onOffSwitch)
@@ -55,14 +58,31 @@ class AddActions : AppCompatActivity() {
         s.isChecked = status
         bright.max = 255
         bright.progress = brightness
+
+        val colorText = v.colorText
+        colorText.text = "ああああああああああああああああ"
+        /*
+         colorText.height = 0
+         colorText.width = 0
+         layout.addView(colorText)
+
+         */
         v.setBackgroundColor(
             Color.argb(127, 222, 222, 222)
         )
-        //todo pop color handler dialog or start activity for result
         txt.setOnClickListener {
+            //val intentR = Intent(baseContext, ColorHandler::class.java)
+            //startActivityForResult(intentR, shortHash)
+            colorPicker(v.hashCode())
+            println("v.hascode() = ${v.hashCode()}")
             println("${txt.text} was clicked")
+            //println(colorText.text)
         }
         img.setOnClickListener {
+            //val intentR = Intent(baseContext, ColorHandler::class.java)
+            //startActivityForResult(intentR, shortHash)
+            colorPicker(v.hashCode())
+            println("v.hascode() = ${v.hashCode()}")
             println("image of ${txt.text} was clicked")
         }
 
@@ -95,6 +115,7 @@ class AddActions : AppCompatActivity() {
         return v
     }
 
+
     private fun createDeviceList(devices: ArrayList<String>) {
         for (i in devices) {
             when {
@@ -118,5 +139,54 @@ class AddActions : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    //todo hide address in view
+
+
+    private fun colorPicker(hashCode: Int) {
+        val dialog = ColorPickerDialog.newInstance(hashCode)
+        dialog.show(supportFragmentManager, "color")
+    }
+
+    override fun saveColor(color: String, code: Int) {
+        println("color = $color")
+        println("hashCode = $code")
+        //todo use hashcode to get color value in colorText
+        for (i in 0 until listOFViews.size) {
+            if (code == listOFViews[i].hashCode()) {
+                listOFViews[i].colorText.text = color
+                val color = hexToRGB(color, 255)
+                println("color= $color")
+                //listOFViews[i].brightnessBar.thumb.setTint(color)
+                listOFViews[i].brightnessBar.progressDrawable.setTint(color)
+
+
+            }
+        }
+    }
+
+    private fun hexToRGB(hexColor: String, alpha: Int): Int {
+        val color = hexColor.toCharArray()
+        println(color[0])
+
+        val r = parseLong("${color[1]}${color[2]}", 16).toInt()
+        val g = parseLong("${color[3]}${color[4]}", 16).toInt()
+        val b = parseLong("${color[5]}${color[6]}", 16).toInt()
+        return Color.rgb(r, g, b)
+        //return Color.argb(alpha, r, g, b)
+    }
+
+    private fun listDialog() {
+        val dialog = ListDialog()
+        dialog.show(supportFragmentManager, "listDialog")
+    }
+
+    override fun onListItem(item: String) {
+        //todo add handler for smart plug
+        println("item= $item")
+        val a = ArrayList<String>()
+        a.add(item)
+        createDeviceList(a)
     }
 }

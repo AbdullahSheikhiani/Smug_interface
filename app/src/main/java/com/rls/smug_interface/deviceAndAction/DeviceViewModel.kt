@@ -27,7 +27,13 @@ class DeviceViewModel : ViewModel() {
                 ipas = Inet4Address.getByName(host).hostAddress
             }
             t.join()
-            ipas
+            //ipas
+
+            //work around
+            return if (ipas == "127.0.1.1")
+                "192.168.1.126"
+            else
+                ipas
         } catch (ex: Exception) {
             println(ex.message)
             "192.168.1.126"

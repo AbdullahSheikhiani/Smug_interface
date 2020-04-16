@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.rls.smug_interface.R
+import kotlinx.android.synthetic.main.fragment_bar.view.*
 import kotlinx.android.synthetic.main.fragment_main_ui_device.view.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -73,15 +74,12 @@ class DeviceFragment : Fragment() {
                     listBtn.colorFilter = fList
                     addBtn.colorFilter = fAdd
                     actionBtn.colorFilter = fAction
-
                 }
                 MotionEvent.ACTION_DOWN -> {
                     removeBtn.setColorFilter(Color.rgb(0, 0, 0))
                     //todo my stuff
                     layout.removeAllViewsInLayout()
-
                 }
-
             }
             true
         }
@@ -117,8 +115,8 @@ class DeviceFragment : Fragment() {
                     //get unlinked gesture list
                     //go to new activity to set up
                     val mInflater = requireActivity().layoutInflater
-                    val view = mInflater.inflate(R.layout.fragment_list_gestures, null)
-                    val list = view.findViewById<ListView>(R.id.listGstView)
+                    val view = mInflater.inflate(R.layout.fragment_list, null)
+                    val list = view.findViewById<ListView>(R.id.listView)
                     val a = ArrayList<String>()
                     viewModel.getListOfUnLinkedGestures()
                     viewModel.gestureList.observe(viewLifecycleOwner, Observer {
@@ -152,10 +150,10 @@ class DeviceFragment : Fragment() {
         //todo add listeners
         val myInflater = requireActivity().layoutInflater
         val v: View = myInflater.inflate(R.layout.fragment_bar, null)
-        val img = v.findViewById<ImageView>(R.id.deviceIcon)
-        val txt = v.findViewById<TextView>(R.id.deviceName)
-        val s = v.findViewById<Switch>(R.id.onOffSwitch)
-        val bright = v.findViewById<SeekBar>(R.id.brightnessBar)
+        val img = v.deviceIcon
+        val txt = v.deviceName
+        val s = v.onOffSwitch
+        val bright = v.brightnessBar
         img.setImageResource(imgID)
         txt.text = text
         s.isChecked = status

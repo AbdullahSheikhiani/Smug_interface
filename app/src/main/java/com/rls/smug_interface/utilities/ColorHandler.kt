@@ -26,10 +26,11 @@ class ColorHandler : AppCompatActivity() {
                 String.format("#%06X", 0xFFFFFF and colour)
             )
             setResult(Activity.RESULT_OK, returnIntent)
-            finish()
+            //finish()
         }
     }
 
+    /*
     override fun onBackPressed() {
         super.onBackPressed()
         val hexColor =
@@ -41,4 +42,6 @@ class ColorHandler : AppCompatActivity() {
         finish()
 
     }
+
+     */
 }
