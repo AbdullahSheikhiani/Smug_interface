@@ -51,6 +51,7 @@ class AddDevice : AppCompatActivity(), YesNoDialog.NoticeDialogListener,
             listOfDevices // Array
         )
         deviceList.adapter = adapter
+        /*
         val t = thread {
 
             println("thread add device")
@@ -68,6 +69,7 @@ class AddDevice : AppCompatActivity(), YesNoDialog.NoticeDialogListener,
             adapter.notifyDataSetChanged()
         }
         t.join()
+        */
         println("\ngot list of devices")
         for (i in listOfDevices) {
             print("d: ")

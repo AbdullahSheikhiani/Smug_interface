@@ -159,7 +159,6 @@ class InitialSetup : AppCompatActivity() {
                  //}
                  //recieve ip from raspberry pi
 
-                 //TODO make ip something that is set after the connection secured
 
                  //writer.write(ssid.text.toString().toByteArray())
                  //writer.write(inputPassword.text.toString().toByteArray())

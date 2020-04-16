@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ActionHandler"></activity>
+        <activity android:name=".utilities.ActionHandler"></activity>
         <activity android:name=".Interface" />
         <activity android:name=".deviceAndAction.AssociateGesture" />
         <activity android:name=".utilities.ColorHandler" />
@@ -26,6 +26,7 @@
         <activity android:name=".gesture.AddGesture" />
         <activity android:name=".InitialSetup" />
         <activity android:name=".gesture.ListGestures" />
+        <activity android:name=".deviceAndAction.AddActions" />
         <activity android:name=".Main2Activity" />
         <activity
             android:name=".MainUI"

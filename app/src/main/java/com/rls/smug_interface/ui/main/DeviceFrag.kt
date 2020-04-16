@@ -36,27 +36,6 @@ class DeviceFrag : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val r1 = RelativeLayout(context)
-        val txt = TextView(context)
-        txt.text = "device 1\nstate: xxx \nlmao"
-        r1.addView(txt)
-        val imageView = ImageView(context)
-        r1.addView(imageView)
-        imageView.setImageResource(R.drawable.bulb)
-        val leftV = leftv
-        val rightV = rightv
-        leftV.addView(r1)
-        imageView.setOnClickListener {
-            println("image was clicked")
-            val i = ImageView(context)
-            i.setImageResource(R.drawable.go)
-            rightV.addView(i)
-            val x = ImageView(context)
-            x.setImageResource(R.drawable.strip)
-            rightV.addView(x)
-        }
-
-
     }
 
 

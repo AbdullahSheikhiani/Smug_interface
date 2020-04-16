@@ -1,7 +1,8 @@
-package com.rls.smug_interface
+package com.rls.smug_interface.utilities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.rls.smug_interface.R
 
 class ActionHandler : AppCompatActivity() {
 

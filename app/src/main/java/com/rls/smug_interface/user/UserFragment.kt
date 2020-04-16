@@ -58,7 +58,6 @@ class UserFragment : Fragment() {
                 }
                 MotionEvent.ACTION_DOWN -> {
                     listBtn.setColorFilter(Color.rgb(0, 0, 0))
-                    //todo my stuff
                     val mInflater = requireActivity().layoutInflater
                     val view = mInflater.inflate(R.layout.fragment_list_gestures, null)
                     val list = view.findViewById<ListView>(R.id.listGstView)

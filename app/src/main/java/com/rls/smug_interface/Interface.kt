@@ -59,7 +59,6 @@ class Interface : AppCompatActivity(), YesNoDialog.NoticeDialogListener,
 
 
         exitBtn.setOnClickListener {
-            //TODO
             val t = thread {
                 //println("ip by DNS")
                 //val ip = InetAddress.getByName("pspsps")

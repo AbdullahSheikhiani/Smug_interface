@@ -64,11 +64,11 @@
 
     <Spinner
         android:id="@+id/spinner0"
-        android:layout_width="146dp"
-        android:layout_height="49dp"
+        android:layout_width="208dp"
+        android:layout_height="55dp"
         android:layout_marginStart="112dp"
-        android:layout_marginLeft="112dp"
         app:layout_constraintBottom_toBottomOf="@+id/g0"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/g0"
         app:layout_constraintTop_toTopOf="@+id/g0" />
 

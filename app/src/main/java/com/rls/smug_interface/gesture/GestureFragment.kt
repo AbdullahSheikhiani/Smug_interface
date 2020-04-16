@@ -95,12 +95,11 @@ class GestureFragment : Fragment() {
                 }
                 MotionEvent.ACTION_DOWN -> {
                     removeBtn.setColorFilter(Color.rgb(0, 0, 0))
-                    //todo my stuff
                     val mInflater = requireActivity().layoutInflater
                     val view = mInflater.inflate(R.layout.fragment_list_gestures, null)
                     val list = view.findViewById<ListView>(R.id.listGstView)
                     val a = ArrayList<String>()
-
+                    //todo move to viewModels
                     val t = thread {
                         println("thread remove gst")
                         //val ip = InetAddress.getByName("pspsps")
@@ -195,7 +194,7 @@ class GestureFragment : Fragment() {
                     }
 
                     viewModel.remainingTimes.observe(viewLifecycleOwner, Observer {
-                        timesLeft.text = "recorings left ${it}"
+                        timesLeft.text = "recordings left ${it}"
                         if (it != 0)
                             viewModel.getRemainingTimes()
                         else {
