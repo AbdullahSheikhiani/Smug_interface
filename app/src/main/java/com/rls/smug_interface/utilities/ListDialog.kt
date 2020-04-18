@@ -69,7 +69,7 @@ class ListDialog : DialogFragment() {
 
             thread {
                 val a = ArrayList<String>()
-                var connection = Socket(ip(), 5051)
+                var connection = Socket(ip(), 5050)
                 print(connection)
                 val writer = connection.getOutputStream()
                 writer.write("9".toByteArray())

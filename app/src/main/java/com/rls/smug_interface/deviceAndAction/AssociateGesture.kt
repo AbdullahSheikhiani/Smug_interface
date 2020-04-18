@@ -55,7 +55,7 @@ class AssociateGesture : AppCompatActivity() {
                 var writer = connection.getOutputStream()
                 writer.write("AIG".toByteArray())
                 connection.close()
-                connection = Socket(ip(), 5051)
+                connection = Socket(ip(), 5050)
                 writer = connection.getOutputStream()
                 writer.write("10".toByteArray())
                 connection.close()

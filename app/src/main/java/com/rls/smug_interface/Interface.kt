@@ -68,7 +68,7 @@ class Interface : AppCompatActivity(), YesNoDialog.NoticeDialogListener,
                 // val ip = "192.168.4.1"
 
                 try {
-                    val connection = Socket(ip(), 5051)
+                    val connection = Socket(ip(), 5050)
                     //val reader = connection.getInputStream()
                     val writer = connection.getOutputStream()
                     writer.write("8".toByteArray())
@@ -82,7 +82,7 @@ class Interface : AppCompatActivity(), YesNoDialog.NoticeDialogListener,
                     println()
                     print("e: ")
                     println(e)
-                    val connection = Socket("192.168.4.1", 5051)
+                    val connection = Socket("192.168.4.1", 5050)
                     //val reader = connection.getInputStream()
                     val writer = connection.getOutputStream()
                     writer.write("8".toByteArray())
@@ -124,7 +124,7 @@ class Interface : AppCompatActivity(), YesNoDialog.NoticeDialogListener,
                  */
 
 
-                val connection = Socket(ip(), 5051)
+                val connection = Socket(ip(), 5050)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write("1".toByteArray())
@@ -140,7 +140,7 @@ class Interface : AppCompatActivity(), YesNoDialog.NoticeDialogListener,
             val t = thread {
                 //val ip = InetAddress.getByName("pspsps")
                 //val ip = "192.168.0.186"
-                val connection = Socket(ip(), 5051)
+                val connection = Socket(ip(), 5050)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write("2".toByteArray())
@@ -156,7 +156,7 @@ class Interface : AppCompatActivity(), YesNoDialog.NoticeDialogListener,
             val t = thread {
                 //val ip = InetAddress.getByName("pspsps")
                 // val ip = "192.168.0.186"
-                val connection = Socket(ip(), 5051)
+                val connection = Socket(ip(), 5050)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write("3".toByteArray())
@@ -171,7 +171,7 @@ class Interface : AppCompatActivity(), YesNoDialog.NoticeDialogListener,
             val t = thread {
                 //val ip = InetAddress.getByName("pspsps")
                 // val ip = "192.168.0.186"
-                val connection = Socket(ip(), 5051)
+                val connection = Socket(ip(), 5050)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write("4".toByteArray())
@@ -185,7 +185,7 @@ class Interface : AppCompatActivity(), YesNoDialog.NoticeDialogListener,
             val t = thread {
                 //val ip = InetAddress.getByName("pspsps")
                 //val ip = "192.168.0.186"
-                val connection = Socket(ip(), 5051)
+                val connection = Socket(ip(), 5050)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write("5".toByteArray())
@@ -201,7 +201,7 @@ class Interface : AppCompatActivity(), YesNoDialog.NoticeDialogListener,
             val t = thread {
                 //val ip = InetAddress.getByName("pspsps")
                 //val ip = "192.168.0.186"
-                val connection = Socket(ip(), 5051)
+                val connection = Socket(ip(), 5050)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write("6".toByteArray())
@@ -216,7 +216,7 @@ class Interface : AppCompatActivity(), YesNoDialog.NoticeDialogListener,
             val t = thread {
                 //val ip = InetAddress.getByName("pspsps")
                 //val ip = "192.168.0.186"
-                val connection = Socket(ip(), 5051)
+                val connection = Socket(ip(), 5050)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write("7".toByteArray())
@@ -230,7 +230,7 @@ class Interface : AppCompatActivity(), YesNoDialog.NoticeDialogListener,
         }
         addDeviceBtn.setOnClickListener {
             val t = thread {
-                val connection = Socket(ip(), 5051)
+                val connection = Socket(ip(), 5050)
                 val writer = connection.getOutputStream()
                 writer.write("9".toByteArray())
                 println("sent 9")
@@ -249,7 +249,7 @@ class Interface : AppCompatActivity(), YesNoDialog.NoticeDialogListener,
             // showYesNo()
             /*
             val t = thread {
-                val connection = Socket(ip(), 5051)
+                val connection = Socket(ip(), 5050)
                 val writer = connection.getOutputStream()
                 writer.write("10".toByteArray())
                 connection.close()

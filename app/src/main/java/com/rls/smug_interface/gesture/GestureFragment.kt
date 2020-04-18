@@ -106,7 +106,7 @@ class GestureFragment : Fragment() {
                         println("thread remove gst")
                         //val ip = InetAddress.getByName("pspsps")
                         // val ip = "192.168.0.186"
-                        var connection = Socket(ip(), 5051)
+                        var connection = Socket(ip(), 5050)
                         //val reader = connection.getInputStream()
                         val writer = connection.getOutputStream()
                         writer.write("3".toByteArray())
@@ -178,7 +178,7 @@ class GestureFragment : Fragment() {
                         println(gestureName.text.toString())
                         //todo move to viewModel
                         val t = thread {
-                            var connection = Socket(ip(), 5051)
+                            var connection = Socket(ip(), 5050)
                             //val reader = connection.getInputStream()
                             var writer = connection.getOutputStream()
                             writer.write("2".toByteArray())

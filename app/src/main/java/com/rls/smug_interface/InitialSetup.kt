@@ -162,7 +162,7 @@ class InitialSetup : AppCompatActivity() {
 
                  //writer.write(ssid.text.toString().toByteArray())
                  //writer.write(inputPassword.text.toString().toByteArray())
-                 val connection = Socket("192.168.4.1", 5051)
+                 val connection = Socket("192.168.4.1", 5050)
                  val writer: OutputStream = connection.getOutputStream()
                  val server = ServerSocket(5050)
                  val client = server.accept()
@@ -263,7 +263,7 @@ class InitialSetup : AppCompatActivity() {
             sendData,
             sendData.size,
             InetAddress.getByAddress("192.168.4.1".toByteArray()),
-            5051
+            5050
         )
         socket.send(sendPacket)
     }

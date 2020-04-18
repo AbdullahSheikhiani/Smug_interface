@@ -165,12 +165,14 @@ class DeviceFragment : Fragment() {
 
         s.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
+                viewModel.issueLiveCommand("0x001788010149A6BAD", "state", "ON")
                 //we can use text to get current device name
                 println(text)
                 println("checked")
                 //buttonView.isChecked = false
             } else {
                 println("not checked")
+                viewModel.issueLiveCommand("0x001788010149A6BAD", "state", "OFF")
             }
         }
         bright.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {

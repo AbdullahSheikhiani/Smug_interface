@@ -7,10 +7,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.net.Inet4Address
 import java.net.Socket
-import java.nio.channels.AsynchronousChannel
 import kotlin.concurrent.thread
 
-class GestureViewModel : ViewModel(), AsynchronousChannel {
+class GestureViewModel : ViewModel() {
 
     val gestureList = MutableLiveData<ArrayList<String>>()
     val remainingTimes = MutableLiveData<Int>()
@@ -34,11 +33,11 @@ class GestureViewModel : ViewModel(), AsynchronousChannel {
         viewModelScope.launch(Dispatchers.Default) {
             val a = ArrayList<String>()
             println("thread add device")
-            val t = thread {
+            thread {
                 println("list gestures THREAD")
                 print("IP= ")
                 println(ip())
-                var connection = Socket(ip(), 5051)
+                var connection = Socket(ip(), 5050)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write("1".toByteArray())
@@ -52,9 +51,9 @@ class GestureViewModel : ViewModel(), AsynchronousChannel {
                     x = b.readLine()
                 }
                 connection.close()
+                gestureList.postValue(a)
+
             }
-            t.join()
-            gestureList.postValue(a)
         }
     }
 
@@ -71,10 +70,5 @@ class GestureViewModel : ViewModel(), AsynchronousChannel {
         }
     }
 
-    override fun isOpen(): Boolean {
-        return true
-    }
 
-    override fun close() {
-    }
 }

@@ -46,7 +46,7 @@ class DeviceViewModel : ViewModel() {
             println("thread device list")
             thread {
 
-                var connection = Socket(ip(), 5051)
+                var connection = Socket(ip(), 5050)
                 print(connection)
                 val writer = connection.getOutputStream()
                 writer.write("9".toByteArray())
@@ -91,7 +91,7 @@ class DeviceViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.Default) {
             val a = ArrayList<String>()
             thread {
-                var connection = Socket(ip(), 5051)
+                var connection = Socket(ip(), 5050)
                 val writer = connection.getOutputStream()
                 writer.write("12".toByteArray())
                 println("sent 12, request to get unlinked gestures")
@@ -130,6 +130,26 @@ class DeviceViewModel : ViewModel() {
                     writer.flush()
                 }
                 connection.close()
+            }
+        }
+    }
+
+    fun issueLiveCommand(ieeeAddr: String, attribute: String, value: String) {
+        viewModelScope.launch(Dispatchers.Default) {
+            thread {
+                var connection = Socket(ip(), 5050)
+                var writer = connection.getOutputStream()
+                writer.write("16".toByteArray())
+                println("sent 12, request live data")
+                connection.close()
+                //Thread.sleep(0)
+                connection = Socket(ip(), 5050)
+                println(connection)
+                writer = connection.getOutputStream()
+                writer.write((ieeeAddr + "\n").toByteArray())
+                writer.write((attribute + "\n").toByteArray())
+                writer.write((value + "\n").toByteArray())
+                writer.flush()
             }
         }
     }
