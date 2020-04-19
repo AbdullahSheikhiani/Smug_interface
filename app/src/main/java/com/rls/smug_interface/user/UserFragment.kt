@@ -93,7 +93,7 @@ class UserFragment : Fragment() {
                     list.setOnItemClickListener { parent, view, position, id ->
                         val th = thread {
                             println("chg user THREAD")
-                            var connection = Socket(ip(), 5050)
+                            var connection = Socket(ip(), 5051)
                             var writer = connection.getOutputStream()
                             writer.write("5".toByteArray())
                             connection.close()
@@ -136,7 +136,7 @@ class UserFragment : Fragment() {
                         //val ip = InetAddress.getByName("pspsps")
                         //val ip = "192.168.0.186"
                         //todo move to UserViewModel
-                        var connection = Socket(ip(), 5050)
+                        var connection = Socket(ip(), 5051)
                         //val reader = connection.getInputStream()
                         val writer = connection.getOutputStream()
                         writer.write("7".toByteArray())

@@ -14,28 +14,9 @@ import com.rls.smug_interface.R
 import kotlinx.android.synthetic.main.activity_add_gesture.view.*
 import kotlinx.android.synthetic.main.fragment_list.view.*
 import kotlinx.android.synthetic.main.fragment_main_ui.view.*
-import java.net.Inet4Address
-import java.net.Socket
-import kotlin.concurrent.thread
+
 
 class GestureFragment : Fragment() {
-
-    fun ip(): String {
-
-        val host = "pspspspi"
-        lateinit var ipas: String
-        return try {
-            //print("INSIDE SHOW IP ADDRESS")
-            val t = thread {
-                ipas = Inet4Address.getByName(host).hostAddress
-            }
-            t.join()
-            ipas
-        } catch (ex: Exception) {
-            println(ex.message)
-            "192.168.1.126"
-        }
-    }
 
     lateinit var viewModel: GestureViewModel
     override fun onCreateView(
@@ -93,7 +74,7 @@ class GestureFragment : Fragment() {
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
                     addBtn.colorFilter = fAdd
-                    listBtn.colorFilter = fRemove
+                    listBtn.colorFilter = fList
                 }
                 MotionEvent.ACTION_DOWN -> {
                     removeBtn.setColorFilter(Color.rgb(0, 0, 0))
@@ -102,59 +83,27 @@ class GestureFragment : Fragment() {
                     val list = view.findViewById<ListView>(R.id.listView)
                     val a = ArrayList<String>()
                     //todo move to viewModels
-                    val t = thread {
-                        println("thread remove gst")
-                        //val ip = InetAddress.getByName("pspsps")
-                        // val ip = "192.168.0.186"
-                        var connection = Socket(ip(), 5050)
-                        //val reader = connection.getInputStream()
-                        val writer = connection.getOutputStream()
-                        writer.write("3".toByteArray())
-                        connection.close()
 
-                        connection = Socket(ip(), 5050)
-                        val reader = connection.getInputStream()
-                        //val writer = connection.getOutputStream()
-                        val b = reader.bufferedReader()
-                        //list Gestures
-                        var x = b.readLine()
-                        print(x)
-                        while (x != "stp") {
-                            a.add(x)
-                            x = b.readLine()
-                            //print("x=")
-                            //println(x)
+                    viewModel.getGestureList()
+                    viewModel.gestureList.observe(viewLifecycleOwner, Observer {
+                        val adapter = ArrayAdapter(
+                            context, // Context
+                            android.R.layout.simple_expandable_list_item_1, // Layout
+                            it // Array
+                        )
+
+                        list.adapter = adapter
+                        layout.removeAllViews()
+                        layout.addView(view)
+                        list.setOnItemClickListener { parent, view, position, id ->
+                            viewModel.removeGesture(a[position])
+                            layout.removeAllViewsInLayout()
+                            val txt = TextView(context)
+                            //todo ack
+                            txt.text = "removed ${a[position]} successfully"
+                            layout.addView(txt)
                         }
-                        connection.close()
-                    }
-                    t.join()
-                    val adapter = ArrayAdapter(
-                        context, // Context
-                        android.R.layout.simple_expandable_list_item_1, // Layout
-                        a // Array
-                    )
-                    list.adapter = adapter
-                    layout.removeAllViews()
-                    layout.addView(view)
-                    list.setOnItemClickListener { parent, view, position, id ->
-                        val th = thread {
-                            print("item = ")
-                            println(a[position])
-                            val connection = Socket(ip(), 5050)
-                            val reader = connection.getInputStream()
-                            val writer = connection.getOutputStream()
-                            writer.write(a[position].toByteArray())
-                            val r = reader.bufferedReader()
-                            print("removed gesture read: ")
-                            println(r.readLine())
-                        }
-                        th.join()
-                        layout.removeAllViewsInLayout()
-                        val txt = TextView(context)
-                        //todo ack
-                        txt.text = "removed ${a[position]} successfully"
-                        layout.addView(txt)
-                    }
+                    })
 
                 }
 
@@ -165,7 +114,7 @@ class GestureFragment : Fragment() {
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
                     removeBtn.colorFilter = fAdd
-                    listBtn.colorFilter = fRemove
+                    listBtn.colorFilter = fList
                 }
                 MotionEvent.ACTION_DOWN -> {
                     val mInflater = requireActivity().layoutInflater
@@ -177,20 +126,7 @@ class GestureFragment : Fragment() {
                     addGstbtn.setOnClickListener {
                         println(gestureName.text.toString())
                         //todo move to viewModel
-                        val t = thread {
-                            var connection = Socket(ip(), 5050)
-                            //val reader = connection.getInputStream()
-                            var writer = connection.getOutputStream()
-                            writer.write("2".toByteArray())
-                            connection.close()
-                            Thread.sleep(10)
-
-                            connection = Socket(ip(), 5050)
-                            writer = connection.getOutputStream()
-                            writer.write(gestureName.text.toString().toByteArray())
-                            connection.close()
-                        }
-                        t.join()
+                        viewModel.addGesture(gestureName.text.toString())
                         viewModel.getRemainingTimes()
                     }
                     viewModel.remainingTimes.observe(viewLifecycleOwner, Observer {

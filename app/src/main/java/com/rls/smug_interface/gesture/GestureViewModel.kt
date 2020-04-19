@@ -1,33 +1,18 @@
 package com.rls.smug_interface.gesture
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rls.smug_interface.utilities.EssenceViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.net.Inet4Address
 import java.net.Socket
 import kotlin.concurrent.thread
 
-class GestureViewModel : ViewModel() {
+class GestureViewModel : EssenceViewModel() {
 
     val gestureList = MutableLiveData<ArrayList<String>>()
     val remainingTimes = MutableLiveData<Int>()
-    fun ip(): String {
-        val host = "pspspspi"
-        lateinit var ipas: String
-        return try {
-            //print("INSIDE SHOW IP ADDRESS")
-            val t = thread {
-                ipas = Inet4Address.getByName(host).hostAddress
-            }
-            t.join()
-            ipas
-        } catch (ex: Exception) {
-            println(ex.message)
-            "192.168.1.126"
-        }
-    }
+
 
     fun getGestureList() {
         viewModelScope.launch(Dispatchers.Default) {
@@ -37,12 +22,12 @@ class GestureViewModel : ViewModel() {
                 println("list gestures THREAD")
                 print("IP= ")
                 println(ip())
-                var connection = Socket(ip(), 5050)
+                var connection = Socket(ip(), port_main)
                 //val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write("1".toByteArray())
                 connection.close()
-                connection = Socket(ip(), 5050)
+                connection = Socket(ip(), port_service)
                 val reader = connection.getInputStream()
                 val b = reader.bufferedReader()
                 var x = b.readLine()
@@ -61,13 +46,45 @@ class GestureViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.Default) {
             var x = ""
             thread {
-                val connection = Socket(ip(), 5050)
+                val connection = Socket(ip(), port_service)
                 val reader = connection.getInputStream()
                 val b = reader.bufferedReader()
                 x = b.readLine()
             }.join()
             remainingTimes.postValue(x.toInt())
         }
+    }
+
+    fun removeGesture(gestureToBeRemoved: String) {
+        viewModelScope.launch(Dispatchers.Default) {
+            val th = thread {
+                print("item = ")
+                println(gestureToBeRemoved)
+                val connection = Socket(ip(), port_service)
+                val reader = connection.getInputStream()
+                val writer = connection.getOutputStream()
+                writer.write(gestureToBeRemoved.toByteArray())
+                val r = reader.bufferedReader()
+                print("removed gesture read: ")
+                println(r.readLine())
+            }.join()
+        }
+    }
+
+    fun addGesture(gestureName: String) {
+        val t = thread {
+            var connection = Socket(ip(), port_main)
+            //val reader = connection.getInputStream()
+            var writer = connection.getOutputStream()
+            writer.write("2".toByteArray())
+            connection.close()
+            Thread.sleep(10)
+            connection = Socket(ip(), port_service)
+            writer = connection.getOutputStream()
+            writer.write(gestureName.toByteArray())
+            connection.close()
+        }
+        t.join()
     }
 
 

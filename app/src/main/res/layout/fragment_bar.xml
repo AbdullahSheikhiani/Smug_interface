@@ -54,6 +54,13 @@
                 android:layout_weight="1"
                 android:width="0dp"
                 android:height="0dp" />
+            <TextView
+                android:id="@+id/deviceAddr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:width="0dp"
+                android:height="0dp"/>
 
         </LinearLayout>
 

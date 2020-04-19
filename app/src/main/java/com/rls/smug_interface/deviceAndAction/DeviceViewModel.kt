@@ -1,59 +1,35 @@
 package com.rls.smug_interface.deviceAndAction
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rls.smug_interface.utilities.EssenceViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.net.Inet4Address
 import java.net.Socket
-import java.nio.channels.AsynchronousChannel
 import kotlin.concurrent.thread
 
-class DeviceViewModel : ViewModel() {
+class DeviceViewModel : EssenceViewModel() {
 
     val deviceList = MutableLiveData<ArrayList<String>>()
     val gestureList = MutableLiveData<ArrayList<String>>()
+
     //val deviceTypeList = MutableLiveData<ArrayList<String>>()
-    //val deviceIeeeAddressList = MutableLiveData<ArrayList<String>>()
+    val deviceAdderList = MutableLiveData<ArrayList<String>>()
 
-    fun ip(): String {
-
-        val host = "pspspspi"
-        lateinit var ipas: String
-        return try {
-            //print("INSIDE SHOW IP ADDRESS")
-            val t = thread {
-                ipas = Inet4Address.getByName(host).hostAddress
-            }
-            t.join()
-            //ipas
-
-            //work around
-            return if (ipas == "127.0.1.1")
-                "192.168.1.126"
-            else
-                ipas
-        } catch (ex: Exception) {
-            println(ex.message)
-            "192.168.1.126"
-        }
-    }
 
     fun getDeviceList() {
         viewModelScope.launch(Dispatchers.Default) {
             val a = ArrayList<String>()
             println("thread device list")
             thread {
-
-                var connection = Socket(ip(), 5050)
-                print(connection)
+                var connection = Socket(ip(), port_main)
+                println(connection)
                 val writer = connection.getOutputStream()
                 writer.write("9".toByteArray())
                 println("sent 9")
                 connection.close()
                 Thread.sleep(1)
-                connection = Socket(ip(), 5050)
+                connection = Socket(ip(), port_service)
                 println(connection)
                 val reader = connection.getInputStream()
                 val b = reader.bufferedReader()
@@ -91,13 +67,13 @@ class DeviceViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.Default) {
             val a = ArrayList<String>()
             thread {
-                var connection = Socket(ip(), 5050)
+                var connection = Socket(ip(), port_main)
                 val writer = connection.getOutputStream()
                 writer.write("12".toByteArray())
                 println("sent 12, request to get unlinked gestures")
                 connection.close()
                 //Thread.sleep(0)
-                connection = Socket(ip(), 5050)
+                connection = Socket(ip(), port_service)
                 println(connection)
                 val reader = connection.getInputStream()
                 val b = reader.bufferedReader()
@@ -120,8 +96,16 @@ class DeviceViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.Default) {
             val th = thread {
                 print("sent to device")
-                val connection = Socket(ip(), 5050)
-                val writer = connection.getOutputStream()
+
+                var connection = Socket(ip(), port_service)
+                var writer = connection.getOutputStream()
+                writer.write("10".toByteArray())
+                connection.close()
+
+                Thread.sleep(1)
+
+                connection = Socket(ip(), port_service)
+                writer = connection.getOutputStream()
                 writer.write((gestureName + "\n").toByteArray())
                 for (i in devices.indices) {
                     writer.write((devices[i] + "\n").toByteArray())
@@ -137,19 +121,52 @@ class DeviceViewModel : ViewModel() {
     fun issueLiveCommand(ieeeAddr: String, attribute: String, value: String) {
         viewModelScope.launch(Dispatchers.Default) {
             thread {
-                var connection = Socket(ip(), 5050)
+                var connection = Socket(ip(), port_main)
+
                 var writer = connection.getOutputStream()
-                writer.write("16".toByteArray())
-                println("sent 12, request live data")
+                writer.write("17".toByteArray())
+                println("sent 17, request live action")
                 connection.close()
                 //Thread.sleep(0)
-                connection = Socket(ip(), 5050)
+
+                println("action requested: $ieeeAddr $attribute $value")
+                connection = Socket(ip(), port_service)
                 println(connection)
                 writer = connection.getOutputStream()
+                /*
                 writer.write((ieeeAddr + "\n").toByteArray())
                 writer.write((attribute + "\n").toByteArray())
                 writer.write((value + "\n").toByteArray())
+                 */
+                writer.write("$ieeeAddr,$attribute,$value".toByteArray())
+                println("wrote")
+
                 writer.flush()
+            }
+        }
+    }
+
+    fun getDeviceAddrList() {
+        viewModelScope.launch(Dispatchers.Default) {
+            val a = ArrayList<String>()
+            //todo make the actual implementation
+            thread {
+                var connection = Socket(ip(), port_main)
+                val writer = connection.getOutputStream()
+                writer.write("16".toByteArray())
+                println("sent 12, request to get unlinked gestures")
+                connection.close()
+                //Thread.sleep(0)
+                connection = Socket(ip(), port_service)
+                println(connection)
+                val reader = connection.getInputStream()
+                val b = reader.bufferedReader()
+                var x = b.readLine()
+                while (x != "stp") {
+                    a.add(x)
+                    x = b.readLine()
+                }
+                deviceAdderList.postValue(a)
             }
         }
     }

@@ -64,10 +64,16 @@ class DeviceFragment : Fragment() {
             }
             true
         }
-        viewModel.deviceList.observe(viewLifecycleOwner, Observer {
-            println(it)
-            layout = createDeviceList(it, layout)
+        viewModel.deviceList.observe(viewLifecycleOwner, Observer { deviceListArray ->
+            println(deviceListArray)
+            viewModel.getDeviceAddrList()
+            viewModel.deviceAdderList.observe(viewLifecycleOwner, Observer {
+                println(it)
+                createDeviceList(deviceListArray, it, layout)
+            })
         })
+
+
         removeBtn.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
@@ -126,7 +132,7 @@ class DeviceFragment : Fragment() {
                             it // Array
                         )
                         list.adapter = adapter
-                        list.setOnItemClickListener { parent, view, position, id ->
+                        list.setOnItemClickListener { _, _, position, _ ->
                             //start new activity
                             val item = adapter.getItem(position)
                             println(item)
@@ -146,73 +152,127 @@ class DeviceFragment : Fragment() {
         return root
     }
 
-    private fun adjustView(imgID: Int, text: String, status: Boolean, brightness: Int): View {
+    private fun adjustView(
+        imgID: Int,
+        text: String,
+        status: Boolean,
+        brightness: Int,
+        deviceAddress: String
+    ): View {
         //todo add listeners
         val myInflater = requireActivity().layoutInflater
         val v: View = myInflater.inflate(R.layout.fragment_bar, null)
         val img = v.deviceIcon
-        val txt = v.deviceName
+        val deviceNameTxt = v.deviceName
+        val deviceAddr = v.deviceAddr
         val s = v.onOffSwitch
         val bright = v.brightnessBar
-        img.setImageResource(imgID)
-        txt.text = text
+
+        deviceNameTxt.text = text
+        deviceAddr.text = deviceAddress
         s.isChecked = status
         bright.max = 255
         bright.progress = brightness
         v.setBackgroundColor(
             Color.argb(127, 222, 222, 222)
         )
+        if (imgID == -1) {
+            img.setImageResource(R.drawable.plug)
+            //bright.setOnTouchListener()
+        } else {
+            img.setImageResource(imgID)
+            img.setOnTouchListener { v, event ->
+                println("device address $deviceAddress")
+                true
+            }
+            bright.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    println("seekbar Value ${seekBar.progress}")
+                    viewModel.issueLiveCommand(
+                        deviceAddress,
+                        "brightness",
+                        seekBar.progress.toString()
+                    )
+                }
 
-        s.setOnCheckedChangeListener { buttonView, isChecked ->
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                }
+
+                override fun onProgressChanged(
+                    seekBar: SeekBar,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+
+                }
+            })
+        }
+
+        s.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                viewModel.issueLiveCommand("0x001788010149A6BAD", "state", "ON")
+                viewModel.issueLiveCommand(deviceAddress, "state", "ON")
                 //we can use text to get current device name
                 println(text)
                 println("checked")
                 //buttonView.isChecked = false
             } else {
                 println("not checked")
-                viewModel.issueLiveCommand("0x001788010149A6BAD", "state", "OFF")
+                viewModel.issueLiveCommand(deviceAddress, "state", "OFF")
             }
         }
-        bright.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                println("seekbar Value ${seekBar.progress}")
-            }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-            }
-
-            override fun onProgressChanged(
-                seekBar: SeekBar,
-                progress: Int,
-                fromUser: Boolean
-            ) {
-
-            }
-        })
 
         return v
     }
 
-    private fun createDeviceList(devices: ArrayList<String>, layout: LinearLayout): LinearLayout {
+    private fun createDeviceList(
+        devices: ArrayList<String>,
+        deviceIeeeAdder: ArrayList<String>,
+        layout: LinearLayout
+    ): LinearLayout {
         layout.removeAllViewsInLayout()
         for (i in devices) {
             when {
                 i.toLowerCase(Locale.ROOT).contains("go") -> {
-                    layout.addView(adjustView(R.drawable.go, i, false, 125))
+                    layout.addView(
+                        adjustView(
+                            R.drawable.go, i, false, 0,
+                            deviceIeeeAdder[devices.indexOf(i)]
+                        )
+                    )
                     val space = Space(context)
                     space.minimumHeight = 15
                     layout.addView(space)
                 }
                 i.toLowerCase(Locale.ROOT).contains("strip") -> {
-                    layout.addView(adjustView(R.drawable.strip, i, true, 125))
+                    layout.addView(
+                        adjustView(
+                            R.drawable.strip, i, true, 0,
+                            deviceIeeeAdder[devices.indexOf(i)]
+                        )
+                    )
                     val space = Space(context)
                     space.minimumHeight = 15
                     layout.addView(space)
                 }
                 i.toLowerCase(Locale.ROOT).contains("e26") -> {
-                    layout.addView(adjustView(R.drawable.bulb, i, false, 0))
+                    layout.addView(
+                        adjustView(
+                            R.drawable.bulb, i, false, 0,
+                            deviceIeeeAdder[devices.indexOf(i)]
+                        )
+                    )
+                    val space = Space(context)
+                    space.minimumHeight = 15
+                    layout.addView(space)
+                }
+                i.toLowerCase(Locale.ROOT).contains("switch") -> {
+                    layout.addView(
+                        adjustView(
+                            -1, i, false, 0,
+                            deviceIeeeAdder[devices.indexOf(i)]
+                        )
+                    )
                     val space = Space(context)
                     space.minimumHeight = 15
                     layout.addView(space)

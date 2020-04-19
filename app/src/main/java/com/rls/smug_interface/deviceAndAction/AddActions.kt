@@ -27,7 +27,7 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_actions)
-        supportActionBar!!.title = "add شسمه"
+        supportActionBar!!.title = "add actions to a gesture"
         viewModel = ViewModelProvider(this).get(DeviceViewModel::class.java)
 
         val gestureName = intent.getStringExtra("GESTURE_NAME")
@@ -38,6 +38,10 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
         val del = delActionBtn
         addAction.setOnClickListener {
             listDialog()
+        }
+        saveBtn.setOnClickListener {
+            //todo create array and stuff for gesture association from views
+            //viewModel.setGestureAssociation(gestureName, )
         }
     }
 
