@@ -1,6 +1,7 @@
 package com.rls.smug_interface.utilities
 
 import androidx.lifecycle.ViewModel
+import org.jetbrains.annotations.TestOnly
 import java.net.Inet4Address
 import kotlin.concurrent.thread
 

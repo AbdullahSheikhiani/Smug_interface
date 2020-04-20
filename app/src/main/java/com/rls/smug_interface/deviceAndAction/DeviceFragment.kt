@@ -123,7 +123,7 @@ class DeviceFragment : Fragment() {
                     val mInflater = requireActivity().layoutInflater
                     val view = mInflater.inflate(R.layout.fragment_list, null)
                     val list = view.findViewById<ListView>(R.id.listView)
-                    val a = ArrayList<String>()
+                    //val a = ArrayList<String>()
                     viewModel.getListOfUnLinkedGestures()
                     viewModel.gestureList.observe(viewLifecycleOwner, Observer {
                         val adapter = ArrayAdapter(
@@ -266,7 +266,7 @@ class DeviceFragment : Fragment() {
                     space.minimumHeight = 15
                     layout.addView(space)
                 }
-                i.toLowerCase(Locale.ROOT).contains("switch") -> {
+                i.toLowerCase(Locale.ROOT).contains("smart") -> {
                     layout.addView(
                         adjustView(
                             -1, i, false, 0,

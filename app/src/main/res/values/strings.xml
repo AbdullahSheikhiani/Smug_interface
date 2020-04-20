@@ -25,5 +25,6 @@
     <string name="add_another_action">add another action</string>
     <string name="save_and_apply_actions">save and apply actions</string>
     <string name="remove_action">   remove action   </string>
+    <string name="_1">-1</string>
 
 </resources>

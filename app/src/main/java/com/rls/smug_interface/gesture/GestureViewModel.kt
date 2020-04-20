@@ -17,7 +17,6 @@ class GestureViewModel : EssenceViewModel() {
     fun getGestureList() {
         viewModelScope.launch(Dispatchers.Default) {
             val a = ArrayList<String>()
-            println("thread add device")
             thread {
                 println("list gestures THREAD")
                 print("IP= ")
@@ -37,7 +36,6 @@ class GestureViewModel : EssenceViewModel() {
                 }
                 connection.close()
                 gestureList.postValue(a)
-
             }
         }
     }
@@ -60,14 +58,19 @@ class GestureViewModel : EssenceViewModel() {
             val th = thread {
                 print("item = ")
                 println(gestureToBeRemoved)
-                val connection = Socket(ip(), port_service)
+                var connection = Socket(ip(), port_main)
+                var writer = connection.getOutputStream()
+                writer.write("3".toByteArray())
+                Thread.sleep(10)
+                connection = Socket(ip(), port_service)
                 val reader = connection.getInputStream()
-                val writer = connection.getOutputStream()
+                writer = connection.getOutputStream()
                 writer.write(gestureToBeRemoved.toByteArray())
                 val r = reader.bufferedReader()
                 print("removed gesture read: ")
                 println(r.readLine())
-            }.join()
+            }
+            th.join()
         }
     }
 

@@ -87,6 +87,20 @@ class DeviceViewModel : EssenceViewModel() {
         }
     }
 
+    fun getDeviceStates() {
+        viewModelScope.launch(Dispatchers.Default) {
+            thread {
+                var connection = Socket(ip(), port_main)
+                val writer = connection.getOutputStream()
+                writer.write("15".toByteArray())
+                println("sent 15, request to get state")
+                connection.close()
+
+                //todo logic
+            }
+        }
+    }
+
     fun setGestureAssociation(
         gestureName: String,
         devices: ArrayList<String>,
@@ -94,12 +108,17 @@ class DeviceViewModel : EssenceViewModel() {
         values: ArrayList<String>
     ) {
         viewModelScope.launch(Dispatchers.Default) {
+            println(gestureName)
+            println(devices)
+            println(attr)
+            println(values)
             val th = thread {
                 print("sent to device")
 
-                var connection = Socket(ip(), port_service)
+                var connection = Socket(ip(), port_main)
                 var writer = connection.getOutputStream()
                 writer.write("10".toByteArray())
+                println("send 10 for add action ")
                 connection.close()
 
                 Thread.sleep(1)
@@ -107,12 +126,12 @@ class DeviceViewModel : EssenceViewModel() {
                 connection = Socket(ip(), port_service)
                 writer = connection.getOutputStream()
                 writer.write((gestureName + "\n").toByteArray())
+                writer.flush()
                 for (i in devices.indices) {
-                    writer.write((devices[i] + "\n").toByteArray())
-                    writer.write((attr[i] + "\n").toByteArray())
-                    writer.write((values[i] + "\n").toByteArray())
-                    writer.flush()
+                    println("${devices[i]},${attr[i]},${values[i]}")
+                    writer.write(("${devices[i]},${attr[i]},${values[i]}\n").toByteArray())
                 }
+                writer.flush()
                 connection.close()
             }
         }
@@ -167,7 +186,9 @@ class DeviceViewModel : EssenceViewModel() {
                     x = b.readLine()
                 }
                 deviceAdderList.postValue(a)
+                getDeviceStates()
             }
         }
     }
+
 }

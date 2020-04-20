@@ -96,11 +96,11 @@ class GestureFragment : Fragment() {
                         layout.removeAllViews()
                         layout.addView(view)
                         list.setOnItemClickListener { parent, view, position, id ->
-                            viewModel.removeGesture(a[position])
+                            viewModel.removeGesture(adapter.getItem(position))
                             layout.removeAllViewsInLayout()
                             val txt = TextView(context)
                             //todo ack
-                            txt.text = "removed ${a[position]} successfully"
+                            txt.text = "removed ${adapter.getItem(position)} successfully"
                             layout.addView(txt)
                         }
                     })

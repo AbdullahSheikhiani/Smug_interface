@@ -1,7 +1,6 @@
 package com.rls.smug_interface.deviceAndAction
 
 import android.graphics.Color
-import android.graphics.ColorFilter
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -10,9 +9,9 @@ import java.lang.Long.parseLong
 import androidx.lifecycle.ViewModelProvider
 import com.rls.smug_interface.R
 import com.rls.smug_interface.utilities.ColorPickerDialog
-import com.rls.smug_interface.utilities.ListDialog
 import kotlinx.android.synthetic.main.activity_add_actions.*
 import kotlinx.android.synthetic.main.fragment_bar.view.*
+import kotlinx.android.synthetic.main.fragment_bar.view.deviceAddr
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -38,15 +37,56 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
         val del = delActionBtn
         addAction.setOnClickListener {
             listDialog()
+            println("list dialog")
         }
         saveBtn.setOnClickListener {
             //todo create array and stuff for gesture association from views
             //viewModel.setGestureAssociation(gestureName, )
+            val devicesAddr = ArrayList<String>()
+            val attr = ArrayList<String>()
+            val values = ArrayList<String>()
+            for (i in 0 until listOFViews.size) {
+                if (!listOFViews[i].deviceName.text.toString().contains("plug")) {
+                    devicesAddr.add(listOFViews[i].deviceAddr.text.toString())
+                    attr.add("state")
+                    if (listOFViews[i].onOffSwitch.isChecked)
+                        values.add("ON")
+                    else
+                        values.add("OFF")
+
+                    devicesAddr.add(listOFViews[i].deviceAddr.text.toString())
+                    attr.add("brightness")
+                    values.add(listOFViews[i].brightnessBar.progress.toString())
+
+
+                    if (!listOFViews[i].colorText.text.toString().contains("-1")) {
+                        devicesAddr.add(listOFViews[i].deviceAddr.text.toString())
+                        attr.add("color")
+                        values.add(listOFViews[i].colorText.text.toString())
+                    }
+
+                } else {
+                    devicesAddr.add(listOFViews[i].deviceAddr.text.toString())
+                    attr.add("state")
+                    if (listOFViews[i].onOffSwitch.isChecked)
+                        values.add("ON")
+                    else
+                        values.add("OFF")
+                }
+            }
+
+            viewModel.setGestureAssociation(gestureName, devicesAddr, attr, values)
         }
     }
 
 
-    private fun adjustView(imgID: Int, text: String, status: Boolean, brightness: Int): View {
+    private fun adjustView(
+        imgID: Int,
+        text: String,
+        status: Boolean,
+        brightness: Int,
+        addr: String
+    ): View {
         //todo add listeners
         val myInflater = layoutInflater
         val v: View = myInflater.inflate(R.layout.fragment_bar, null)
@@ -57,6 +97,8 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
         val txt = v.deviceName
         val s = v.onOffSwitch
         val bright = v.brightnessBar
+        val address = v.deviceAddr
+        address.text = addr
         img.setImageResource(imgID)
         txt.text = text
         s.isChecked = status
@@ -64,31 +106,67 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
         bright.progress = brightness
 
         val colorText = v.colorText
-        colorText.text = "ああああああああああああああああ"
+        colorText.text = "-1"
         /*
          colorText.height = 0
          colorText.width = 0
          layout.addView(colorText)
 
          */
+        if (imgID == R.drawable.plug) {
+            bright.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                }
+
+                override fun onProgressChanged(
+                    seekBar: SeekBar,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+
+                }
+            })
+        } else {
+            bright.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    println("seekbar Value ${seekBar.progress}")
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                }
+
+                override fun onProgressChanged(
+                    seekBar: SeekBar,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+
+                }
+            })
+            txt.setOnClickListener {
+                //val intentR = Intent(baseContext, ColorHandler::class.java)
+                //startActivityForResult(intentR, shortHash)
+                colorPicker(v.hashCode())
+                println("v.hascode() = ${v.hashCode()}")
+                println("${txt.text} was clicked")
+                //println(colorText.text)
+            }
+            img.setOnClickListener {
+                //val intentR = Intent(baseContext, ColorHandler::class.java)
+                //startActivityForResult(intentR, shortHash)
+                colorPicker(v.hashCode())
+                println("v.hascode() = ${v.hashCode()}")
+                println("image of ${txt.text} was clicked")
+            }
+        }
+
         v.setBackgroundColor(
             Color.argb(127, 222, 222, 222)
         )
-        txt.setOnClickListener {
-            //val intentR = Intent(baseContext, ColorHandler::class.java)
-            //startActivityForResult(intentR, shortHash)
-            colorPicker(v.hashCode())
-            println("v.hascode() = ${v.hashCode()}")
-            println("${txt.text} was clicked")
-            //println(colorText.text)
-        }
-        img.setOnClickListener {
-            //val intentR = Intent(baseContext, ColorHandler::class.java)
-            //startActivityForResult(intentR, shortHash)
-            colorPicker(v.hashCode())
-            println("v.hascode() = ${v.hashCode()}")
-            println("image of ${txt.text} was clicked")
-        }
+
 
         s.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
@@ -100,52 +178,42 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
                 println("not checked")
             }
         }
-        bright.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                println("seekbar Value ${seekBar.progress}")
-            }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-            }
-
-            override fun onProgressChanged(
-                seekBar: SeekBar,
-                progress: Int,
-                fromUser: Boolean
-            ) {
-
-            }
-        })
         return v
     }
 
 
-    private fun createDeviceList(devices: ArrayList<String>) {
-        for (i in devices) {
-            when {
-                i.toLowerCase(Locale.ROOT).contains("go") -> {
-                    layout.addView(adjustView(R.drawable.go, i, false, 0))
-                    val space = Space(applicationContext)
-                    space.minimumHeight = 15
-                    layout.addView(space)
-                }
-                i.toLowerCase(Locale.ROOT).contains("strip") -> {
-                    layout.addView(adjustView(R.drawable.strip, i, false, 0))
-                    val space = Space(applicationContext)
-                    space.minimumHeight = 15
-                    layout.addView(space)
-                }
-                i.toLowerCase(Locale.ROOT).contains("e26") -> {
-                    layout.addView(adjustView(R.drawable.bulb, i, false, 0))
-                    val space = Space(applicationContext)
-                    space.minimumHeight = 15
-                    layout.addView(space)
-                }
+    private fun createDeviceList(device: String, addr: String) {
+        when {
+            device.toLowerCase(Locale.ROOT).contains("go") -> {
+                layout.addView(adjustView(R.drawable.go, device, false, 0, addr))
+                val space = Space(applicationContext)
+                space.minimumHeight = 15
+                layout.addView(space)
+            }
+            device.toLowerCase(Locale.ROOT).contains("strip") -> {
+                layout.addView(adjustView(R.drawable.strip, device, false, 0, addr))
+                val space = Space(applicationContext)
+                space.minimumHeight = 15
+                layout.addView(space)
+            }
+            device.toLowerCase(Locale.ROOT).contains("e26") -> {
+                layout.addView(adjustView(R.drawable.bulb, device, false, 0, addr))
+                val space = Space(applicationContext)
+                space.minimumHeight = 15
+                layout.addView(space)
+            }
+            device.toLowerCase(Locale.ROOT).contains("plug") -> {
+                layout.addView(adjustView(R.drawable.plug, device, false, 0, addr))
+                val space = Space(applicationContext)
+                space.minimumHeight = 15
+                layout.addView(space)
             }
         }
     }
 
-    //todo hide address in view
+
+//todo hide address in view
 
 
     private fun colorPicker(hashCode: Int) {
@@ -164,8 +232,6 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
                 println("color= $color")
                 //listOFViews[i].brightnessBar.thumb.setTint(color)
                 listOFViews[i].brightnessBar.progressDrawable.setTint(color)
-
-
             }
         }
     }
@@ -186,11 +252,9 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
         dialog.show(supportFragmentManager, "listDialog")
     }
 
-    override fun onListItem(item: String) {
+    override fun onListItem(item: String, address: String) {
         //todo add handler for smart plug
         println("item= $item")
-        val a = ArrayList<String>()
-        a.add(item)
-        createDeviceList(a)
+        createDeviceList(item, address)
     }
 }

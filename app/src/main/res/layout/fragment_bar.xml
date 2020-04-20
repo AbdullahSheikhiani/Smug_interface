@@ -51,16 +51,18 @@
                 android:id="@+id/colorText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="0"
                 android:width="0dp"
-                android:height="0dp" />
+                android:height="0dp"
+                android:text="@string/_1" />
+
             <TextView
                 android:id="@+id/deviceAddr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="0"
                 android:width="0dp"
-                android:height="0dp"/>
+                android:height="0dp" />
 
         </LinearLayout>
 

@@ -64,7 +64,7 @@ class UserFragment : Fragment() {
                     val a = ArrayList<String>()
                     val t = thread {
                         println("list user THREAD")
-                        var connection = Socket(ip(), 5050)
+                        var connection = Socket(ip(), 5051)
                         val writer = connection.getOutputStream()
                         writer.write("11".toByteArray())
                         connection.close()
@@ -141,7 +141,7 @@ class UserFragment : Fragment() {
                         val writer = connection.getOutputStream()
                         writer.write("7".toByteArray())
                         connection.close()
-                        Thread.sleep(1)
+                        Thread.sleep(10)
                         connection = Socket(ip(), 5050)
                         val reader = connection.getInputStream()
                         //val writer = connection.getOutputStream()
@@ -207,7 +207,7 @@ class UserFragment : Fragment() {
                         val t = thread {
                             //val ip = InetAddress.getByName("pspsps")
                             //val ip = "192.168.0.186"
-                            var connection = Socket(ip(), 5050)
+                            var connection = Socket(ip(), 5051)
                             //val reader = connection.getInputStream()
                             var writer = connection.getOutputStream()
                             writer.write("6".toByteArray())
