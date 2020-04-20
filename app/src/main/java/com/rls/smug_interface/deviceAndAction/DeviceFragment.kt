@@ -12,6 +12,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.rls.smug_interface.InitialSetup
 import com.rls.smug_interface.R
 import kotlinx.android.synthetic.main.fragment_bar.view.*
 import kotlinx.android.synthetic.main.fragment_main_ui_device.view.*
@@ -31,7 +32,7 @@ class DeviceFragment : Fragment() {
 
         val root = inflater.inflate(R.layout.fragment_main_ui_device, container, false)
 
-        var layout = root.sLinear
+        val layout = root.sLinear
 
         val listBtn = root.imageViewList
         val removeBtn = root.imageViewDel
@@ -67,7 +68,7 @@ class DeviceFragment : Fragment() {
         viewModel.deviceList.observe(viewLifecycleOwner, Observer { deviceListArray ->
             println(deviceListArray)
             viewModel.getDeviceAddrList()
-            viewModel.deviceAdderList.observe(viewLifecycleOwner, Observer {
+            viewModel.deviceAddrList.observe(viewLifecycleOwner, Observer {
                 println(it)
                 createDeviceList(deviceListArray, it, layout)
             })
@@ -100,6 +101,9 @@ class DeviceFragment : Fragment() {
                 MotionEvent.ACTION_DOWN -> {
                     addBtn.setColorFilter(Color.rgb(0, 0, 0))
                     //todo my stuff
+                    val intent = Intent(context, InitialSetup::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivityForResult(intent, 1)
 
                 }
 

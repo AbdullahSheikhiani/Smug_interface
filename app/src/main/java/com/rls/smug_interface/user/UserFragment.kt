@@ -62,6 +62,7 @@ class UserFragment : Fragment() {
                     val view = mInflater.inflate(R.layout.fragment_list, null)
                     val list = view.findViewById<ListView>(R.id.listView)
                     val a = ArrayList<String>()
+                    //getUserList()
                     val t = thread {
                         println("list user THREAD")
                         var connection = Socket(ip(), 5051)
@@ -91,6 +92,7 @@ class UserFragment : Fragment() {
                     layout.removeAllViews()
                     layout.addView(view)
                     list.setOnItemClickListener { parent, view, position, id ->
+                        //changeUser()
                         val th = thread {
                             println("chg user THREAD")
                             var connection = Socket(ip(), 5051)
@@ -135,7 +137,7 @@ class UserFragment : Fragment() {
 
                         //val ip = InetAddress.getByName("pspsps")
                         //val ip = "192.168.0.186"
-                        //todo move to UserViewModel
+                        //todo change to get list
                         var connection = Socket(ip(), 5051)
                         //val reader = connection.getInputStream()
                         val writer = connection.getOutputStream()
@@ -167,6 +169,7 @@ class UserFragment : Fragment() {
                     layout.removeAllViews()
                     layout.addView(view)
                     list.setOnItemClickListener { parent, view, position, id ->
+                        //removeUser()
                         val th = thread {
                             val connection = Socket(ip(), 5050)
                             val reader = connection.getInputStream()
@@ -251,8 +254,6 @@ class UserFragment : Fragment() {
             }
             true
         }
-
-
 
         return root
     }

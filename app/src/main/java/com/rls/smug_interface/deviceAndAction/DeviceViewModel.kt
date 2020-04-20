@@ -13,8 +13,8 @@ class DeviceViewModel : EssenceViewModel() {
     val deviceList = MutableLiveData<ArrayList<String>>()
     val gestureList = MutableLiveData<ArrayList<String>>()
 
-    //val deviceTypeList = MutableLiveData<ArrayList<String>>()
-    val deviceAdderList = MutableLiveData<ArrayList<String>>()
+    val deviceStates = MutableLiveData<ArrayList<String>>()
+    val deviceAddrList = MutableLiveData<ArrayList<String>>()
 
 
     fun getDeviceList() {
@@ -98,6 +98,7 @@ class DeviceViewModel : EssenceViewModel() {
 
                 //todo logic
             }
+            //deviceStates.postValue("TODO")
         }
     }
 
@@ -185,7 +186,7 @@ class DeviceViewModel : EssenceViewModel() {
                     a.add(x)
                     x = b.readLine()
                 }
-                deviceAdderList.postValue(a)
+                deviceAddrList.postValue(a)
                 getDeviceStates()
             }
         }

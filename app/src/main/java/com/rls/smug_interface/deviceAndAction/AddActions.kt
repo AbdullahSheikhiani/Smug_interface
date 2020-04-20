@@ -228,7 +228,7 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
         for (i in 0 until listOFViews.size) {
             if (code == listOFViews[i].hashCode()) {
                 listOFViews[i].colorText.text = color
-                val color = hexToRGB(color, 255)
+                val color = hexToRGB(color)
                 println("color= $color")
                 //listOFViews[i].brightnessBar.thumb.setTint(color)
                 listOFViews[i].brightnessBar.progressDrawable.setTint(color)
@@ -236,7 +236,7 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
         }
     }
 
-    private fun hexToRGB(hexColor: String, alpha: Int): Int {
+    private fun hexToRGB(hexColor: String): Int {
         val color = hexColor.toCharArray()
         println(color[0])
 

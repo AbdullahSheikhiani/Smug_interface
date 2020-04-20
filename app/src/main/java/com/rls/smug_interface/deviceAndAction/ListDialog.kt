@@ -61,9 +61,9 @@ class ListDialog : DialogFragment() {
         }
     }
 
-    val port_main = 5051
-    val port_service = 5050
-    val addrList = ArrayList<String>()
+    private val port_main = 5051
+    private val port_service = 5050
+    private val addrList = ArrayList<String>()
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let { it ->
             // Build the dialog and set up the button click handlers

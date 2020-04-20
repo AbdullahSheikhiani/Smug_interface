@@ -17,7 +17,7 @@ class InitialSetup : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_initial_setup)
-        var networks = arrayOf(
+        val networks = arrayOf(
             "getting networks list "
         )
         print("loadIP value: ")
@@ -35,10 +35,14 @@ class InitialSetup : AppCompatActivity() {
 
         val networkList = ArrayList<String>()
         val t = thread {
+            var connection = Socket("192.168.4.1", 5051)
+            var writer = connection.getOutputStream()
+            writer.write("8".toByteArray())
+            connection.close()
 
-            val connection = Socket("192.168.4.1", 5005)
+            connection = Socket("192.168.4.1", 5005)
             val reader = connection.getInputStream()
-            val writer = connection.getOutputStream()
+            writer = connection.getOutputStream()
             writer.write("conf".toByteArray())
 
             val s = reader.bufferedReader()
@@ -71,6 +75,7 @@ class InitialSetup : AppCompatActivity() {
         reloadBtn.setOnClickListener {
             val th = thread {
                 //TODO add handling clicking reload on server side
+
                 val connection = Socket("192.168.4.1", 5005)
                 val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
@@ -93,11 +98,13 @@ class InitialSetup : AppCompatActivity() {
         }
         confBtn.setOnClickListener {
             val th = thread {
+
+
                 val connection = Socket("192.168.4.1", 5005)
                 val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()
                 writer.write(spinner0.selectedItem.toString().toByteArray())
-                var s = reader.bufferedReader()
+                val s = reader.bufferedReader()
                 println()
                 print("ack: ")
                 println(s.readLine())
