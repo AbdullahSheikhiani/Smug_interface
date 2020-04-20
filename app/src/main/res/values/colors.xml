@@ -3,6 +3,5 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">@android:color/background_dark</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="background">#7A7171</color>
     <color name="gesture_color">#5A0F0F</color>
 </resources>

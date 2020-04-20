@@ -1,20 +1,19 @@
 package com.rls.smug_interface.utilities
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.service.carrier.CarrierIdentifier
 import android.view.View
 import androidx.fragment.app.DialogFragment
 import com.rls.smug_interface.R
-import kotlinx.android.synthetic.main.activity_color_handler.*
 import kotlinx.android.synthetic.main.fragment_color.view.*
 import com.skydoves.colorpickerview.listeners.ColorListener
 import kotlinx.android.synthetic.main.fragment_color.view.colorPickerView
 
 class ColorPickerDialog : DialogFragment() {
-    private lateinit var listener: ColorPickerDialog.ColorListener
+    private lateinit var listener: ColorListener
     private var code: Int = -1
 
     interface ColorListener {
@@ -53,6 +52,7 @@ class ColorPickerDialog : DialogFragment() {
         }
     }
 
+    @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             // Build the dialog and set up the button click handlers
