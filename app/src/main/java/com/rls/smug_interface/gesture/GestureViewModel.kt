@@ -42,20 +42,22 @@ class GestureViewModel : EssenceViewModel() {
 
     fun getRemainingTimes() {
         viewModelScope.launch(Dispatchers.Default) {
-            var x = ""
             thread {
                 val connection = Socket(ip(), port_service)
                 val reader = connection.getInputStream()
                 val b = reader.bufferedReader()
-                x = b.readLine()
-            }.join()
-            remainingTimes.postValue(x.toInt())
+                val x = b.readLine()
+                b.close()
+                reader.close()
+                connection.close()
+                remainingTimes.postValue(x.toInt())
+            }
         }
     }
 
     fun removeGesture(gestureToBeRemoved: String) {
         viewModelScope.launch(Dispatchers.Default) {
-            val th = thread {
+            thread {
                 print("item = ")
                 println(gestureToBeRemoved)
                 var connection = Socket(ip(), port_main)
@@ -70,7 +72,7 @@ class GestureViewModel : EssenceViewModel() {
                 print("removed gesture read: ")
                 println(r.readLine())
             }
-            th.join()
+
         }
     }
 

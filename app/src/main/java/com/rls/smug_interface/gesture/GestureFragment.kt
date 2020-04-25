@@ -47,14 +47,15 @@ class GestureFragment : Fragment() {
                 MotionEvent.ACTION_DOWN -> {
                     listBtn.setColorFilter(Color.rgb(0, 0, 0))
                     //move to listGestures
-                    val mInflater = requireActivity().layoutInflater
-                    val view = mInflater.inflate(R.layout.fragment_list, null)
+                    //val mInflater = requireActivity().layoutInflater
+                    //val view = mInflater.inflate(R.layout.fragment_list, null)
+                    val view = View.inflate(context, R.layout.fragment_list, null)
                     val list = view.listView
                     //val a = ArrayList<String>()
                     viewModel.getGestureList()
                     viewModel.gestureList.observe(viewLifecycleOwner, Observer {
                         val adapter = ArrayAdapter(
-                            context, // Context
+                            context!!, // Context
                             android.R.layout.simple_expandable_list_item_1, // Layout
                             it // Array
                         )
@@ -62,9 +63,7 @@ class GestureFragment : Fragment() {
                         layout.removeAllViews()
                         layout.addView(view)
                     })
-
                 }
-
             }
             true
         }
@@ -78,16 +77,15 @@ class GestureFragment : Fragment() {
                 }
                 MotionEvent.ACTION_DOWN -> {
                     removeBtn.setColorFilter(Color.rgb(0, 0, 0))
-                    val mInflater = requireActivity().layoutInflater
-                    val view = mInflater.inflate(R.layout.fragment_list, null)
+                    //val mInflater = requireActivity().layoutInflater
+                    //val view = mInflater.inflate(R.layout.fragment_list, null)
+                    val view = View.inflate(context, R.layout.fragment_list, null)
                     val list = view.findViewById<ListView>(R.id.listView)
-                    val a = ArrayList<String>()
-                    //todo move to viewModels
 
                     viewModel.getGestureList()
                     viewModel.gestureList.observe(viewLifecycleOwner, Observer {
                         val adapter = ArrayAdapter(
-                            context, // Context
+                            context!!, // Context
                             android.R.layout.simple_expandable_list_item_1, // Layout
                             it // Array
                         )
@@ -96,7 +94,7 @@ class GestureFragment : Fragment() {
                         layout.removeAllViews()
                         layout.addView(view)
                         list.setOnItemClickListener { parent, view, position, id ->
-                            viewModel.removeGesture(adapter.getItem(position))
+                            viewModel.removeGesture(adapter.getItem(position)!!.toString())
                             layout.removeAllViewsInLayout()
                             val txt = TextView(context)
                             //todo ack
@@ -110,31 +108,50 @@ class GestureFragment : Fragment() {
             }
             true
         }
-        addBtn.setOnTouchListener { v, event ->
+        addBtn.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
                     removeBtn.colorFilter = fAdd
                     listBtn.colorFilter = fList
                 }
                 MotionEvent.ACTION_DOWN -> {
-                    val mInflater = requireActivity().layoutInflater
-                    val view = mInflater.inflate(R.layout.activity_add_gesture, null)
+
+                    layout.removeAllViewsInLayout()
+                    //val mInflater = requireActivity().layoutInflater
+                    // val view = mInflater.inflate(R.layout.activity_add_gesture, null)
+                    val view = View.inflate(context, R.layout.activity_add_gesture, null)
+
                     val gestureName = view.gestureNameTxt
                     val addGstbtn = view.btnAdd
                     val timesLeft = view.timesLeftText
+                    val progress = view.progressBar
+                    timesLeft.text = ""
+                    println(savedInstanceState)
                     addBtn.setColorFilter(Color.rgb(0, 0, 0))
                     addGstbtn.setOnClickListener {
+                        gestureName.isEnabled = false
                         println(gestureName.text.toString())
-                        //todo move to viewModel
                         viewModel.addGesture(gestureName.text.toString())
                         viewModel.getRemainingTimes()
                     }
                     viewModel.remainingTimes.observe(viewLifecycleOwner, Observer {
                         timesLeft.text = "recordings left ${it}"
-                        if (it != 0)
+
+                        if (it != 0 && it != -1)
                             viewModel.getRemainingTimes()
-                        else {
+                        else if (it == 0) {
+                            progress.visibility = View.VISIBLE
                             timesLeft.text = "Adding Gesture to system, will take a moment"
+                            viewModel.getRemainingTimes()
+                        } else {
+                            progress.visibility = View.INVISIBLE
+                            timesLeft.text = ""
+                            val text = "Gesture added successfully"
+                            val duration = Toast.LENGTH_LONG
+                            val toast = Toast.makeText(context, text, duration)
+                            toast.show()
+                            gestureName.setText("")
+                            gestureName.isEnabled = true
                         }
                     })
                     layout.removeAllViewsInLayout()

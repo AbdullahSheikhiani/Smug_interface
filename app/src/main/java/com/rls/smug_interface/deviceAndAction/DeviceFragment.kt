@@ -124,14 +124,15 @@ class DeviceFragment : Fragment() {
                     //todo my stuff
                     //get unlinked gesture list
                     //go to new activity to set up
-                    val mInflater = requireActivity().layoutInflater
-                    val view = mInflater.inflate(R.layout.fragment_list, null)
+                    //val mInflater = requireActivity().layoutInflater
+                    // val view = mInflater.inflate(R.layout.fragment_list, null)
+                    val view = View.inflate(context, R.layout.fragment_list, null)
                     val list = view.findViewById<ListView>(R.id.listView)
                     //val a = ArrayList<String>()
                     viewModel.getListOfUnLinkedGestures()
                     viewModel.gestureList.observe(viewLifecycleOwner, Observer {
                         val adapter = ArrayAdapter(
-                            context, // Context
+                            context!!, // Context
                             android.R.layout.simple_expandable_list_item_1, // Layout
                             it // Array
                         )
@@ -147,9 +148,7 @@ class DeviceFragment : Fragment() {
                         layout.removeAllViews()
                         layout.addView(view)
                     })
-
                 }
-
             }
             true
         }
@@ -164,8 +163,10 @@ class DeviceFragment : Fragment() {
         deviceAddress: String
     ): View {
         //todo add listeners
-        val myInflater = requireActivity().layoutInflater
-        val v: View = myInflater.inflate(R.layout.fragment_bar, null)
+
+        // val myInflater = requireActivity().layoutInflater
+        // val v: View = myInflater.inflate(R.layout.fragment_bar, null)
+        val v = View.inflate(context, R.layout.fragment_bar, null)
         val img = v.deviceIcon
         val deviceNameTxt = v.deviceName
         val deviceAddr = v.deviceAddr
@@ -182,10 +183,13 @@ class DeviceFragment : Fragment() {
         )
         if (imgID == -1) {
             img.setImageResource(R.drawable.plug)
+            bright.setOnTouchListener { _, _ ->
+                true
+            }
             //bright.setOnTouchListener()
         } else {
             img.setImageResource(imgID)
-            img.setOnTouchListener { v, event ->
+            img.setOnTouchListener { _, event ->
                 println("device address $deviceAddress")
                 true
             }
@@ -235,6 +239,8 @@ class DeviceFragment : Fragment() {
         layout: LinearLayout
     ): LinearLayout {
         layout.removeAllViewsInLayout()
+        val spaceHeight = 30
+
         for (i in devices) {
             when {
                 i.toLowerCase(Locale.ROOT).contains("go") -> {
@@ -245,18 +251,18 @@ class DeviceFragment : Fragment() {
                         )
                     )
                     val space = Space(context)
-                    space.minimumHeight = 15
+                    space.minimumHeight = spaceHeight
                     layout.addView(space)
                 }
                 i.toLowerCase(Locale.ROOT).contains("strip") -> {
                     layout.addView(
                         adjustView(
-                            R.drawable.strip, i, true, 0,
+                            R.drawable.strip, i, false, 0,
                             deviceIeeeAdder[devices.indexOf(i)]
                         )
                     )
                     val space = Space(context)
-                    space.minimumHeight = 15
+                    space.minimumHeight = spaceHeight
                     layout.addView(space)
                 }
                 i.toLowerCase(Locale.ROOT).contains("e26") -> {
@@ -267,7 +273,7 @@ class DeviceFragment : Fragment() {
                         )
                     )
                     val space = Space(context)
-                    space.minimumHeight = 15
+                    space.minimumHeight = spaceHeight
                     layout.addView(space)
                 }
                 i.toLowerCase(Locale.ROOT).contains("smart") -> {
@@ -278,7 +284,7 @@ class DeviceFragment : Fragment() {
                         )
                     )
                     val space = Space(context)
-                    space.minimumHeight = 15
+                    space.minimumHeight = spaceHeight
                     layout.addView(space)
                 }
             }

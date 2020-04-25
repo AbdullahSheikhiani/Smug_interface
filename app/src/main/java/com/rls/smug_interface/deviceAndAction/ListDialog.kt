@@ -20,7 +20,7 @@ class ListDialog : DialogFragment() {
         fun onListItem(item: String, address: String)
         //private fun adjustView(imgID: Int, text: String, status: Boolean, brightness: Int): View {
     }
-
+//call essenceViewModel
     fun ip(): String {
 
         val host = "pspspspi"
