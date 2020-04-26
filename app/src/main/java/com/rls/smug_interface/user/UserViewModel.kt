@@ -60,16 +60,19 @@ class UserViewModel : EssenceViewModel() {
                 println("remove user THREAD")
                 var connection = Socket(ip(), 5051)
                 //val reader = connection.getInputStream()
-                val writer = connection.getOutputStream()
+                var writer = connection.getOutputStream()
                 writer.write("7".toByteArray())
+                writer.close()
                 connection.close()
                 Thread.sleep(10)
                 connection = Socket(ip(), 5050)
                 val reader = connection.getInputStream()
-                //val writer = connection.getOutputStream()
-                val buff = reader.bufferedReader()
-                val ack = buff.readLine()
-                if (ack == "ack") {
+                writer = connection.getOutputStream()
+                writer.write(userName.toByteArray())
+                val ack = reader.readBytes().toString(Charsets.UTF_8)
+                reader.close()
+                connection.close()
+                if (ack.contains("ack")) {
                     println("ack")
                     val text = "user $userName removed successfully"
                     val duration = Toast.LENGTH_LONG

@@ -104,7 +104,7 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
         s.isChecked = status
         bright.max = 255
         bright.progress = brightness
-
+        bright.min = 10
         val colorText = v.colorText
         colorText.text = "-1"
         /*
@@ -173,25 +173,25 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
         val spaceHeight = 30
         when {
             device.toLowerCase(Locale.ROOT).contains("go") -> {
-                layout.addView(adjustView(R.drawable.go, device, false, 0, addr))
+                layout.addView(adjustView(R.drawable.go, device, true, 10, addr))
                 val space = Space(applicationContext)
                 space.minimumHeight = spaceHeight
                 layout.addView(space)
             }
             device.toLowerCase(Locale.ROOT).contains("strip") -> {
-                layout.addView(adjustView(R.drawable.strip, device, false, 0, addr))
+                layout.addView(adjustView(R.drawable.strip, device, true, 10, addr))
                 val space = Space(applicationContext)
                 space.minimumHeight = spaceHeight
                 layout.addView(space)
             }
             device.toLowerCase(Locale.ROOT).contains("e26") -> {
-                layout.addView(adjustView(R.drawable.bulb, device, false, 0, addr))
+                layout.addView(adjustView(R.drawable.bulb, device, true, 10, addr))
                 val space = Space(applicationContext)
                 space.minimumHeight = spaceHeight
                 layout.addView(space)
             }
             device.toLowerCase(Locale.ROOT).contains("plug") -> {
-                layout.addView(adjustView(R.drawable.plug, device, false, 0, addr))
+                layout.addView(adjustView(R.drawable.plug, device, true, 10, addr))
                 val space = Space(applicationContext)
                 space.minimumHeight = spaceHeight
                 layout.addView(space)

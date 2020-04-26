@@ -107,7 +107,6 @@ class DeviceViewModel : EssenceViewModel() {
                 connection.close()
 
                 for (i in 0 until deviceAddrList.size) {
-                    Thread.sleep(10)
                     connection = Socket(ip(), port_service)
                     writer = connection.getOutputStream()
                     if (deviceNameList[i].contains("plug"))
@@ -163,17 +162,24 @@ class DeviceViewModel : EssenceViewModel() {
                 var writer = connection.getOutputStream()
                 writer.write("10".toByteArray())
                 println("send 10 for add action ")
+                writer.close()
                 connection.close()
-
-                Thread.sleep(1)
 
                 connection = Socket(ip(), port_service)
                 writer = connection.getOutputStream()
-                writer.write((gestureName + "\n").toByteArray())
-                writer.flush()
-                for (i in devices.indices) {
-                    println("${devices[i]},${attr[i]},${values[i]}")
-                    writer.write(("${devices[i]},${attr[i]},${values[i]}\n").toByteArray())
+                val reader = connection.getInputStream()
+                println(writer.write((gestureName + "\n").toByteArray()))
+
+                var ack = ""
+                println("sent gesture name")
+                while (!ack.contains("ack")) {
+                    for (i in 0 until devices.size) {
+                        println("${devices[i]},${attr[i]},${values[i]}")
+                        println(writer.write(("${devices[i]},${attr[i]},${values[i]}\n".toByteArray())))
+                        println("After writer\ni= $i")
+                    }
+                    ack = reader.readBytes().toString(Charsets.UTF_8)
+                    println("ack = $ack")
                 }
                 writer.flush()
                 connection.close()
@@ -205,8 +211,13 @@ class DeviceViewModel : EssenceViewModel() {
                 println("sent 17, request live action")
                 connection.close()
                 //Thread.sleep(0)
-
-                println("action requested: $ieeeAddr $attribute $value")
+                var temp = value
+                if (attribute.contains("brightness")) {
+                    var tmp = value.toInt()
+                    if (tmp < 9)
+                        temp = "10";
+                }
+                println("action requested: $ieeeAddr $attribute $temp")
                 connection = Socket(ip(), port_service)
                 println(connection)
                 writer = connection.getOutputStream()
@@ -215,10 +226,12 @@ class DeviceViewModel : EssenceViewModel() {
                 writer.write((attribute + "\n").toByteArray())
                 writer.write((value + "\n").toByteArray())
                  */
-                writer.write("$ieeeAddr,$attribute,$value".toByteArray())
+                writer.write("$ieeeAddr,$attribute,$temp".toByteArray())
                 println("wrote")
 
                 writer.flush()
+                writer.close()
+                connection.close()
             }
         }
     }
@@ -264,12 +277,11 @@ class DeviceViewModel : EssenceViewModel() {
                 connection = Socket(ip(), port_service)
                 writer = connection.getOutputStream()
                 writer.write(deviceAddr.toByteArray())
+                println("sent removed device address")
                 writer.close()
                 connection.close()
 
             }
         }
-
     }
-
 }

@@ -68,7 +68,6 @@ class DeviceFragment : Fragment() {
                                 println(deviceAddrList)
                                 viewModel.getDeviceStates(deviceAddrList, deviceName)
                                 viewModel.deviceStates.observe(viewLifecycleOwner, Observer {
-                                    println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXXXXXXXXXXXXXXXXXXX\n")
                                     createDeviceList(deviceName, deviceAddrList, it, layout)
                                 })
                             })
