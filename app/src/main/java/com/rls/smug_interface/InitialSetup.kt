@@ -70,8 +70,6 @@ class InitialSetup : AppCompatActivity() {
 
         reloadBtn.setOnClickListener {
             val th = thread {
-                //TODO add handling clicking reload on server side
-
                 val connection = Socket("192.168.4.1", 5005)
                 val reader = connection.getInputStream()
                 val writer = connection.getOutputStream()

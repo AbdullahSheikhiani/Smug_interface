@@ -13,11 +13,14 @@ class DeviceViewModel : EssenceViewModel() {
     val deviceList = MutableLiveData<ArrayList<String>>()
     val gestureList = MutableLiveData<ArrayList<String>>()
 
+
     val deviceStates = MutableLiveData<ArrayList<String>>()
     val deviceAddrList = MutableLiveData<ArrayList<String>>()
 
+    val deviceList2 = MutableLiveData<ArrayList<String>>()
+    val deviceAddrList2 = MutableLiveData<ArrayList<String>>()
 
-    fun getDeviceList() {
+    fun getDeviceList(flag: Int) {
         viewModelScope.launch(Dispatchers.Default) {
             val a = ArrayList<String>()
             println("thread device list")
@@ -39,7 +42,11 @@ class DeviceViewModel : EssenceViewModel() {
                     x = b.readLine()
                 }
                 println("posting device array value")
-                deviceList.postValue(a)
+                if (flag == 1)
+                    deviceList.postValue(a)
+                else
+                    deviceList2.postValue(a)
+
                 /*
                 a.clear()
                 x = b.readLine()
@@ -87,20 +94,56 @@ class DeviceViewModel : EssenceViewModel() {
         }
     }
 
-    fun getDeviceStates() {
+
+    fun getDeviceStates(deviceAddrList: ArrayList<String>, deviceNameList: ArrayList<String>) {
         viewModelScope.launch(Dispatchers.Default) {
+            val states = ArrayList<String>()
             thread {
                 var connection = Socket(ip(), port_main)
-                val writer = connection.getOutputStream()
+                var writer = connection.getOutputStream()
                 writer.write("15".toByteArray())
                 println("sent 15, request to get state")
+                writer.close()
                 connection.close()
 
-                //todo logic
+                for (i in 0 until deviceAddrList.size) {
+                    Thread.sleep(10)
+                    connection = Socket(ip(), port_service)
+                    writer = connection.getOutputStream()
+                    if (deviceNameList[i].contains("plug"))
+                        writer.write("${deviceAddrList[i]},1".toByteArray())
+                    else
+                        writer.write("${deviceAddrList[i]},0".toByteArray())
+
+                    val reader = connection.getInputStream()
+                    val x = reader.readBytes().toString(Charsets.UTF_8)
+                    //println("x: $x")
+                    //print(x)
+                    states.add(x)
+                    //println("states: $states")
+                    writer.close()
+                    reader.close()
+                    connection.close()
+                }
+                //println("00states: $states")
+                connection = Socket(ip(), port_service)
+                writer = connection.getOutputStream()
+                writer.write("stp".toByteArray())
+                writer.flush()
+                println("wrote STP")
+
+                writer.close()
+                connection.close()
+
+                deviceStates.postValue(states)
+
+                //deviceStates.postValue(states)
+                //println("STATES:$states ")
+                //println(states)
             }
-            //deviceStates.postValue("TODO")
         }
     }
+
 
     fun setGestureAssociation(
         gestureName: String,
@@ -113,7 +156,7 @@ class DeviceViewModel : EssenceViewModel() {
             println(devices)
             println(attr)
             println(values)
-            val th = thread {
+            thread {
                 print("sent to device")
 
                 var connection = Socket(ip(), port_main)
@@ -134,6 +177,20 @@ class DeviceViewModel : EssenceViewModel() {
                 }
                 writer.flush()
                 connection.close()
+            }
+        }
+    }
+
+    fun addDevice() {
+        viewModelScope.launch(Dispatchers.Default) {
+            thread {
+                val connection = Socket(ip(), port_main)
+
+                val writer = connection.getOutputStream()
+                writer.write("13".toByteArray())
+                println("sent 13, request discover devices")
+                connection.close()
+
             }
         }
     }
@@ -166,10 +223,9 @@ class DeviceViewModel : EssenceViewModel() {
         }
     }
 
-    fun getDeviceAddrList() {
+    fun getDeviceAddrList(flag: Int) {
         viewModelScope.launch(Dispatchers.Default) {
             val a = ArrayList<String>()
-            //todo make the actual implementation
             thread {
                 var connection = Socket(ip(), port_main)
                 val writer = connection.getOutputStream()
@@ -186,10 +242,34 @@ class DeviceViewModel : EssenceViewModel() {
                     a.add(x)
                     x = b.readLine()
                 }
-                deviceAddrList.postValue(a)
-                getDeviceStates()
+                if (flag == 1)
+                    deviceAddrList.postValue(a)
+                else
+                    deviceAddrList2.postValue(a)
+
             }
         }
+    }
+
+    fun removeDevice(deviceAddr: String) {
+        viewModelScope.launch(Dispatchers.Default) {
+            thread {
+                var connection = Socket(ip(), port_main)
+                var writer = connection.getOutputStream()
+                writer.write("14".toByteArray())
+                println("requested 14, remove iot device")
+                writer.close()
+                connection.close()
+
+                connection = Socket(ip(), port_service)
+                writer = connection.getOutputStream()
+                writer.write(deviceAddr.toByteArray())
+                writer.close()
+                connection.close()
+
+            }
+        }
+
     }
 
 }

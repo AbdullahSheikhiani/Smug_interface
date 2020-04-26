@@ -8,10 +8,11 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.rls.smug_interface.utilities.ColorPickerDialog
 import java.net.Inet4Address
 import kotlin.concurrent.thread
 
-class MainUI : AppCompatActivity() {
+class MainUI : AppCompatActivity(), ColorPickerDialog.ColorListener {
     fun ip(): String {
         //return "192.168.1.126"
 
@@ -51,5 +52,10 @@ class MainUI : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+    }
+
+    override fun saveColor(color: String, code: Int) {
+        print("save color $color")
+
     }
 }

@@ -14,7 +14,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.rls.smug_interface.InitialSetup
 import com.rls.smug_interface.R
+import com.rls.smug_interface.utilities.ColorPickerDialog
+import kotlinx.android.synthetic.main.fragment_bar.*
 import kotlinx.android.synthetic.main.fragment_bar.view.*
+import kotlinx.android.synthetic.main.fragment_bar.view.deviceName
 import kotlinx.android.synthetic.main.fragment_main_ui_device.view.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -53,9 +56,23 @@ class DeviceFragment : Fragment() {
                 }
                 MotionEvent.ACTION_DOWN -> {
                     listBtn.setColorFilter(Color.rgb(0, 0, 0))
-                    //TODO smart plug needs different handling
                     //get address and test listener
-                    viewModel.getDeviceList()
+                    layout.removeAllViewsInLayout()
+                    viewModel.getDeviceList(1)
+                    viewModel.deviceList.observe(viewLifecycleOwner, Observer { deviceName ->
+                        println(deviceName)
+                        viewModel.getDeviceAddrList(1)
+                        viewModel.deviceAddrList.observe(
+                            viewLifecycleOwner,
+                            Observer { deviceAddrList ->
+                                println(deviceAddrList)
+                                viewModel.getDeviceStates(deviceAddrList, deviceName)
+                                viewModel.deviceStates.observe(viewLifecycleOwner, Observer {
+                                    println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXXXXXXXXXXXXXXXXXXX\n")
+                                    createDeviceList(deviceName, deviceAddrList, it, layout)
+                                })
+                            })
+                    })
                     /*
                     val intent = Intent(context, ActionHandler::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -65,14 +82,6 @@ class DeviceFragment : Fragment() {
             }
             true
         }
-        viewModel.deviceList.observe(viewLifecycleOwner, Observer { deviceListArray ->
-            println(deviceListArray)
-            viewModel.getDeviceAddrList()
-            viewModel.deviceAddrList.observe(viewLifecycleOwner, Observer {
-                println(it)
-                createDeviceList(deviceListArray, it, layout)
-            })
-        })
 
 
         removeBtn.setOnTouchListener { v, event ->
@@ -84,8 +93,72 @@ class DeviceFragment : Fragment() {
                 }
                 MotionEvent.ACTION_DOWN -> {
                     removeBtn.setColorFilter(Color.rgb(0, 0, 0))
-                    //todo my stuff
                     layout.removeAllViewsInLayout()
+                    viewModel.getDeviceList(2)
+                    viewModel.deviceList2.observe(viewLifecycleOwner, Observer { nameList ->
+                        println(nameList)
+                        viewModel.getDeviceAddrList(2)
+                        viewModel.deviceAddrList2.observe(
+                            viewLifecycleOwner,
+                            Observer { addresses ->
+                                println(nameList)
+                                layout.removeAllViewsInLayout()
+                                for (i in 0 until nameList.size) {
+                                    println("deviceListArray: $nameList")
+                                    println("deviceAddr: $addresses")
+                                    val vi = View.inflate(context, R.layout.fragment_bar, null)
+                                    val img = vi.deviceIcon
+                                    val deviceNameTxt = vi.deviceName
+                                    val deviceAddr = vi.deviceAddr
+                                    val s = vi.onOffSwitch
+                                    val bright = vi.brightnessBar
+                                    deviceNameTxt.text = nameList[i]
+                                    print("xxxxxxxx")
+                                    s.visibility = View.INVISIBLE
+                                    bright.visibility = View.INVISIBLE
+                                    deviceAddr.text = nameList[i]
+                                    //todo listener
+                                    deviceNameTxt.setOnClickListener {
+                                        viewModel.removeDevice(deviceAddr.text.toString())
+
+                                    }
+                                    img.setOnClickListener {
+                                        viewModel.removeDevice(deviceAddr.text.toString())
+                                    }
+
+                                    vi.setBackgroundColor(Color.rgb(222, 222, 222))
+                                    when {
+                                        nameList[i].toLowerCase(Locale.ROOT)
+                                            .contains("e26") -> {
+                                            img.setImageResource(R.drawable.bulb)
+                                        }
+                                        nameList[i].toLowerCase(Locale.ROOT)
+                                            .contains("strip") -> {
+                                            img.setImageResource(R.drawable.strip)
+                                        }
+                                        nameList[i].toLowerCase(Locale.ROOT)
+                                            .contains("go") -> {
+                                            img.setImageResource(R.drawable.go)
+                                        }
+                                        nameList[i].toLowerCase(Locale.ROOT)
+                                            .contains("plug") -> {
+                                            img.setImageResource(R.drawable.plug)
+                                        }
+                                    }
+                                    val space = Space(context)
+                                    space.minimumHeight = 30
+                                    layout.addView(vi)
+                                    layout.addView(space)
+                                }
+                                //create device list
+                                //add to layout
+                            }
+                        )
+                    })
+
+                    //list devices
+                    //viewModel.removeDevice()
+                    //layout.removeAllViewsInLayout()
                 }
             }
             true
@@ -100,10 +173,12 @@ class DeviceFragment : Fragment() {
                 }
                 MotionEvent.ACTION_DOWN -> {
                     addBtn.setColorFilter(Color.rgb(0, 0, 0))
-                    //todo my stuff
-                    val intent = Intent(context, InitialSetup::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivityForResult(intent, 1)
+
+                    viewModel.addDevice()
+                    //beautify
+                    //val intent = Intent(context, InitialSetup::class.java)
+                    //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    //startActivityForResult(intent, 1)
 
                 }
 
@@ -121,7 +196,6 @@ class DeviceFragment : Fragment() {
                 }
                 MotionEvent.ACTION_DOWN -> {
                     actionBtn.setColorFilter(Color.rgb(0, 0, 0))
-                    //todo my stuff
                     //get unlinked gesture list
                     //go to new activity to set up
                     //val mInflater = requireActivity().layoutInflater
@@ -160,7 +234,8 @@ class DeviceFragment : Fragment() {
         text: String,
         status: Boolean,
         brightness: Int,
-        deviceAddress: String
+        deviceAddress: String,
+        color: String
     ): View {
         //todo add listeners
 
@@ -172,7 +247,7 @@ class DeviceFragment : Fragment() {
         val deviceAddr = v.deviceAddr
         val s = v.onOffSwitch
         val bright = v.brightnessBar
-
+        val txt = v.deviceName
         deviceNameTxt.text = text
         deviceAddr.text = deviceAddress
         s.isChecked = status
@@ -186,13 +261,26 @@ class DeviceFragment : Fragment() {
             bright.setOnTouchListener { _, _ ->
                 true
             }
+            bright.visibility = View.INVISIBLE
             //bright.setOnTouchListener()
         } else {
+
             img.setImageResource(imgID)
-            img.setOnTouchListener { _, event ->
+            img.setOnClickListener {
                 println("device address $deviceAddress")
-                true
+                colorPicker(v.hashCode())
+                println("v.hascode() = ${v.hashCode()}")
+                println("image of ${txt.text} was clicked")
             }
+            txt.setOnClickListener {
+                //val intentR = Intent(baseContext, ColorHandler::class.java)
+                //startActivityForResult(intentR, shortHash)
+                colorPicker(v.hashCode())
+                println("v.hascode() = ${v.hashCode()}")
+                println("${txt.text} was clicked")
+                //println(colorText.text)
+            }
+
             bright.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
                 override fun onStopTrackingTouch(seekBar: SeekBar) {
                     println("seekbar Value ${seekBar.progress}")
@@ -236,51 +324,63 @@ class DeviceFragment : Fragment() {
     private fun createDeviceList(
         devices: ArrayList<String>,
         deviceIeeeAdder: ArrayList<String>,
+        states: ArrayList<String>,
         layout: LinearLayout
     ): LinearLayout {
         layout.removeAllViewsInLayout()
         val spaceHeight = 30
 
-        for (i in devices) {
+        for (i in 0 until devices.size) {
+            val stateList = states[i].split(",")
+            var status = false
+            var brightness = 0
+            var color = "0"
+            if (stateList[0].contains("ON"))
+                status = true
+            if (stateList.size > 2) {
+                brightness = stateList[1].toInt()
+                color = stateList[2]
+            }
             when {
-                i.toLowerCase(Locale.ROOT).contains("go") -> {
+                devices[i].toLowerCase(Locale.ROOT).contains("go") -> {
                     layout.addView(
                         adjustView(
-                            R.drawable.go, i, false, 0,
-                            deviceIeeeAdder[devices.indexOf(i)]
+                            R.drawable.go, devices[i], status, brightness,
+                            deviceIeeeAdder[i], color
                         )
                     )
                     val space = Space(context)
                     space.minimumHeight = spaceHeight
                     layout.addView(space)
                 }
-                i.toLowerCase(Locale.ROOT).contains("strip") -> {
+                devices[i].toLowerCase(Locale.ROOT).contains("strip") -> {
                     layout.addView(
                         adjustView(
-                            R.drawable.strip, i, false, 0,
-                            deviceIeeeAdder[devices.indexOf(i)]
+                            R.drawable.strip, devices[i], status, brightness,
+                            deviceIeeeAdder[i], color
                         )
                     )
                     val space = Space(context)
                     space.minimumHeight = spaceHeight
                     layout.addView(space)
                 }
-                i.toLowerCase(Locale.ROOT).contains("e26") -> {
+                devices[i].toLowerCase(Locale.ROOT).contains("e26") -> {
                     layout.addView(
                         adjustView(
-                            R.drawable.bulb, i, false, 0,
-                            deviceIeeeAdder[devices.indexOf(i)]
+                            R.drawable.bulb, devices[i], status, brightness,
+                            deviceIeeeAdder[i], color
                         )
                     )
                     val space = Space(context)
                     space.minimumHeight = spaceHeight
                     layout.addView(space)
                 }
-                i.toLowerCase(Locale.ROOT).contains("smart") -> {
+                devices[i].toLowerCase(Locale.ROOT).contains("smart") -> {
+
                     layout.addView(
                         adjustView(
-                            -1, i, false, 0,
-                            deviceIeeeAdder[devices.indexOf(i)]
+                            -1, devices[i], status, 0,
+                            deviceIeeeAdder[i], "0"
                         )
                     )
                     val space = Space(context)
@@ -291,4 +391,11 @@ class DeviceFragment : Fragment() {
         }
         return layout
     }
+
+    private fun colorPicker(hashCode: Int) {
+        val dialog = ColorPickerDialog.newInstance(hashCode)
+        dialog.setTargetFragment(targetFragment, 0)
+        dialog.show(childFragmentManager, "color0")
+    }
+
 }

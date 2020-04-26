@@ -20,6 +20,7 @@ class ColorPickerDialog : DialogFragment() {
         fun saveColor(color: String, code: Int)
     }
 
+
     companion object {
 
         fun newInstance(c: Int) = ColorPickerDialog().apply {
@@ -47,21 +48,21 @@ class ColorPickerDialog : DialogFragment() {
             // The activity doesn't implement the interface, throw exception
             throw ClassCastException(
                 (context.toString() +
-                        "must implement NoticeDialogListener")
+                        "must implement ColorListener")
             )
         }
     }
 
-    @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             // Build the dialog and set up the button click handlers
             val builder = AlertDialog.Builder(it)
-            val myInflater = requireActivity().layoutInflater
-            val v: View = myInflater.inflate(R.layout.fragment_color, null)
+            //val myInflater = requireActivity().layoutInflater
+            val v: View = View.inflate(context, R.layout.fragment_color, null)
             val save = v.returnColorBtn2
             val colorPickerView = v.colorPickerView
             var colour = 0
+            //colorPickerView.setSelectorPoint(0, 1)
             colorPickerView.setColorListener(ColorListener { color, _ ->
                 //println(String.format("#%06X", 0xFFFFFF and colour))
                 colour = color

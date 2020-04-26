@@ -114,21 +114,7 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
 
          */
         if (imgID == R.drawable.plug) {
-            bright.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onStopTrackingTouch(seekBar: SeekBar) {
-                }
-
-                override fun onStartTrackingTouch(seekBar: SeekBar) {
-                }
-
-                override fun onProgressChanged(
-                    seekBar: SeekBar,
-                    progress: Int,
-                    fromUser: Boolean
-                ) {
-
-                }
-            })
+            bright.visibility = View.GONE
         } else {
             bright.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onStopTrackingTouch(seekBar: SeekBar) {
@@ -184,29 +170,30 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
 
 
     private fun createDeviceList(device: String, addr: String) {
+        val spaceHeight = 30
         when {
             device.toLowerCase(Locale.ROOT).contains("go") -> {
                 layout.addView(adjustView(R.drawable.go, device, false, 0, addr))
                 val space = Space(applicationContext)
-                space.minimumHeight = 15
+                space.minimumHeight = spaceHeight
                 layout.addView(space)
             }
             device.toLowerCase(Locale.ROOT).contains("strip") -> {
                 layout.addView(adjustView(R.drawable.strip, device, false, 0, addr))
                 val space = Space(applicationContext)
-                space.minimumHeight = 15
+                space.minimumHeight = spaceHeight
                 layout.addView(space)
             }
             device.toLowerCase(Locale.ROOT).contains("e26") -> {
                 layout.addView(adjustView(R.drawable.bulb, device, false, 0, addr))
                 val space = Space(applicationContext)
-                space.minimumHeight = 15
+                space.minimumHeight = spaceHeight
                 layout.addView(space)
             }
             device.toLowerCase(Locale.ROOT).contains("plug") -> {
                 layout.addView(adjustView(R.drawable.plug, device, false, 0, addr))
                 val space = Space(applicationContext)
-                space.minimumHeight = 15
+                space.minimumHeight = spaceHeight
                 layout.addView(space)
             }
         }
@@ -253,7 +240,6 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
     }
 
     override fun onListItem(item: String, address: String) {
-        //todo add handler for smart plug
         println("item= $item")
         createDeviceList(item, address)
     }
