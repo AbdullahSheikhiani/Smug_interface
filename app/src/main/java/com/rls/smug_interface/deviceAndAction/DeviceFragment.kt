@@ -67,9 +67,11 @@ class DeviceFragment : Fragment() {
                             Observer { deviceAddrList ->
                                 println(deviceAddrList)
                                 viewModel.getDeviceStates(deviceAddrList, deviceName)
-                                viewModel.deviceStates.observe(viewLifecycleOwner, Observer {
-                                    createDeviceList(deviceName, deviceAddrList, it, layout)
-                                })
+                                viewModel.deviceStates.observe(
+                                    viewLifecycleOwner,
+                                    Observer { states ->
+                                        createDeviceList(deviceName, deviceAddrList, states, layout)
+                                    })
                             })
                     })
                     /*
@@ -93,6 +95,7 @@ class DeviceFragment : Fragment() {
                 MotionEvent.ACTION_DOWN -> {
                     removeBtn.setColorFilter(Color.rgb(0, 0, 0))
                     layout.removeAllViewsInLayout()
+                    //TODO move out of viewModels? refresh the list or show that device is removed
                     viewModel.getDeviceList(2)
                     viewModel.deviceList2.observe(viewLifecycleOwner, Observer { nameList ->
                         println(nameList)
@@ -115,8 +118,7 @@ class DeviceFragment : Fragment() {
                                     print("xxxxxxxx")
                                     s.visibility = View.INVISIBLE
                                     bright.visibility = View.INVISIBLE
-                                    deviceAddr.text = nameList[i]
-                                    //todo listener
+                                    deviceAddr.text = addresses[i]
                                     deviceNameTxt.setOnClickListener {
                                         viewModel.removeDevice(deviceAddr.text.toString())
 

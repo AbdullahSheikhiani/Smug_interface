@@ -15,12 +15,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:hint="@string/your_new_user_name"
         android:id="@+id/addUserEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:autofillHints=""
         android:ems="10"
+        android:hint="@string/your_new_user_name"
         android:inputType="textShortMessage"
         android:text=""
         app:layout_constraintBottom_toTopOf="@+id/btnSendUser"

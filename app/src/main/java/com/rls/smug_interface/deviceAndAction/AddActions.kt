@@ -7,6 +7,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import java.lang.Long.parseLong
 import androidx.lifecycle.ViewModelProvider
+import com.rls.smug_interface.MainUI
 import com.rls.smug_interface.R
 import com.rls.smug_interface.utilities.ColorPickerDialog
 import kotlinx.android.synthetic.main.activity_add_actions.*
@@ -40,7 +41,6 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
             println("list dialog")
         }
         saveBtn.setOnClickListener {
-            //todo create array and stuff for gesture association from views
             //viewModel.setGestureAssociation(gestureName, )
             val devicesAddr = ArrayList<String>()
             val attr = ArrayList<String>()
@@ -76,6 +76,10 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
             }
 
             viewModel.setGestureAssociation(gestureName, devicesAddr, attr, values)
+            finish()
+            //val intent = Intent(context, MainUI::class.java)
+            //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            //startActivityForResult(intent, 1)
         }
     }
 
@@ -87,7 +91,6 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
         brightness: Int,
         addr: String
     ): View {
-        //todo add listeners
         val myInflater = layoutInflater
         val v: View = myInflater.inflate(R.layout.fragment_bar, null)
 
@@ -200,9 +203,6 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
     }
 
 
-//todo hide address in view
-
-
     private fun colorPicker(hashCode: Int) {
         val dialog = ColorPickerDialog.newInstance(hashCode)
         dialog.show(supportFragmentManager, "color")
@@ -211,7 +211,6 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
     override fun saveColor(color: String, code: Int) {
         println("color = $color")
         println("hashCode = $code")
-        //todo use hashcode to get color value in colorText
         for (i in 0 until listOFViews.size) {
             if (code == listOFViews[i].hashCode()) {
                 listOFViews[i].colorText.text = color

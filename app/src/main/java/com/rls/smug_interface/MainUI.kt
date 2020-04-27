@@ -56,6 +56,7 @@ class MainUI : AppCompatActivity(), ColorPickerDialog.ColorListener {
 
     override fun saveColor(color: String, code: Int) {
         print("save color $color")
+        //todo pass through view model to live action
 
     }
 }
