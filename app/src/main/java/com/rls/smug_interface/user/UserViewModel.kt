@@ -1,6 +1,7 @@
 package com.rls.smug_interface.user
 
 import android.content.Context
+import android.os.Looper
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -74,6 +75,7 @@ class UserViewModel : EssenceViewModel() {
                 connection.close()
                 if (ack.contains("ack")) {
                     println("ack")
+                    Looper.prepare()
                     val text = "user $userName removed successfully"
                     val duration = Toast.LENGTH_LONG
                     val toast = Toast.makeText(context, text, duration)

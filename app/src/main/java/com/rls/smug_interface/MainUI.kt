@@ -4,15 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.rls.smug_interface.deviceAndAction.DeviceViewModel
 import com.rls.smug_interface.utilities.ColorPickerDialog
 import java.net.Inet4Address
 import kotlin.concurrent.thread
 
 class MainUI : AppCompatActivity(), ColorPickerDialog.ColorListener {
+    lateinit var viewModel: DeviceViewModel
+
     fun ip(): String {
         //return "192.168.1.126"
 
@@ -41,6 +45,7 @@ class MainUI : AppCompatActivity(), ColorPickerDialog.ColorListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_ui)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
+        viewModel = ViewModelProvider(this).get(DeviceViewModel::class.java)
 
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
@@ -54,8 +59,9 @@ class MainUI : AppCompatActivity(), ColorPickerDialog.ColorListener {
         navView.setupWithNavController(navController)
     }
 
-    override fun saveColor(color: String, code: Int) {
+    override fun saveColor(color: String, code: String) {
         print("save color $color")
+        viewModel.issueLiveCommand(code, "color", color)
         //todo pass through view model to live action
 
     }

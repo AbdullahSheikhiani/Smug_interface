@@ -22,6 +22,7 @@ class ListDialog : DialogFragment() {
     }
 //call essenceViewModel
     fun ip(): String {
+    return "192.168.1.254"
 
         val host = "pspspspi"
         lateinit var ipas: String

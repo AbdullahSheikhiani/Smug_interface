@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.fragment_bar.*
 import kotlinx.android.synthetic.main.fragment_bar.view.*
 import kotlinx.android.synthetic.main.fragment_bar.view.deviceName
 import kotlinx.android.synthetic.main.fragment_main_ui_device.view.*
+import java.lang.IndexOutOfBoundsException
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -70,7 +71,16 @@ class DeviceFragment : Fragment() {
                                 viewModel.deviceStates.observe(
                                     viewLifecycleOwner,
                                     Observer { states ->
-                                        createDeviceList(deviceName, deviceAddrList, states, layout)
+                                        try {
+                                            createDeviceList(
+                                                deviceName,
+                                                deviceAddrList,
+                                                states,
+                                                layout
+                                            )
+                                        } catch (e: IndexOutOfBoundsException) {
+                                            println("out of bound")
+                                        }
                                     })
                             })
                     })
@@ -119,12 +129,17 @@ class DeviceFragment : Fragment() {
                                     s.visibility = View.INVISIBLE
                                     bright.visibility = View.INVISIBLE
                                     deviceAddr.text = addresses[i]
+                                    val space = Space(context)
                                     deviceNameTxt.setOnClickListener {
                                         viewModel.removeDevice(deviceAddr.text.toString())
+                                        layout.removeView(vi)
+                                        layout.removeView(space)
 
                                     }
                                     img.setOnClickListener {
                                         viewModel.removeDevice(deviceAddr.text.toString())
+                                        layout.removeView(vi)
+                                        layout.removeView(space)
                                     }
 
                                     vi.setBackgroundColor(Color.rgb(222, 222, 222))
@@ -146,7 +161,6 @@ class DeviceFragment : Fragment() {
                                             img.setImageResource(R.drawable.plug)
                                         }
                                     }
-                                    val space = Space(context)
                                     space.minimumHeight = 30
                                     layout.addView(vi)
                                     layout.addView(space)
@@ -252,6 +266,7 @@ class DeviceFragment : Fragment() {
         deviceNameTxt.text = text
         deviceAddr.text = deviceAddress
         s.isChecked = status
+        bright.min = 20
         bright.max = 255
         bright.progress = brightness
         v.setBackgroundColor(
@@ -269,14 +284,14 @@ class DeviceFragment : Fragment() {
             img.setImageResource(imgID)
             img.setOnClickListener {
                 println("device address $deviceAddress")
-                colorPicker(v.hashCode())
-                println("v.hascode() = ${v.hashCode()}")
+                colorPicker(v.deviceAddr.text.toString())
+                println("v.hascode() = ${v.deviceAddr.text}")
                 println("image of ${txt.text} was clicked")
             }
             txt.setOnClickListener {
                 //val intentR = Intent(baseContext, ColorHandler::class.java)
                 //startActivityForResult(intentR, shortHash)
-                colorPicker(v.hashCode())
+                colorPicker(v.deviceAddr.text.toString())
                 println("v.hascode() = ${v.hashCode()}")
                 println("${txt.text} was clicked")
                 //println(colorText.text)
@@ -393,7 +408,7 @@ class DeviceFragment : Fragment() {
         return layout
     }
 
-    private fun colorPicker(hashCode: Int) {
+    private fun colorPicker(hashCode: String) {
         val dialog = ColorPickerDialog.newInstance(hashCode)
         dialog.setTargetFragment(targetFragment, 0)
         dialog.show(childFragmentManager, "color0")

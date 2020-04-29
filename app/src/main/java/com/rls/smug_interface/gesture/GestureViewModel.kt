@@ -35,6 +35,7 @@ class GestureViewModel : EssenceViewModel() {
                     x = b.readLine()
                 }
                 connection.close()
+                println("a =$a")
                 gestureList.postValue(a)
             }
         }

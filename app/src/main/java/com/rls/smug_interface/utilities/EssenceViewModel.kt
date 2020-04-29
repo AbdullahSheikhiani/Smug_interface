@@ -9,6 +9,8 @@ open class EssenceViewModel : ViewModel() {
     val port_main = 5051
     val port_service = 5050
     fun ip(): String {
+        return "192.168.1.254"
+
         val host = "pspspspi"
         lateinit var ipas: String
         return try {

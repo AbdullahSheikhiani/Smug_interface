@@ -14,26 +14,34 @@ import kotlinx.android.synthetic.main.fragment_color.view.colorPickerView
 
 class ColorPickerDialog : DialogFragment() {
     private lateinit var listener: ColorListener
-    private var code: Int = -1
+    private var code: String = "-1"
 
     interface ColorListener {
-        fun saveColor(color: String, code: Int)
+        fun saveColor(color: String, code: String)
     }
 
 
     companion object {
-
-        fun newInstance(c: Int) = ColorPickerDialog().apply {
+        /*
+                fun newInstance(c: Int) = ColorPickerDialog().apply {
+                    arguments = Bundle().apply {
+                        putInt("viewHash", c)
+                    }
+                }
+        */
+        fun newInstance(c: String) = ColorPickerDialog().apply {
             arguments = Bundle().apply {
-                putInt("viewHash", c)
+                putString("viewAddr", c)
             }
         }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            code = it.getInt("viewHash")
+            //code = it.getInt("viewHash")
+            code = it.getString("viewAddr")
 
         }
     }

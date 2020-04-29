@@ -107,7 +107,7 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
         s.isChecked = status
         bright.max = 255
         bright.progress = brightness
-        bright.min = 10
+        bright.min = 20
         val colorText = v.colorText
         colorText.text = "-1"
         /*
@@ -138,7 +138,7 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
             txt.setOnClickListener {
                 //val intentR = Intent(baseContext, ColorHandler::class.java)
                 //startActivityForResult(intentR, shortHash)
-                colorPicker(v.hashCode())
+                colorPicker(v.deviceAddr.text.toString())
                 println("v.hascode() = ${v.hashCode()}")
                 println("${txt.text} was clicked")
                 //println(colorText.text)
@@ -146,7 +146,9 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
             img.setOnClickListener {
                 //val intentR = Intent(baseContext, ColorHandler::class.java)
                 //startActivityForResult(intentR, shortHash)
-                colorPicker(v.hashCode())
+                //colorPicker(v.hashCode())
+                colorPicker(v.deviceAddr.text.toString())
+
                 println("v.hascode() = ${v.hashCode()}")
                 println("image of ${txt.text} was clicked")
             }
@@ -203,16 +205,16 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
     }
 
 
-    private fun colorPicker(hashCode: Int) {
+    private fun colorPicker(hashCode: String) {
         val dialog = ColorPickerDialog.newInstance(hashCode)
         dialog.show(supportFragmentManager, "color")
     }
 
-    override fun saveColor(color: String, code: Int) {
+    override fun saveColor(color: String, code: String) {
         println("color = $color")
         println("hashCode = $code")
         for (i in 0 until listOFViews.size) {
-            if (code == listOFViews[i].hashCode()) {
+            if (code.contains(listOFViews[i].deviceAddr.text)) {
                 listOFViews[i].colorText.text = color
                 val color = hexToRGB(color)
                 println("color= $color")
