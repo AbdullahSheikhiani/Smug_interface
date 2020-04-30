@@ -356,6 +356,8 @@ class DeviceFragment : Fragment() {
             if (stateList.size > 2) {
                 brightness = stateList[1].toInt()
                 color = stateList[2]
+                if (brightness == 20)
+                    status = false
             }
             when {
                 devices[i].toLowerCase(Locale.ROOT).contains("go") -> {

@@ -136,6 +136,7 @@ class UserFragment : Fragment() {
                         viewModel.getFingerPrintConfirmation()
                         layout.removeAllViews()
                         val txt = TextView(context)
+                        txt.textSize = 18F
                         txt.text =
                             "Please touch the touch sensor once then put your finger on the fingerprint scanner"
                         layout.addView(txt)

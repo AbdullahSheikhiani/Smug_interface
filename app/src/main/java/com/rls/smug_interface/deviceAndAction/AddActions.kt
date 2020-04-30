@@ -53,13 +53,11 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
                         values.add("ON")
                     else
                         values.add("OFF")
-
                     devicesAddr.add(listOFViews[i].deviceAddr.text.toString())
                     attr.add("brightness")
                     values.add(listOFViews[i].brightnessBar.progress.toString())
 
-
-                    if (!listOFViews[i].colorText.text.toString().contains("-1")) {
+                    if (!listOFViews[i].colorText.text.contains("-1")) {
                         devicesAddr.add(listOFViews[i].deviceAddr.text.toString())
                         attr.add("color")
                         values.add(listOFViews[i].colorText.text.toString())
@@ -68,10 +66,11 @@ class AddActions : AppCompatActivity(), ColorPickerDialog.ColorListener,
                 } else {
                     devicesAddr.add(listOFViews[i].deviceAddr.text.toString())
                     attr.add("state")
-                    if (listOFViews[i].onOffSwitch.isChecked)
+                    if (listOFViews[i].onOffSwitch.isChecked) {
                         values.add("ON")
-                    else
+                    } else {
                         values.add("OFF")
+                    }
                 }
             }
 
